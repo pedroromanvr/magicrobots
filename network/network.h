@@ -9,6 +9,9 @@
 #define _MAX_PIPES_ 5
 #define INVALID_GID 0
 
+#define DEFAULT_PIPE 0
+#define DEFAULT_TTL 7
+
 typedef struct
 {
     uint16_t id;
@@ -20,9 +23,9 @@ typedef ripEntry_t * ripEntry_p;
 /* Possible packet types */
 typedef enum {
     INVALID,                          
-    DATA,       
-    DISCOVERY,  
-    BROADCAST   
+    DATA, /* The message is for you */ 
+    DISCOVERY, /* I want to join the network */  
+    BROADCAST /* Read & re-transmit the message */
 }
 packet_t;
 
@@ -50,8 +53,11 @@ extern uint16_t gID;
 
 /* Internal, aux functions */
 int isRootPipe(uint16_t pipe);
-isInRange(uint16_t leafPipe, uint16_t rootPipe);
+int isInRange(uint16_t leafPipe, uint16_t rootPipe);
 ret_t insertEntry(ripEntry_t *newEntry);
+uint8_t checksumCalculator(headerPack_p hdr, 
+                                   char *msg, 
+                                uint8_t left);
  
  
 /* ------ To use outside this API ------  */
@@ -59,7 +65,8 @@ ret_t insertEntry(ripEntry_t *newEntry);
 //Broadcast message
  ret_t sendMessage(char *msg,  uint8_t size);
 //Send message to an specific ID
- ret_t sendMessageTo(uint16_t id, char *msg, uint8_t size);
+ret_t sendMessageTo(uint16_t id, packet_t type, 
+                        char *msg, uint8_t size);
 //Recieve message from any sender
  ret_t getMessage(char *buf, uint16_t size);
 //Specify ID to recieve from

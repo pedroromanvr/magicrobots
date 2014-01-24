@@ -76,18 +76,71 @@ ret_t sendMessage(char *msg,  uint8_t size)
   uint8_t idx;
   ripEntry_p re;         
 
-  for(idx==0; idx<_MAX_PIPES_; idx++)
+  for(idx=0; idx<_MAX_PIPES_; idx++)
   {
     re = &ripTable[idx];
     if(re->id == INVALID_GID)
       continue;
-    sendMessageTo(re->id, msg, size);    
+    sendMessageTo(re->id, BROADCAST, msg, size);    
   }
     return SUCCESS;
 }
 //Send message to an specific ID
-ret_t sendMessageTo(uint16_t id, char *msg, uint8_t size){
-    return UNIMPLEMENTED;
+ret_t sendMessageTo(uint16_t id, packet_t type, 
+                        char *msg, uint8_t size)
+{
+  uint8_t idx, pipe = DEFAULT_PIPE, done = 0, found = 0;
+  uint8_t checksum;
+  ripEntry_p re; 
+  discPack_t packet;
+  headerPack_p hdr = (headerPack_p)&packet;
+
+  hdr->type = type;
+  hdr->size = size;
+  hdr->ttl = DEFAULT_TTL;
+  hdr->idSrc = gID;
+  hdr->idDest = id;
+
+  for(idx=0; idx<_MAX_PIPES_; idx++)
+  {                          
+    re = &ripTable[idx];
+    if(re->id == INVALID_GID)
+      continue;
+    if(re->id == id)
+    {
+      pipe = re->pipe;                                 
+      found = 1;
+      break;
+    }
+  }
+  idx = 0;
+nextEntry:
+  if(!found)
+  {
+    if(idx == _MAX_PIPES_)
+      return WARNING;
+    re = &ripTable[idx];    
+    if(re->id == INVALID_GID)
+    {
+      idx++;
+      goto nextEntry;
+    }
+    pipe = re->pipe;
+  }
+  
+  while(done < size)
+  {
+    hdr->checksum = checksumCalculator(hdr, 
+                       &msg[done], size - done);  
+    memcpy(packet.data, &msg[done], 8);
+    nrf24l01_settxaddr(nfr23l01_pipeAddr(nrf24l01_addr, pipe));
+    nrf24l01_write((uint8_t *)&packet);
+    done += 8;
+  }
+  idx++;
+  if(!found)
+    goto nextEntry;
+  return SUCCESS;
 }
 //Recieve message from any sender
 ret_t getMessage(char *buf, uint16_t size){
@@ -109,8 +162,27 @@ int isRootPipe(uint16_t pipe)
     return 0;
 }
 
-isInRange(uint16_t leafPipe, uint16_t rootPipe)
+int isInRange(uint16_t leafPipe, uint16_t rootPipe)
 {
     return 0;    
 }
 
+uint8_t checksumCalculator(headerPack_p hdr, 
+                                   char *msg, 
+                                uint8_t left)
+{
+  uint8_t i, checksum = 0;
+  uint8_t limit = left < 8 ? left : 8;
+  checksum ^= hdr->type;
+  checksum ^= hdr->size;
+  checksum ^= hdr->ttl;
+  checksum ^= (uint8_t)((hdr->idSrc & 0xFF00)>>8);
+  checksum ^= (uint8_t)(hdr->idSrc & 0x00FF);
+  checksum ^= (uint8_t)((hdr->idDest & 0xFF00)>>8);
+  checksum ^= (uint8_t)(hdr->idDest & 0x00FF);
+  
+  for(i = 0; i < limit; i++)
+    checksum ^= msg[i];
+    
+  return checksum;
+}
