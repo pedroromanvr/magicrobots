@@ -128,7 +128,7 @@ nextEntry:
     pipe = re->pipe;
   }
   
-  while(done < size)
+  while(done <= size)
   {
     hdr->checksum = checksumCalculator(hdr, 
                        &msg[done], size - done);  
