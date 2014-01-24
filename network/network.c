@@ -70,20 +70,31 @@ ret_t joinNetwork()
     }                                                             
     return SUCCESS;
 }
-//Broadcast message
- ret_t sendMessage(char *msg,  uint16_t size){
-    return UNIMPLEMENTED;
+//Broadcast message originated in this host
+ret_t sendMessage(char *msg,  uint8_t size)
+{
+  uint8_t idx;
+  ripEntry_p re;         
+
+  for(idx==0; idx<_MAX_PIPES_; idx++)
+  {
+    re = &ripTable[idx];
+    if(re->id == INVALID_GID)
+      continue;
+    sendMessageTo(re->id, msg, size);    
+  }
+    return SUCCESS;
 }
 //Send message to an specific ID
- ret_t sendMessageTo(uint16_t id, char *msg, uint16_t size){
+ret_t sendMessageTo(uint16_t id, char *msg, uint8_t size){
     return UNIMPLEMENTED;
 }
 //Recieve message from any sender
- ret_t getMessage(char *buf, uint16_t size){
+ret_t getMessage(char *buf, uint16_t size){
     return UNIMPLEMENTED;
 }
 //Specify ID to recieve from
- ret_t getMessageFrom(uint16_t id, char *buf, uint16_t size){
+ret_t getMessageFrom(uint16_t id, char *buf, uint16_t size){
     return UNIMPLEMENTED;
 }
 

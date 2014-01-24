@@ -175,8 +175,8 @@ WatchAVR8LAutoVariables=0
 UseEEPROMLocation0=1
 RebuildAll=0
 LinkageInformationPresent=1
-COFFileTimeStamp=1144456698
-Build=22
+COFFileTimeStamp=1144553239
+Build=25
 [DefinedSymbolsDebug]
 Count=0
 [Compiler]
@@ -277,7 +277,7 @@ UseEEPROMLocation0=1
 RebuildAll=1
 LinkageInformationPresent=0
 COFFileTimeStamp=-1
-Build=22
+Build=25
 IncludePath0=
 IncludePath1=
 IncludePath2=
@@ -493,7 +493,7 @@ UserProgWorkDir=
 [BuildInfoCompiler]
 L1=Build configuration: Debug
 L2=Chip: ATmega328P
-L3=Clock frequency: 8.000000 MHz
+L3=Clock frequency: 8,000000 MHz
 L4=Program type: Application
 L5=Memory model: Small
 L6=Optimize for: Size
@@ -507,10 +507,10 @@ L13=Enhanced function parameters passing: Yes
 L14=Automatic register allocation: Yes
 L15=Smart register allocation: Yes
 L16=
-L17=Build: 21
-L18=18501 line(s) compiled
+L17=Build: 25
+L18=18514 line(s) compiled
 L19=No errors
-L20=19 warning(s)
+L20=18 warning(s)
 L21=
 L22=Bit variables size: 0 byte(s)
 L23=
@@ -518,30 +518,30 @@ L24=Data Stack area: 0x100 to 0x2FF
 L25=Data Stack size: 512 byte(s)
 L26=Estimated Data Stack usage: 139 byte(s)
 L27=
-L28=RAM Global variables area: 0x300 to 0x363
-L29=RAM Global variables size: 100 byte(s)
+L28=RAM Global variables area: 0x300 to 0x372
+L29=RAM Global variables size: 115 byte(s)
 L30=
-L31=Hardware Stack area: 0x364 to 0x6FF
-L32=Hardware Stack size: 924 byte(s)
+L31=Hardware Stack area: 0x373 to 0x6FF
+L32=Hardware Stack size: 909 byte(s)
 L33=
 L34=Heap area: 0x700 to 0x8FF
 L35=Heap size: 512 byte(s)
 L36=
-L37=EEPROM usage: 0 byte(s), 0.0% of EEPROM
+L37=EEPROM usage: 0 byte(s), 0,0% of EEPROM
 Lines=39
-L38=Program size: 2249 words (4498 bytes), 13.7% of FLASH
-L39=519 words (1038 bytes), 18.8% reduced by Code Compression
+L38=Program size: 2249 words (4498 bytes), 13,7% of FLASH
+L39=519 words (1038 bytes), 18,8% reduced by Code Compression
 [BuildInfoAssembler]
 L1=AVRASM: AVR macro assembler 2.1.30 (build 592 Nov  7 2008 12:38:17)
 L2=Copyright (C) 1995-2008 ATMEL Corporation
 L3=
-L4=E:\Dropbox\Masters\Distributed Systems\Robots\nrf24_platform\Debug\List\platform.asm(4920): No EEPROM data, deleting E:\Dropbox\Masters\Distributed Systems\Robots\nrf24_platform\Debug\Exe\platform.eep
+L4=C:\Users\marc\dagas\magicrobots\Debug\List\platform.asm(4895): No EEPROM data, deleting C:\Users\marc\dagas\magicrobots\Debug\Exe\platform.eep
 L5=
 L6=ATmega328P memory use summary [bytes]:
 L7=Segment   Begin    End      Code   Data   Used    Size   Use%
 L8=---------------------------------------------------------------
 L9=[.cseg] 0x000000 0x001192   3852    646   4498   32768  13.7%
-L10=[.dseg] 0x000100 0x000364      0    100    100    2048   4.9%
+L10=[.dseg] 0x000100 0x000373      0    115    115    2048   5.6%
 L11=[.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 L12=
 Lines=12
@@ -601,11 +601,11 @@ BK7=-1
 BK8=-1
 BK9=-1
 [Bookmarks3]
-TimeStamp=1132952514
-Row=230
-Column=35
+TimeStamp=1144552116
+Row=0
+Column=0
 ScrollPosX=0
-ScrollPosY=210
+ScrollPosY=0
 BK0=-1
 BK1=-1
 BK2=-1
@@ -633,11 +633,11 @@ BK7=-1
 BK8=-1
 BK9=-1
 [Bookmarks5]
-TimeStamp=1132360500
-Row=43
-Column=27
+TimeStamp=1144552116
+Row=0
+Column=0
 ScrollPosX=0
-ScrollPosY=31
+ScrollPosY=0
 BK0=-1
 BK1=-1
 BK2=-1
@@ -665,11 +665,11 @@ BK7=-1
 BK8=-1
 BK9=-1
 [Bookmarks7]
-TimeStamp=1132952331
-Row=12
-Column=39
+TimeStamp=1144552116
+Row=0
+Column=0
 ScrollPosX=0
-ScrollPosY=12
+ScrollPosY=0
 BK0=-1
 BK1=-1
 BK2=-1
@@ -681,8 +681,8 @@ BK7=-1
 BK8=-1
 BK9=-1
 [Bookmarks8]
-TimeStamp=1132952847
-Row=11
+TimeStamp=1144552116
+Row=0
 Column=0
 ScrollPosX=0
 ScrollPosY=0
@@ -716,71 +716,6 @@ BK9=-1
 Blocks=0
 [FoldedCode4]
 Blocks=0
-[HeadersList]
-Files=5
-F1=E:\Dropbox\Masters\Distributed Systems\Robots\nrf24_platform\main.c
-F2=E:\Dropbox\Masters\Distributed Systems\Robots\nrf24_platform\nrf24l01\nrf24l01.c
-F3=E:\Dropbox\Masters\Distributed Systems\Robots\nrf24_platform\spi\spi.c
-F4=E:\Dropbox\Masters\Distributed Systems\Robots\nrf24_platform\movement\movement.c
-F5=E:\Dropbox\Masters\Distributed Systems\Robots\nrf24_platform\network\network.c
-[Header1]
-Files=13
-F1=platform.h
-F2=C:\cvavreval\inc\mega328p.h
-F3=C:\cvavreval\inc\mega328p_bits.h
-F4=nrf24l01\nrf24l01.h
-F5=C:\cvavreval\inc\delay.h
-F6=C:\cvavreval\inc\stdint.h
-F7=C:\cvavreval\inc\string.h
-F8=C:\cvavreval\inc\stdio.h
-F9=C:\cvavreval\inc\stdarg.h
-F10=spi\spi.h
-F11=nrf24l01\nrf24l01registers.h
-F12=movement\movement.h
-F13=network\network.h
-[Header2]
-Files=11
-F1=nrf24l01\nrf24l01.h
-F2=C:\cvavreval\inc\delay.h
-F3=platform.h
-F4=C:\cvavreval\inc\mega328p.h
-F5=C:\cvavreval\inc\mega328p_bits.h
-F6=C:\cvavreval\inc\stdint.h
-F7=C:\cvavreval\inc\string.h
-F8=C:\cvavreval\inc\stdio.h
-F9=C:\cvavreval\inc\stdarg.h
-F10=spi\spi.h
-F11=nrf24l01\nrf24l01registers.h
-[Header3]
-Files=5
-F1=spi\spi.h
-F2=platform.h
-F3=C:\cvavreval\inc\mega328p.h
-F4=C:\cvavreval\inc\mega328p_bits.h
-F5=C:\cvavreval\inc\stdint.h
-[Header4]
-Files=5
-F1=movement\movement.h
-F2=C:\cvavreval\inc\stdio.h
-F3=C:\cvavreval\inc\stdarg.h
-F4=C:\cvavreval\inc\stdlib.h
-F5=C:\cvavreval\inc\string.h
-[Header5]
-Files=14
-F1=network\network.h
-F2=C:\cvavreval\inc\stdint.h
-F3=C:\cvavreval\inc\string.h
-F4=nrf24l01\nrf24l01.h
-F5=C:\cvavreval\inc\delay.h
-F6=platform.h
-F7=C:\cvavreval\inc\mega328p.h
-F8=C:\cvavreval\inc\mega328p_bits.h
-F9=C:\cvavreval\inc\stdio.h
-F10=C:\cvavreval\inc\stdarg.h
-F11=spi\spi.h
-F12=nrf24l01\nrf24l01registers.h
-F13=movement\movement.h
-F14=C:\cvavreval\inc\stdlib.h
 [Bookmarks10]
 TimeStamp=1143255513
 Row=126
@@ -847,8 +782,6 @@ BK8=-1
 BK9=-1
 [FoldedCode2]
 Blocks=0
-[FoldedCode3]
-Blocks=0
 [FoldedCode10]
 Blocks=0
 [FoldedCode11]
@@ -857,11 +790,78 @@ Blocks=0
 Blocks=0
 [FoldedCode13]
 Blocks=0
-[FoldedCode5]
-Blocks=0
 [FoldedCode6]
-Blocks=0
-[FoldedCode7]
 Blocks=0
 [FoldedCode8]
 Blocks=0
+[FoldedCode7]
+Blocks=0
+[FoldedCode5]
+Blocks=0
+[FoldedCode3]
+Blocks=0
+[HeadersList]
+Files=5
+F1=C:\Users\marc\dagas\magicrobots\main.c
+F2=C:\Users\marc\dagas\magicrobots\nrf24l01\nrf24l01.c
+F3=C:\Users\marc\dagas\magicrobots\spi\spi.c
+F4=C:\Users\marc\dagas\magicrobots\movement\movement.c
+F5=C:\Users\marc\dagas\magicrobots\network\network.c
+[Header1]
+Files=13
+F1=platform.h
+F2=C:\cvavreval\inc\mega328p.h
+F3=C:\cvavreval\inc\mega328p_bits.h
+F4=nrf24l01\nrf24l01.h
+F5=C:\cvavreval\inc\delay.h
+F6=C:\cvavreval\inc\stdint.h
+F7=C:\cvavreval\inc\string.h
+F8=C:\cvavreval\inc\stdio.h
+F9=C:\cvavreval\inc\stdarg.h
+F10=spi\spi.h
+F11=nrf24l01\nrf24l01registers.h
+F12=movement\movement.h
+F13=network\network.h
+[Header2]
+Files=11
+F1=nrf24l01\nrf24l01.h
+F2=C:\cvavreval\inc\delay.h
+F3=platform.h
+F4=C:\cvavreval\inc\mega328p.h
+F5=C:\cvavreval\inc\mega328p_bits.h
+F6=C:\cvavreval\inc\stdint.h
+F7=C:\cvavreval\inc\string.h
+F8=C:\cvavreval\inc\stdio.h
+F9=C:\cvavreval\inc\stdarg.h
+F10=spi\spi.h
+F11=nrf24l01\nrf24l01registers.h
+[Header3]
+Files=5
+F1=spi\spi.h
+F2=platform.h
+F3=C:\cvavreval\inc\mega328p.h
+F4=C:\cvavreval\inc\mega328p_bits.h
+F5=C:\cvavreval\inc\stdint.h
+[Header4]
+Files=5
+F1=movement\movement.h
+F2=C:\cvavreval\inc\stdio.h
+F3=C:\cvavreval\inc\stdarg.h
+F4=C:\cvavreval\inc\stdlib.h
+F5=C:\cvavreval\inc\string.h
+[Header5]
+Files=14
+F1=network\network.h
+F2=C:\cvavreval\inc\stdint.h
+F3=C:\cvavreval\inc\string.h
+F4=nrf24l01\nrf24l01.h
+F5=C:\cvavreval\inc\delay.h
+F6=platform.h
+F7=C:\cvavreval\inc\mega328p.h
+F8=C:\cvavreval\inc\mega328p_bits.h
+F9=C:\cvavreval\inc\stdio.h
+F10=C:\cvavreval\inc\stdarg.h
+F11=spi\spi.h
+F12=nrf24l01\nrf24l01registers.h
+F13=movement\movement.h
+F14=C:\cvavreval\inc\stdlib.h

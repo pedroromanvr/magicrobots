@@ -7,6 +7,7 @@
 #include "../nrf24l01/nrf24l01.h"
 #include "movement/movement.h"
 #define _MAX_PIPES_ 5
+#define INVALID_GID 0
 
 typedef struct
 {
@@ -56,9 +57,9 @@ ret_t insertEntry(ripEntry_t *newEntry);
 /* ------ To use outside this API ------  */
  ret_t joinNetwork();
 //Broadcast message
- ret_t sendMessage(char *msg,  uint16_t size);
+ ret_t sendMessage(char *msg,  uint8_t size);
 //Send message to an specific ID
- ret_t sendMessageTo(uint16_t id, char *msg, uint16_t size);
+ ret_t sendMessageTo(uint16_t id, char *msg, uint8_t size);
 //Recieve message from any sender
  ret_t getMessage(char *buf, uint16_t size);
 //Specify ID to recieve from
