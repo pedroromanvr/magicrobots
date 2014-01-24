@@ -1,6 +1,5 @@
 /*******************************************************
- * I was here too......
- * This program was created by the
+This program was created by the
 CodeWizardAVR V3.08 Evaluation
 Automatic Program Generator
 � Copyright 1998-2013 Pavel Haiduc, HP InfoTech s.r.l.
@@ -13,14 +12,6 @@ Author  :
 Company : 
 Comments: 
 
-check
- * asdasd
- * sdf
- * sd
- * f
- * sdf
- * d
- * f
 Chip type               : ATmega328P
 Program type            : Application
 AVR Core Clock frequency: 8.000000 MHz
