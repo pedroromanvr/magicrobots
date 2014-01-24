@@ -14,13 +14,8 @@ Company :
 Comments: 
 
 check
- * asdasd
- * sdf
- * sd
- * f
- * sdf
- * d
- * f
+check2
+
 Chip type               : ATmega328P
 Program type            : Application
 AVR Core Clock frequency: 8.000000 MHz
