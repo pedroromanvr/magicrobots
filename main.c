@@ -1,8 +1,9 @@
 /*******************************************************
-This program was created by the
+ * I was here too......
+ * This program was created by the
 CodeWizardAVR V3.08 Evaluation
 Automatic Program Generator
-© Copyright 1998-2013 Pavel Haiduc, HP InfoTech s.r.l.
+ï¿½ Copyright 1998-2013 Pavel Haiduc, HP InfoTech s.r.l.
 http://www.hpinfotech.com
 
 Project : 
