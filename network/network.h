@@ -14,6 +14,7 @@ typedef struct
     uint8_t pipe;        
 }
 ripEntry_t;
+typedef ripEntry_t * ripEntry_p;
 
 /* Possible packet types */
 typedef enum {
@@ -33,21 +34,18 @@ typedef struct {
     uint16_t    idDest;    
 }
 headerPack_t;
+typedef headerPack_t * headerPack_p;
 
 typedef struct {
     headerPack_t header;
     uint8_t data[8];    
 }
 discPack_t;
+typedef discPack_t * discPack_p;
 
 extern ripEntry_t ripTable[_MAX_PIPES_];
 extern uint8_t usedEntries;
 extern uint16_t gID;    
-
-/* ADC specific functions */
-ret_t initADC();
-ret_t disableADC();
-unsigned int read_adc(unsigned char adc_input);
 
 /* Internal, aux functions */
 int isRootPipe(uint16_t pipe);
