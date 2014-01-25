@@ -9,6 +9,7 @@ ripEntry_t ripTable[_MAX_PIPES_] = {{0,0},
 uint8_t usedEntries = 0;
 uint16_t gID = 0;  
 
+#include "../movement/movement.h"
 #include "platform.h"
 #include "stdlib.h"
 #include <delay.h>
@@ -148,8 +149,29 @@ ret_t getMessage(char *buf, uint16_t size){
     return UNIMPLEMENTED;
 }
 //Specify ID to recieve from
-ret_t getMessageFrom(uint16_t id, char *buf, uint16_t size){
-    return UNIMPLEMENTED;
+ret_t getMessageFrom(uint16_t id, char *buf, uint16_t size)
+{
+  /*
+   * We are like a girl in love,
+   * just waiting that special someone to call <3
+   */
+   ret_t ret;
+   int retry = 0;
+   headerPack_p hdr = (headerPack_p)buf;
+   int notHim = 1;
+   while(notHim)
+   {
+      /* we cannot be in love forever </3 */
+      if(retry == _MAX_RETRIES_)
+        return WARNING;
+      ret = getMessage(buf, size);
+      if(hdr->idSrc == id)
+      {
+        notHim = 0;
+      }
+      retry++;
+   }
+   return ret;
 }
 
 ret_t insertEntry(ripEntry_t *newEntry)
