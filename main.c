@@ -1,4 +1,5 @@
 /*******************************************************
+
 This program was created by the
 CodeWizardAVR V3.08 Evaluation
 Automatic Program Generator
@@ -18,6 +19,7 @@ AVR Core Clock frequency: 8.000000 MHz
 Memory model            : Small
 External RAM size       : 0
 Data Stack size         : 512
+
 *******************************************************/
 
 #include "platform.h"
