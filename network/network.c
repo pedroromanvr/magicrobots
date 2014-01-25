@@ -1,14 +1,12 @@
 #include "network.h"
 #include <stdint.h>
 
-ripEntry_t ripTable[_MAX_PIPES_] = {{0,0,0},
-                                    {0,0,0},
-                                    {0,0,0},
-                                    {0,0,0},
-                                    {0,0,0}};
+ripEntry_t ripTable[_MAX_PIPES_] = {{0,0},
+                                    {0,0},
+                                    {0,0},
+                                    {0,0},
+                                    {0,0}};
 uint8_t usedEntries = 0;
-uint8_t isPaired = FALSE;
-uint8_t isRoot = 255;   //Initialize with any value
 uint16_t gID = 0;  
 
 #include "../movement/movement.h"
@@ -29,17 +27,8 @@ ret_t joinNetwork()
     // ----------- Variable declarations ----------
     uint8_t pipe;   
     char data[NRF24L01_PAYLOAD];   
+    ripEntry_t *entryP = (ripEntry_t *)data;    
     uint8_t retryN = 0;
-    
-    //Used by root node
-    ripEntry_p entryP = (ripEntry_p)data;    
-    
-    
-    //Used by leaf node
-    discPack_t packet;
-    headerPack_p hdr = (headerPack_p)&packet;
-    rootReplyP_p rootReply = (rootReplyP_p)data;
-    ripEntry_t myLeafInfo;
                                                    
     // --------------------------------------------
     srand(TCNT2);
@@ -50,7 +39,7 @@ ret_t joinNetwork()
     // Select initial pipe, range 1-255
     pipe = gID%255 + 1;
     // Validate root
-    if(isRootId(gID))
+    if(isRootPipe(pipe))
     {  
         while(retryN < _MAX_RETRIES_)
         {
@@ -79,44 +68,9 @@ ret_t joinNetwork()
     else // Leaf node
     {
         //Look for our root to become available
-        while(retryN < _MAX_RETRIES_)
-        {
-            //Check if someone has just sent something
-            if( !nrf24l01_readready(_JOIN_PIPE_) )
-            {
-                //Send a message to our root, build packet to send
-                myLeafInfo.id   = gID;
-                myLeafInfo.pipe = pipe;
-                myLeafInfo.isRoot = 0;
-                
-                sendMessageTo(getRootFromRange(pipe), DISCOVERY,
-                              (char *)&myLeafInfo, sizeof(myLeafInfo));
-            }
-            else
-            {
-                //Verify packet destiny
-                nrf24l01_read(data);
-                if(isRootId(rootID))
-                {
-                    //Validate connection established
-                    if(rootReply->isAcceptedConnection)
-                    {
-                        isPaired = TRUE;
-                        insertEntry(entryP); //FIXME: create rip entry
-                        return SUCCESS;
-                    }
-                }
-                else //Got a packet from other leaf, retry
-                {
-                    retryN++;
-                }
-            }
-                
-        }      
     }                                                             
     return SUCCESS;
 }
-
 //Broadcast message originated in this host
 ret_t sendMessage(char *msg,  uint8_t size)
 {
@@ -180,7 +134,7 @@ nextEntry:
     hdr->checksum = checksumCalculator(hdr, 
                        &msg[done], size - done);  
     memcpy(packet.data, &msg[done], DATA_SIZE);
-    nrf24l01_settxaddr(nfr23l01_pipeAddr(nrf24l01_addr, pipe)); //FIXME: address from RIP table
+    nrf24l01_settxaddr(nfr23l01_pipeAddr(nrf24l01_addr, pipe));
     nrf24l01_write((uint8_t *)&packet);
     done += 8;
     hdr->number += 1;
@@ -190,7 +144,6 @@ nextEntry:
     goto nextEntry;
   return SUCCESS;
 }
-
 //Recieve message from any sender
 ret_t getMessage(char *buf, uint16_t size){
     return UNIMPLEMENTED;
@@ -227,7 +180,7 @@ ret_t insertEntry(ripEntry_t *newEntry)
 }
 
 /* Internal, aux functions */
-int isRootId(uint16_t id)
+int isRootPipe(uint16_t pipe)
 {
     return 0;
 }
@@ -236,19 +189,6 @@ int isInRange(uint16_t leafPipe, uint16_t rootPipe)
 {
     return 0;    
 }
-
-uint8_t getRootFromRange(uint16_t pipe)
-{
-    return 0;
-}
-
-/*
- * Function to calculate the checksum of the network packet
- * 
- * param hdr : Header of the packet to calculate the checksum for
- * param msg : Message body of the packet
- * param left: Size of bytes left to send 
- */
 
 uint8_t checksumCalculator(headerPack_p hdr, 
                                    char *msg, 
