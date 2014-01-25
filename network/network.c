@@ -1,13 +1,15 @@
 #include "network.h"
 #include <stdint.h>
 
-ripEntry_t ripTable[_MAX_PIPES_] = {{0,0},
-                                    {0,0},
-                                    {0,0},
-                                    {0,0},
-                                    {0,0}};
+ripEntry_t ripTable[_MAX_PIPES_] = {{0,0,0,0},
+                                    {0,0,0,0},
+                                    {0,0,0,0},
+                                    {0,0,0,0},
+                                    {0,0,0,0}};
 uint8_t usedEntries = 0;
-uint16_t gID = 0;  
+uint8_t isPaired = FALSE;
+uint8_t isRoot = 255;   //Initialize with any value
+uint16_t gID = 0;   
 
 #include "../movement/movement.h"
 #include "platform.h"
@@ -25,33 +27,44 @@ uint16_t gID = 0;
 ret_t joinNetwork()
 {
     // ----------- Variable declarations ----------
-    uint8_t pipe;   
-    char data[NRF24L01_PAYLOAD];   
-    ripEntry_t *entryP = (ripEntry_t *)data;    
-    uint8_t retryN = 0;
-                                                   
+    uint8_t address;
+    uint8_t retryN = 0;   
+    char rxData[NRF24L01_PAYLOAD];
+    discPack_p tempPacket = (discPack_p) rxData; 
+    headerPack_p tempHeader = (headerPack_p) rxData;
+    
+    //Used by root node, leaf nodes send ripEntries 
+    rootReplyP_t myRootReply;
+    ripEntry_p entryP = (ripEntry_p)tempPacket->data;    
+    
+    
+    //Used by leaf node, root node sends rootReplies
+    ripEntry_t myLeafInfo;
+    rootReplyP_p rootReply = (rootReplyP_p)tempPacket->data;      
+                                                  
     // --------------------------------------------
     srand(TCNT2);
 
     gID = rand(); 
     printf("gID %s:%d:%d\n", __FILE__, __LINE__, gID);   
     
-    // Select initial pipe, range 1-255
-    pipe = gID%255 + 1;
+    // Select initial address, range 1-255
+    address = gID%255 + 1;
     // Validate root
-    if(isRootPipe(pipe))
+    if(isRootId(gID))
     {  
         while(retryN < _MAX_RETRIES_)
         {
             //Wait for a non-root node in range to send a message
             while( !nrf24l01_readready(_JOIN_PIPE_) );
             //Someone sends us a message  
-            nrf24l01_read(data);
-            if(isInRange(entryP->pipe, pipe)) 
+            nrf24l01_read(rxData);
+            if(isInRange(entryP->id, gID)) //leaf in our range
             {
                 if(usedEntries<_MAX_PIPES_)
                 {
-                    insertEntry(entryP);
+                    insertEntry(entryP); 
+                    //FIXME: send correct reply to sender
                 }  
                 else                           
                 {
@@ -63,11 +76,66 @@ ret_t joinNetwork()
             {
                 retryN++;
             }
-        }                              
+        }
+        //FIXME: autoconnect roots                              
     }
     else // Leaf node
     {
         //Look for our root to become available
+        while(retryN < _MAX_RETRIES_)
+        {
+            //Check if someone has just sent something
+            if( !nrf24l01_readready(_JOIN_PIPE_) )
+            {
+                //Send a message to our root, build packet to send
+                myLeafInfo.id   = gID;
+                myLeafInfo.address = address;
+                myLeafInfo.pipe = 0;
+                myLeafInfo.isRoot = 0; 
+                
+                
+                sendMessageTo(getRootFromAddr(gID), DISCOVERY,
+                              (char *)&myLeafInfo, sizeof(myLeafInfo));
+                printf("Sent discovery message %s:%d:%d\n", __FILE__, __LINE__, gID);   
+            }
+            else
+            {
+                //Verify packet destiny
+                nrf24l01_read(rxData);
+                if( isRootId(tempHeader->idSrc) )                 
+                {                                
+                    if( isInRange(gID, tempHeader->idSrc) ) //If the packet is from our root
+                    { 
+                        //Validate connection established
+                        if(rootReply->isAcceptedConnection)
+                        {
+                            isPaired            = TRUE;  
+                            /* Reuse leaf entry to fill the unique entry for this leaf */ 
+                            myLeafInfo.id       = tempHeader->idSrc;
+                            myLeafInfo.pipe     = rootReply->pipe;
+                            myLeafInfo.isRoot   = FALSE;
+                            insertEntry(&myLeafInfo);
+                            printf("Success pairing %s:%d:%d:%d:%d\n", __FILE__, __LINE__, gID, tempHeader->idSrc,
+                                    rootReply->pipe);   
+                            return SUCCESS;
+                        }
+                    }
+                    else //Packet from other root, simply discard it
+                        retryN++;
+                }
+                else //Got a packet from other leaf
+                {
+                    if( tempHeader->idSrc == gID)
+                    {
+                        //global ID collision detected, modify ours
+                        gID = rand();  
+                        address = gID%255 + 1;
+                    }
+                    else //Packet from other leaf, simply discard it
+                        retryN++;
+                }
+            }   
+        }      
     }                                                             
     return SUCCESS;
 }
@@ -180,15 +248,28 @@ ret_t insertEntry(ripEntry_t *newEntry)
 }
 
 /* Internal, aux functions */
-int isRootPipe(uint16_t pipe)
+int isRootId(uint16_t id)
 {
     return 0;
 }
 
-int isInRange(uint16_t leafPipe, uint16_t rootPipe)
+int isInRange(uint16_t leafID, uint16_t rootID)
 {
     return 0;    
 }
+
+uint8_t getRootFromAddr(uint16_t address)
+{
+    return 0;
+}
+
+/*
+ * Function to calculate the checksum of the network packet
+ * 
+ * param hdr : Header of the packet to calculate the checksum for
+ * param msg : Message body of the packet
+ * param left: Size of bytes left to send 
+ */
 
 uint8_t checksumCalculator(headerPack_p hdr, 
                                    char *msg, 
