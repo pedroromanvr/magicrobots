@@ -12,6 +12,9 @@
 #define DEFAULT_PIPE 0
 #define DEFAULT_TTL 7
 
+#define DATA_SIZE \
+  (NRF24L01_PAYLOAD-sizeof(headerPack_t))
+
 typedef struct
 {
     uint16_t id;
@@ -34,6 +37,7 @@ typedef struct {
     uint8_t     size;
     uint8_t     checksum;
     uint8_t     ttl;
+    uint8_t     number;
     uint16_t    idSrc;
     uint16_t    idDest;    
 }
@@ -42,7 +46,7 @@ typedef headerPack_t * headerPack_p;
 
 typedef struct {
     headerPack_t header;
-    uint8_t data[8];    
+    uint8_t data[DATA_SIZE];    
 }
 discPack_t;
 typedef discPack_t * discPack_p;

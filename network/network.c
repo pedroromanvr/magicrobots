@@ -9,6 +9,7 @@ ripEntry_t ripTable[_MAX_PIPES_] = {{0,0},
 uint8_t usedEntries = 0;
 uint16_t gID = 0;  
 
+#include "../movement/movement.h"
 #include "platform.h"
 #include "stdlib.h"
 #include <delay.h>
@@ -159,15 +160,16 @@ nextEntry:
     }
     pipe = re->pipe;
   }
-  
+  hdr->number = 0;
   while(done <= size)
   {
     hdr->checksum = checksumCalculator(hdr, 
                        &msg[done], size - done);  
-    memcpy(packet.data, &msg[done], 8);
+    memcpy(packet.data, &msg[done], DATA_SIZE);
     nrf24l01_settxaddr(nfr23l01_pipeAddr(nrf24l01_addr, pipe));
     nrf24l01_write((uint8_t *)&packet);
     done += 8;
+    hdr->number += 1;
   }
   idx++;
   if(!found)
@@ -179,8 +181,29 @@ ret_t getMessage(char *buf, uint16_t size){
     return UNIMPLEMENTED;
 }
 //Specify ID to recieve from
-ret_t getMessageFrom(uint16_t id, char *buf, uint16_t size){
-    return UNIMPLEMENTED;
+ret_t getMessageFrom(uint16_t id, char *buf, uint16_t size)
+{
+  /*
+   * We are like a girl in love,
+   * just waiting that special someone to call <3
+   */
+   ret_t ret;
+   int retry = 0;
+   headerPack_p hdr = (headerPack_p)buf;
+   int notHim = 1;
+   while(notHim)
+   {
+      /* we cannot be in love forever </3 */
+      if(retry == _MAX_RETRIES_)
+        return WARNING;
+      ret = getMessage(buf, size);
+      if(hdr->idSrc == id)
+      {
+        notHim = 0;
+      }
+      retry++;
+   }
+   return ret;
 }
 
 ret_t insertEntry(ripEntry_t *newEntry)
@@ -208,10 +231,11 @@ uint8_t checksumCalculator(headerPack_p hdr,
                                 uint8_t left)
 {
   uint8_t i, checksum = 0;
-  uint8_t limit = left < 8 ? left : 8;
+  uint8_t limit = left < DATA_SIZE ? left : DATA_SIZE;
   checksum ^= hdr->type;
   checksum ^= hdr->size;
   checksum ^= hdr->ttl;
+  checksum ^= hdr->number;
   checksum ^= (uint8_t)((hdr->idSrc & 0xFF00)>>8);
   checksum ^= (uint8_t)(hdr->idSrc & 0x00FF);
   checksum ^= (uint8_t)((hdr->idDest & 0xFF00)>>8);
