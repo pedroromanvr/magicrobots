@@ -90,7 +90,7 @@ ret_t sendMessageTo(uint16_t id, packet_t type,
                         char *msg, uint8_t size)
 {
   uint8_t idx, pipe = DEFAULT_PIPE, done = 0, found = 0;
-  uint8_t checksum;
+  uint8_t checksum, number;
   ripEntry_p re; 
   discPack_t packet;
   headerPack_p hdr = (headerPack_p)&packet;
@@ -127,15 +127,16 @@ nextEntry:
     }
     pipe = re->pipe;
   }
-  
+  number = 0;
   while(done <= size)
   {
     hdr->checksum = checksumCalculator(hdr, 
                        &msg[done], size - done);  
-    memcpy(packet.data, &msg[done], 8);
+    memcpy(packet.data, &msg[done], DATA_SIZE);
     nrf24l01_settxaddr(nfr23l01_pipeAddr(nrf24l01_addr, pipe));
     nrf24l01_write((uint8_t *)&packet);
     done += 8;
+    number++;
   }
   idx++;
   if(!found)
@@ -172,10 +173,11 @@ uint8_t checksumCalculator(headerPack_p hdr,
                                 uint8_t left)
 {
   uint8_t i, checksum = 0;
-  uint8_t limit = left < 8 ? left : 8;
+  uint8_t limit = left < DATA_SIZE ? left : DATA_SIZE;
   checksum ^= hdr->type;
   checksum ^= hdr->size;
   checksum ^= hdr->ttl;
+  checksum ^= hdr->number;
   checksum ^= (uint8_t)((hdr->idSrc & 0xFF00)>>8);
   checksum ^= (uint8_t)(hdr->idSrc & 0x00FF);
   checksum ^= (uint8_t)((hdr->idDest & 0xFF00)>>8);
