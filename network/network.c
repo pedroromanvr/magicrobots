@@ -110,6 +110,7 @@ ret_t joinNetwork()
                         if(rootReply->isAcceptedConnection)
                         {
                             isPaired            = TRUE;  
+                            isRoot              = FALSE;
                             /* Reuse leaf entry to fill the unique entry for this leaf */ 
                             myLeafInfo.id       = tempHeader->idSrc;
                             myLeafInfo.pipe     = rootReply->pipe;
