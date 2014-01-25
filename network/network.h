@@ -34,6 +34,7 @@ typedef struct {
     uint8_t     size;
     uint8_t     checksum;
     uint8_t     ttl;
+    uint8_t     number;
     uint16_t    idSrc;
     uint16_t    idDest;    
 }
