@@ -28,6 +28,8 @@ ret_t joinNetwork()
     char data[NRF24L01_PAYLOAD];   
     ripEntry_t *entryP = (ripEntry_t *)data;    
     uint8_t retryN = 0;
+    discPack_t packet;
+    headerPack_p hdr = (headerPack_p)&packet;
                                                    
     // --------------------------------------------
     srand(TCNT2);
@@ -67,6 +69,36 @@ ret_t joinNetwork()
     else // Leaf node
     {
         //Look for our root to become available
+        while(retryN < _MAX_RETRIES_)
+        {
+            //Check if someone has just sent something
+            if( !nrf24l01_readready(_JOIN_PIPE_) )
+            {
+                //Send a message to root, build packet to send
+                hdr->checksum = checksumCalculator(hdr,data,0); //xor with 0 unaffects the checksum
+                hdr->idDest = ;
+                hdr->idSrc = gID;
+                hdr->size = size;
+                hdr->ttl = DEFAULT_TTL;
+                hdr->type = type;
+            }
+            if(isInRange(entryP->pipe, pipe)) 
+            {
+                if(usedEntries<_MAX_PIPES_)
+                {
+                    insertEntry(entryP);
+                }  
+                else                           
+                {
+                    //Convert leaf node to root 
+                    //break outter while
+                }
+            }
+            else         
+            {
+                retryN++;
+            }
+        }      
     }                                                             
     return SUCCESS;
 }
@@ -166,6 +198,10 @@ int isInRange(uint16_t leafPipe, uint16_t rootPipe)
 {
     return 0;    
 }
+
+/*
+ * param left: Size of bytes left to send 
+ */
 
 uint8_t checksumCalculator(headerPack_p hdr, 
                                    char *msg, 
