@@ -11,14 +11,18 @@
 
 #define DEFAULT_PIPE 0
 #define DEFAULT_TTL 7
+#define TRUE    1
+#define FALSE   0
 
 #define DATA_SIZE \
   (NRF24L01_PAYLOAD-sizeof(headerPack_t))
 
 typedef struct
 {
-    uint16_t id;
-    uint8_t pipe;        
+    uint8_t pipe; 
+    uint8_t address; 
+    uint8_t isRoot; 
+    uint16_t id;           
 }
 ripEntry_t;
 typedef ripEntry_t * ripEntry_p;
@@ -45,6 +49,13 @@ headerPack_t;
 typedef headerPack_t * headerPack_p;
 
 typedef struct {
+    uint8_t     isAcceptedConnection;
+    uint8_t     pipe;   
+}
+rootReplyP_t;
+typedef rootReplyP_t * rootReplyP_p;
+
+typedef struct {
     headerPack_t header;
     uint8_t data[DATA_SIZE];    
 }
@@ -53,6 +64,8 @@ typedef discPack_t * discPack_p;
 
 extern ripEntry_t ripTable[_MAX_PIPES_];
 extern uint8_t usedEntries;
+extern uint8_t isPaired;
+extern uint8_t isRoot;
 extern uint16_t gID;    
 
 /* Internal, aux functions */
