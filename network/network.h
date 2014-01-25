@@ -49,8 +49,9 @@ headerPack_t;
 typedef headerPack_t * headerPack_p;
 
 typedef struct {
-    uint8_t     isAcceptedConnection;
-    uint8_t     pipe;   
+    uint8_t     isAcceptedConnection; /* Boolean true if connection was accepted */
+    uint8_t     pipe;   /* Pipe to be paired with */
+    uint16_t    gID2;   /* Alternative global ID(root) to pair with */ 
 }
 rootReplyP_t;
 typedef rootReplyP_t * rootReplyP_p;
@@ -69,8 +70,10 @@ extern uint8_t isRoot;
 extern uint16_t gID;    
 
 /* Internal, aux functions */
-int isRootPipe(uint16_t pipe);
+int isRootId(uint16_t pipe);
 int isInRange(uint16_t leafPipe, uint16_t rootPipe);
+uint8_t getRootFromAddr(uint16_t pipe);
+
 ret_t insertEntry(ripEntry_t *newEntry);
 uint8_t checksumCalculator(headerPack_p hdr, 
                                    char *msg, 
