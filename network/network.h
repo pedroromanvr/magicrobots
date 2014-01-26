@@ -7,6 +7,7 @@
 #include "../nrf24l01/nrf24l01.h"
 #include "movement/movement.h"
 #define _MAX_PIPES_ 5
+#define _MAXIMUM_ADDRESS_ 255
 #define INVALID_GID 0
 
 #define DEFAULT_PIPE 0
@@ -19,7 +20,6 @@
 
 typedef struct
 {
-    uint8_t pipe; 
     uint8_t address; 
     uint8_t isRoot; 
     uint16_t id;           
@@ -50,7 +50,7 @@ typedef headerPack_t * headerPack_p;
 
 typedef struct {
     uint8_t     isAcceptedConnection; /* Boolean true if connection was accepted */
-    uint8_t     pipe;   /* Pipe to be paired with */
+    uint8_t     address;   /* Address to be paired with */
     uint16_t    gID2;   /* Alternative global ID(root) to pair with */ 
 }
 rootReplyP_t;
@@ -71,8 +71,10 @@ extern uint16_t gID;
 
 /* Internal, aux functions */
 int isRootId(uint16_t pipe);
-int isInRange(uint16_t leafPipe, uint16_t rootPipe);
-uint8_t getRootFromAddr(uint16_t pipe);
+int isInRange(uint16_t leafID, uint16_t rootID);
+uint8_t getRootFromAddr(uint8_t address);
+uint8_t getFreeAddress(uint8_t rootAddr);
+uint8_t isInRIP(uint8_t inpAddr);
 
 ret_t insertEntry(ripEntry_t *newEntry);
 uint8_t checksumCalculator(headerPack_p hdr, 

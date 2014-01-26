@@ -1,11 +1,11 @@
 #include "network.h"
 #include <stdint.h>
 
-ripEntry_t ripTable[_MAX_PIPES_] = {{0,0,0,0},
-                                    {0,0,0,0},
-                                    {0,0,0,0},
-                                    {0,0,0,0},
-                                    {0,0,0,0}};
+ripEntry_t ripTable[_MAX_PIPES_] = {{0,0,0},
+                                    {0,0,0},
+                                    {0,0,0},
+                                    {0,0,0},
+                                    {0,0,0}};
 uint8_t usedEntries = 0;
 uint8_t isPaired = FALSE;
 uint8_t isRoot = 255;   //Initialize with any value
@@ -14,6 +14,7 @@ uint16_t gID = 0;
 #include "../movement/movement.h"
 #include "platform.h"
 #include "stdlib.h"
+#include <math.h>
 #include <delay.h>
 
 #define _JOIN_PIPE_ 0
@@ -49,7 +50,7 @@ ret_t joinNetwork()
     printf("gID %s:%d:%d\n", __FILE__, __LINE__, gID);   
     
     // Select initial address, range 1-255
-    address = gID%255 + 1;
+    address = gID%_MAXIMUM_ADDRESS_+ 1;
     // Validate root
     if(isRootId(gID))
     {  
@@ -61,10 +62,17 @@ ret_t joinNetwork()
             nrf24l01_read(rxData);
             if(isInRange(entryP->id, gID)) //leaf in our range
             {
-                if(usedEntries<_MAX_PIPES_)
+                if(usedEntries < _MAX_PIPES_)
                 {
                     insertEntry(entryP); 
-                    //FIXME: send correct reply to sender
+                    //Send package to leaf node
+                    myRootReply.isAcceptedConnection = TRUE;
+                    myRootReply.address = getFreeAddress(address); //Based on my current root address 
+                    myRootReply.gID2 = 0;
+
+                    sendMessageTo(tempHeader->idSrc, DISCOVERY,
+                              (char *)&myRootReply, sizeof(myRootReply));
+                    printf("Sent root reply message %s:%d:%d\n", __FILE__, __LINE__, gID); 
                 }  
                 else                           
                 {
@@ -90,11 +98,10 @@ ret_t joinNetwork()
                 //Send a message to our root, build packet to send
                 myLeafInfo.id   = gID;
                 myLeafInfo.address = address;
-                myLeafInfo.pipe = 0;
                 myLeafInfo.isRoot = 0; 
                 
                 
-                sendMessageTo(getRootFromAddr(gID), DISCOVERY,
+                sendMessageTo(getRootFromAddr(address), DISCOVERY,
                               (char *)&myLeafInfo, sizeof(myLeafInfo));
                 printf("Sent discovery message %s:%d:%d\n", __FILE__, __LINE__, gID);   
             }
@@ -113,11 +120,11 @@ ret_t joinNetwork()
                             isRoot              = FALSE;
                             /* Reuse leaf entry to fill the unique entry for this leaf */ 
                             myLeafInfo.id       = tempHeader->idSrc;
-                            myLeafInfo.pipe     = rootReply->pipe;
+                            myLeafInfo.address  = rootReply->address;
                             myLeafInfo.isRoot   = FALSE;
                             insertEntry(&myLeafInfo);
                             printf("Success pairing %s:%d:%d:%d:%d\n", __FILE__, __LINE__, gID, tempHeader->idSrc,
-                                    rootReply->pipe);   
+                                    rootReply->address);   
                             return SUCCESS;
                         }
                     }
@@ -159,7 +166,7 @@ ret_t sendMessage(char *msg,  uint8_t size)
 ret_t sendMessageTo(uint16_t id, packet_t type, 
                         char *msg, uint8_t size)
 {
-  uint8_t idx, pipe = DEFAULT_PIPE, done = 0, found = 0;
+  uint8_t idx, addr = DEFAULT_PIPE, done = 0, found = 0;
   uint8_t checksum;
   ripEntry_p re; 
   discPack_t packet;
@@ -178,7 +185,7 @@ ret_t sendMessageTo(uint16_t id, packet_t type,
       continue;
     if(re->id == id)
     {
-      pipe = re->pipe;                                 
+      addr = re->address;                                 
       found = 1;
       break;
     }
@@ -195,7 +202,7 @@ nextEntry:
       idx++;
       goto nextEntry;
     }
-    pipe = re->pipe;
+    addr = re->address;
   }
   hdr->number = 0;
   while(done <= size)
@@ -203,7 +210,7 @@ nextEntry:
     hdr->checksum = checksumCalculator(hdr, 
                        &msg[done], size - done);  
     memcpy(packet.data, &msg[done], DATA_SIZE);
-    nrf24l01_settxaddr(nfr23l01_pipeAddr(nrf24l01_addr, pipe));
+    nrf24l01_settxaddr(nfr23l01_pipeAddr(nrf24l01_addr, addr));
     nrf24l01_write((uint8_t *)&packet);
     done += 8;
     hdr->number += 1;
@@ -251,17 +258,54 @@ ret_t insertEntry(ripEntry_t *newEntry)
 /* Internal, aux functions */
 int isRootId(uint16_t id)
 {
-    return 0;
+    /* A root ID must be a multiple of _MAX_PIPES_ */
+    if(id%(uint16_t)_MAX_PIPES_ == 0)
+      return TRUE;
+    else
+      return FALSE;
 }
 
 int isInRange(uint16_t leafID, uint16_t rootID)
 {
-    return 0;    
+    if(abs(rootID-leafID) <= (uint16_t)_MAX_PIPES_)
+        return TRUE;
+    else
+        return FALSE;
 }
 
-uint8_t getRootFromAddr(uint16_t address)
+uint8_t getRootFromAddr(uint8_t address)
 {
-    return 0;
+    uint8_t retN = _MAX_PIPES_*floor((float)address/_MAX_PIPES_);
+    return retN;
+}
+
+uint8_t getFreeAddress(uint8_t rootAddr)
+{
+   uint8_t i;
+   ripEntry_p rep;
+   uint8_t startVal = rootAddr;
+   for(i=startVal; i < startVal+_MAX_PIPES_; i++)
+   {
+     //Validate each address in the same range as gID 
+     if( !isInRIP(i) )
+     {
+       return i;
+     }
+   }
+   return 0; //Error, no free address in ranga was found
+} 
+
+uint8_t isInRIP(uint8_t inpAddr)
+{
+    int i;
+    ripEntry_p re;
+    for(i=0; i<_MAX_PIPES_; ++i)
+    {
+      re = &ripTable[i];
+      if(re->address == inpAddr)
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /*
