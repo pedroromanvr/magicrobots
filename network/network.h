@@ -80,6 +80,11 @@ ret_t insertEntry(ripEntry_t *newEntry);
 uint8_t checksumCalculator(headerPack_p hdr, 
                                    char *msg, 
                                 uint8_t left);
+/*
+ * pipe : IN
+ * addr : OUT (5 byte array)
+*/
+ret_t getAddrByPipe(uint8_t pipe, char *addr);
  
  
 /* ------ To use outside this API ------  */
