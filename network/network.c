@@ -166,11 +166,12 @@ ret_t sendMessage(char *msg,  uint8_t size)
 ret_t sendMessageTo(uint16_t id, packet_t type, 
                         char *msg, uint8_t size)
 {
-  uint8_t idx, addr = DEFAULT_PIPE, done = 0, found = 0;
+  uint8_t idx, done = 0, found = 0;
   uint8_t checksum;
   ripEntry_p re; 
   discPack_t packet;
   headerPack_p hdr = (headerPack_p)&packet;
+  char address[NRF24L01_ADDRSIZE];
 
   hdr->type = type;
   hdr->size = size;
@@ -185,15 +186,14 @@ ret_t sendMessageTo(uint16_t id, packet_t type,
       continue;
     if(re->id == id)
     {
-      addr = re->address;                                 
       found = 1;
       break;
     }
   }
-  idx = 0;
-nextEntry:
   if(!found)
   {
+    idx = 0;
+nextEntry:
     if(idx == _MAX_PIPES_)
       return WARNING;
     re = &ripTable[idx];    
@@ -202,7 +202,6 @@ nextEntry:
       idx++;
       goto nextEntry;
     }
-    addr = re->address;
   }
   hdr->number = 0;
   while(done <= size)
@@ -210,9 +209,10 @@ nextEntry:
     hdr->checksum = checksumCalculator(hdr, 
                        &msg[done], size - done);  
     memcpy(packet.data, &msg[done], DATA_SIZE);
-    nrf24l01_settxaddr(nfr23l01_pipeAddr(nrf24l01_addr, addr));
+    getAddrByPipe(idx, address);
+    nrf24l01_settxaddr(address);
     nrf24l01_write((uint8_t *)&packet);
-    done += 8;
+    done += DATA_SIZE;
     hdr->number += 1;
   }
   idx++;
@@ -336,3 +336,18 @@ uint8_t checksumCalculator(headerPack_p hdr,
     
   return checksum;
 }
+
+ret_t getAddrByPipe(uint8_t pipe, char *addr)
+{
+    
+    /* pipe 0 has an special address.
+       pipe 1 to 5 have the common address we 
+       are looking for */
+    if(pipe > _MAX_PIPES_)
+        return ERROR;
+    memcpy(addr, nfr23l01_pipeAddr(nrf24l01_addr, 3), 
+                                  NRF24L01_ADDRSIZE);
+    addr[NRF24L01_ADDRSIZE - 1] = ripTable[pipe].address;
+    return SUCCESS;
+}
+
