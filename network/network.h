@@ -70,13 +70,13 @@ extern uint8_t isRoot;
 extern uint16_t gID;    
 
 /* Internal, aux functions */
-int isRootId(uint16_t pipe);
+int isRootId(uint16_t id);
 int isInRange(uint16_t leafID, uint16_t rootID);
-uint8_t getRootFromAddr(uint8_t address);
+uint16_t getRootFromID(uint16_t address);
 uint8_t getFreeAddress(uint8_t rootAddr);
 uint8_t isInRIP(uint8_t inpAddr);
 
-ret_t insertEntry(ripEntry_t *newEntry);
+ret_t insertEntry(ripEntry_p newEntry);
 uint8_t checksumCalculator(headerPack_p hdr, 
                                    char *msg, 
                                 uint8_t left);
