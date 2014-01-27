@@ -100,7 +100,7 @@ ret_t joinNetwork()
                 myLeafInfo.isRoot = 0; 
                 
                 
-                sendMessageTo(getRootFromAddr(address), DISCOVERY,
+                sendMessageTo(getRootFromID(gID), DISCOVERY,
                               (char *)&myLeafInfo, sizeof(myLeafInfo));
                 printf("Sent discovery message %s:%d:%d\n", __FILE__, __LINE__, gID);   
             }
@@ -340,15 +340,15 @@ int isRootId(uint16_t id)
 
 int isInRange(uint16_t leafID, uint16_t rootID)
 {
-    if(abs(rootID-leafID) <= (uint16_t)_MAX_PIPES_)
+    if(getRootFromID(leafID) == rootID)
         return TRUE;
     else
         return FALSE;
 }
 
-uint8_t getRootFromAddr(uint8_t address)
+uint16_t getRootFromID(uint16_t id)
 {
-    uint8_t retN = _MAX_PIPES_*floor((float)address/_MAX_PIPES_);
+    uint16_t retN = _MAX_PIPES_*floor((float)id/_MAX_PIPES_);
     return retN;
 }
 
