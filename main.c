@@ -76,7 +76,7 @@ interrupt [TIM2_OVF] void timer2_ovf_isr(void)
 {
 // Reinitialize Timer2 value
 TCNT2=0x9C;
-/*  */
+
     static char pwmCount = 0;  
     if(++pwmCount == (char)PWM_FRECUENCY_MAX)
     {
@@ -251,24 +251,17 @@ while(1);
   while(1)
   {                     
 #if TXMODE==1
-    /*
+    
     //set tx address for pipe 3
     nrf24l01_settxaddr(nfr23l01_pipeAddr(nrf24l01_addr, pipe));
     //write buffer
     writeret = nrf24l01_write(bufferout);
     TX_LED = !TX_LED;
     delay_ms(500);            
-    */            
-    
-    ripEntry_t re;
-    re.address = 50;
-    re.isRoot = TRUE;
-    re.id = 1000;
-    
-    insertEntry(&re);      
+                
     
 #else
-    /*
+    
     if(nrf24l01_readready(&pipe))
     {                         
       memset(bufferin, 0, sizeof(bufferin));
@@ -278,7 +271,7 @@ while(1);
     }
     else
       delay_ms(10);
-    */   
+    
     
 #endif
   }
