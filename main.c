@@ -258,7 +258,15 @@ while(1);
     writeret = nrf24l01_write(bufferout);
     TX_LED = !TX_LED;
     delay_ms(500);            
-    */
+    */            
+    
+    ripEntry_t re;
+    re.address = 50;
+    re.isRoot = TRUE;
+    re.id = 1000;
+    
+    insertEntry(&re);      
+    
 #else
     /*
     if(nrf24l01_readready(&pipe))

@@ -38,7 +38,6 @@ ret_t joinNetwork()
     rootReplyP_t myRootReply;
     ripEntry_p entryP = (ripEntry_p)tempPacket->data;    
     
-    
     //Used by leaf node, root node sends rootReplies
     ripEntry_t myLeafInfo;
     rootReplyP_p rootReply = (rootReplyP_p)tempPacket->data;      
@@ -250,9 +249,41 @@ ret_t getMessageFrom(uint16_t id, char *buf, uint16_t size)
    return ret;
 }
 
-ret_t insertEntry(ripEntry_t *newEntry)
+ret_t insertEntry(ripEntry_p newEntry)
 {
-    return UNIMPLEMENTED;
+    if(usedEntries < _MAX_PIPES_)
+    {
+      /* Find free spot available i.e. address == 0 */
+      int i;
+      for(i=0; i<_MAX_PIPES_; i++)
+      {
+        if(ripTable[i].address == 0) // Free
+        {
+          if( !isInRIP(newEntry->address) ) //If address is not currently in table
+          {
+            memcpy(&ripTable[i], newEntry, sizeof(ripEntry_t)); 
+            usedEntries++;
+            return SUCCESS;
+          }
+          else
+          {
+            //Error, address already in table
+            printf("Address already in table %d:%d:%d\n", __LINE__, usedEntries,
+                                        newEntry->address);
+            return ERROR;
+
+          }
+        }
+      }
+      //No free spot available, should never reach here
+      return ERROR;
+    }
+    else
+    {
+      printf("ripTable is full %d:%d:%d\n", __LINE__, usedEntries,
+                                        newEntry->address);
+      return ERROR;
+    }
 }
 
 /* Internal, aux functions */
