@@ -94,10 +94,18 @@ ret_t getAddrByPipe(uint8_t pipe, char *addr);
 //Send message to an specific ID
 ret_t sendMessageTo(uint16_t id, packet_t type, 
                         char *msg, uint8_t size);
+/*
+ * header is used to retrieve information
+ * about the message.
+ * In getMessageFrom it is also used to indicate
+ * the source ID
+ */
 //Recieve message from any sender
- ret_t getMessage(char *buf, uint16_t size);
+ ret_t getMessage(headerPack_p header, 
+                 char *buf, uint8_t size);
 //Specify ID to recieve from
- ret_t getMessageFrom(uint16_t id, char *buf, uint16_t size); 
+ ret_t getMessageFrom(headerPack_p header, 
+                 char *buf, uint8_t size); 
 
  
 #endif 

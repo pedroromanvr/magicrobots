@@ -221,11 +221,51 @@ nextEntry:
   return SUCCESS;
 }
 //Recieve message from any sender
-ret_t getMessage(char *buf, uint16_t size){
-    return UNIMPLEMENTED;
+ret_t getMessage(headerPack_p header, char *buf, uint8_t size)
+{
+    uint8_t pipe;
+    int recieved = 0;
+    discPack_t packet;
+    headerPack_p hdr = (headerPack_p)&packet;
+
+nextPacket:    
+    while(!nrf24l01_readready(&pipe))
+    {
+        nrf24l01_read((uint8_t *)&packet);
+        
+        /* Can't handle the size */
+        if(hdr->size > size)
+            return WARNING;
+            
+        /* Bad packet */
+        if(hdr->checksum != checksumCalculator(hdr, 
+                                        packet.data,
+                                        hdr->size - recieved))
+            return ERROR;
+                
+        /* First iteration: setup header,
+         * on the other ones ignore messages from other idSrc
+         */
+        if(recieved == 0)
+            memcpy(header, hdr, sizeof(headerPack_p));
+        else if(header->idSrc != hdr->idSrc)
+            goto nextPacket;
+        
+        memcpy(buf + hdr->number * DATA_SIZE, packet.data, 
+               DATA_SIZE > (hdr->size - recieved) ? 
+               DATA_SIZE : (hdr->size - recieved));
+        recieved += DATA_SIZE;
+        if(recieved > hdr->size)
+            break;
+        else
+            goto nextPacket;        
+    }
+        
+    return SUCCESS;
 }
 //Specify ID to recieve from
-ret_t getMessageFrom(uint16_t id, char *buf, uint16_t size)
+ret_t getMessageFrom(headerPack_p header, char *buf, 
+                                        uint8_t size)
 {
   /*
    * We are like a girl in love,
@@ -240,8 +280,10 @@ ret_t getMessageFrom(uint16_t id, char *buf, uint16_t size)
       /* we cannot be in love forever </3 */
       if(retry == _MAX_RETRIES_)
         return WARNING;
-      ret = getMessage(buf, size);
-      if(hdr->idSrc == id)
+      ret = getMessage(header, buf, size);
+      if(ret != SUCCESS)
+        return ret;
+      if(hdr->idSrc == header->idSrc)
       {
         notHim = 0;
       }
