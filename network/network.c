@@ -247,7 +247,7 @@ nextPacket:
          * on the other ones ignore messages from other idSrc
          */
         if(recieved == 0)
-            memcpy(header, hdr, sizeof(headerPack_p));
+            memcpy(header, hdr, sizeof(headerPack_t));
         else if(header->idSrc != hdr->idSrc)
             goto nextPacket;
         
