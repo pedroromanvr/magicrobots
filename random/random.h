@@ -12,8 +12,8 @@ eeprom uint8_t numbers[1024];
 extern uint16_t randomIdx;
 
 #define random8() \
-    numbers[randomIdx++]
-
+    numbers[(randomIdx++)%1024]
+    
 uint16_t random16();
 
 #endif 
