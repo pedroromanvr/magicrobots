@@ -29,7 +29,7 @@ ret_t joinNetwork()
 {
     // ----------- Variable declarations ----------
     uint8_t address;
-    uint8_t retryN = 0;   
+    uint8_t retryN;
     char rxData[NRF24L01_PAYLOAD];
     discPack_p tempPacket = (discPack_p) rxData; 
     headerPack_p tempHeader = (headerPack_p) rxData;
@@ -43,13 +43,12 @@ ret_t joinNetwork()
     rootReplyP_p rootReply = (rootReplyP_p)tempPacket->data;      
                                                   
     // --------------------------------------------
-    srand(TCNT2);
-
-    gID = rand(); 
-    printf("gID %s:%d:%d\n", __FILE__, __LINE__, gID);   
-    
+join_retry:
+    retryN = 0;
+    //gID = rand();     // <--- DELETE_ME
     // Select initial address, range 1-255
-    address = gID%_MAXIMUM_ADDRESS_+ 1;
+    address = GET_ADDRESS(gID);
+    printf("gID %s:%d:%d\n", __FILE__, __LINE__, gID);   
     // Validate root
     if(isRootId(gID))
     {  
@@ -59,10 +58,12 @@ ret_t joinNetwork()
             while( !nrf24l01_readready(_JOIN_PIPE_) );
             //Someone sends us a message  
             nrf24l01_read(rxData);
+            printf("R_Got package, %s:%d:gID:%d:addr:%d:type:%d:size:%d:checksum:%d:ttl:%d:numb:%d:srcID:%d:destID:%d-\n", __FILE__, __LINE__, gID, address, tempHeader->type, tempHeader->size, tempHeader->checksum, tempHeader->ttl, tempHeader->number, tempHeader->idSrc, tempHeader->idDest); 
             if(isInRange(entryP->id, gID)) //leaf in our range
             {
                 if(usedEntries < _MAX_PIPES_)
                 {
+                    printf("Adding leaf to RIP, %s:%d:%d\n", __FILE__, __LINE__, gID); 
                     insertEntry(entryP); 
                     //Send package to leaf node
                     myRootReply.isAcceptedConnection = TRUE;
@@ -84,7 +85,7 @@ ret_t joinNetwork()
                 retryN++;
             }
         }
-        //FIXME: autoconnect roots                              
+        //TODO: autoconnect roots                              
     }
     else // Leaf node
     {
@@ -108,6 +109,7 @@ ret_t joinNetwork()
             {
                 //Verify packet destiny
                 nrf24l01_read(rxData);
+                printf("L_Got package, %s:%d:gID:%d:addr:%d:type:%d:size:%d:checksum:%d:ttl:%d:numb:%d:srcID:%d:destID:%d-\n", __FILE__, __LINE__, gID, address, tempHeader->type, tempHeader->size, tempHeader->checksum, tempHeader->ttl, tempHeader->number, tempHeader->idSrc, tempHeader->idDest); 
                 if( isRootId(tempHeader->idSrc) )                 
                 {                                
                     if( isInRange(gID, tempHeader->idSrc) ) //If the packet is from our root
@@ -122,10 +124,12 @@ ret_t joinNetwork()
                             myLeafInfo.address  = rootReply->address;
                             myLeafInfo.isRoot   = FALSE;
                             insertEntry(&myLeafInfo);
-                            printf("Success pairing %s:%d:%d:%d:%d\n", __FILE__, __LINE__, gID, tempHeader->idSrc,
+                            printf("Success pairing %s:%d:gID:%d:srcID:%d:rootAddr:%d\n", __FILE__, __LINE__, gID, tempHeader->idSrc,
                                     rootReply->address);   
                             return SUCCESS;
                         }
+                        //TODO: root did not accept connection
+                        break;
                     }
                     else //Packet from other root, simply discard it
                         retryN++;
@@ -135,16 +139,18 @@ ret_t joinNetwork()
                     if( tempHeader->idSrc == gID)
                     {
                         //global ID collision detected, modify ours
-                        gID = rand();  
-                        address = gID%255 + 1;
+                        goto join_retry;
                     }
                     else //Packet from other leaf, simply discard it
                         retryN++;
                 }
             }   
-        }      
-    }                                                             
-    return SUCCESS;
+        }
+        // MAX number of retries reached, move from range
+        //goto join_retry;  // <----- DELETE_ME
+    }
+    printf("Error, could not pair %s:%d:gID:%d:addr:%d:\n", __FILE__, __LINE__, gID, address);   
+    return ERROR;
 }
 //Broadcast message originated in this host
 ret_t sendMessage(char *msg,  uint8_t size)

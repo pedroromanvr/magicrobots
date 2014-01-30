@@ -15,6 +15,9 @@
 #define TRUE    1
 #define FALSE   0
 
+#define GET_ADDRESS(a) \
+  ((a)%_MAXIMUM_ADDRESS_ + 1)
+
 #define DATA_SIZE \
   (NRF24L01_PAYLOAD-sizeof(headerPack_t))
 
