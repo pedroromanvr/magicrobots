@@ -48,13 +48,15 @@ join_retry:
     //gID = rand();     // <--- DELETE_ME
     // Select initial address, range 1-255
     address = GET_ADDRESS(gID);
-    printf("gID %s:%d:%d\n", __FILE__, __LINE__, gID);   
+    printf("gID %d:%d\n", __LINE__, gID);   
     // Validate root
     if(isRootId(gID))
     {  
+        printf("Hello I'm root :D\n");
         while(retryN < _MAX_RETRIES_)
         {
             //Wait for a non-root node in range to send a message
+            printf("I'm waiting for a leaf...\n");
             while( !nrf24l01_readready(_JOIN_PIPE_) );
             //Someone sends us a message  
             nrf24l01_read(rxData);
@@ -89,6 +91,7 @@ join_retry:
     }
     else // Leaf node
     {
+        printf("Hello I'm a leaf! D:\n");
         //Look for our root to become available
         while(retryN < _MAX_RETRIES_)
         {
@@ -172,7 +175,6 @@ ret_t sendMessageTo(uint16_t id, packet_t type,
                         char *msg, uint8_t size)
 {
   uint8_t idx, done = 0, found = 0;
-  uint8_t checksum;
   ripEntry_p re; 
   discPack_t packet;
   headerPack_p hdr = (headerPack_p)&packet;
@@ -182,11 +184,14 @@ ret_t sendMessageTo(uint16_t id, packet_t type,
   hdr->size = size;
   hdr->ttl = DEFAULT_TTL;
   hdr->idSrc = gID;
-  hdr->idDest = id;
-
+  hdr->idDest = id;           
+  
+  printHeader(hdr);
+  
   for(idx=0; idx<_MAX_PIPES_; idx++)
   {                          
     re = &ripTable[idx];
+    printRipEntry(re);
     if(re->id == INVALID_GID)
       continue;
     if(re->id == id)
@@ -195,10 +200,12 @@ ret_t sendMessageTo(uint16_t id, packet_t type,
       break;
     }
   }
+  printf("sendMessageTo:found=%d\n", found);
   if(!found)
   {
     idx = 0;
 nextEntry:
+    printf("sendMessageTo:nextEntry: idx=%d", idx);
     if(idx == _MAX_PIPES_)
       return WARNING;
     re = &ripTable[idx];    
@@ -208,9 +215,12 @@ nextEntry:
       goto nextEntry;
     }
   }
+  printRipEntry(re);
+
   hdr->number = 0;
   while(done <= size)
   {
+    printHeader(hdr);
     hdr->checksum = checksumCalculator(hdr, 
                        &msg[done], size - done);  
     memcpy(packet.data, &msg[done], DATA_SIZE);
@@ -361,7 +371,6 @@ uint16_t getRootFromID(uint16_t id)
 uint8_t getFreeAddress(uint8_t rootAddr)
 {
    uint8_t i;
-   ripEntry_p rep;
    uint8_t startVal = rootAddr;
    for(i=startVal; i < startVal+_MAX_PIPES_; i++)
    {
@@ -424,7 +433,7 @@ ret_t getAddrByPipe(uint8_t pipe, char *addr)
        are looking for */
     if(pipe > _MAX_PIPES_)
         return ERROR;
-    memcpy(addr, nfr23l01_pipeAddr(nrf24l01_addr, 3), 
+    memcpy(addr, nfr24l01_pipeAddr(nrf24l01_addr, 3), 
                                   NRF24L01_ADDRSIZE);
     addr[NRF24L01_ADDRSIZE - 1] = ripTable[pipe].address;
     return SUCCESS;

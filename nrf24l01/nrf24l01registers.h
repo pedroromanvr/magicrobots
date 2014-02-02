@@ -33,7 +33,7 @@ Please refer to LICENSE file for licensing information.
 #define NRF24L01_REG_RX_PW_P5    0x16
 #define NRF24L01_REG_FIFO_STATUS 0x17
 #define NRF24L01_REG_FEATURE     0x1D
-#define NRF24L01_REG_DYNPD	     0x1C
+#define NRF24L01_REG_DYNPD         0x1C
 
 /* Bit Mnemonics */
 #define NRF24L01_REG_MASK_RX_DR  6

@@ -40,7 +40,6 @@ Please refer to LICENSE file for licensing information.
 #include "../spi/spi.h"
 #include "nrf24l01registers.h"
 
-
 //CE and CSN port definitions
 #define NRF24L01_DDR DDRB
 #define NRF24L01_PORT PORTB
@@ -101,44 +100,39 @@ Please refer to LICENSE file for licensing information.
 #define NRF24L01_ADDRSIZE 5
 
 //pipe address
-#define NRF24L01_ADDRP0 \
-{0xE8, 0xE8, 0xF0, 0xF0, 0xE2}
-#define NRF24L01_ADDRP1 \
-{0xC1, 0xC2, 0xC2, 0xC2, 0xC2}
-#define NRF24L01_ADDRP2 \
-{0xC1, 0xC2, 0xC2, 0xC2, 0xC3}
-#define NRF24L01_ADDRP3 \
-{0xC1, 0xC2, 0xC2, 0xC2, 0xC4}
-#define NRF24L01_ADDRP4 \
-{0xC1, 0xC2, 0xC2, 0xC2, 0xC5}
-#define NRF24L01_ADDRP5 \
-{0xC1, 0xC2, 0xC2, 0xC2, 0xC6}
-#define NRF24L01_ADDRTX \
-{0xE8, 0xE8, 0xF0, 0xF0, 0xE2}
-
-#define nfr23l01_pipeAddr(basep, pipe) \
-	((uint8_t *)(basep + pipe*NRF24L01_ADDRSIZE))
-
-#define MAX_PIPE 6
-/* Notice that there is no pipe 6
- * It is just a software trick to make things easier.
- * Pipe 6 is configured as pipe 0  */
-#define TX_PIPE 6
+#define NRF24L01_ADDRP0 {0xE8, 0xE8, 0xF0, 0xF0, 0xE2} //pipe 0, 5 byte address
+#define NRF24L01_ADDRP1 {0xC1, 0xC2, 0xC2, 0xC2, 0xC2} //pipe 1, 5 byte address
+#define NRF24L01_ADDRP2 {0xC1, 0xC2, 0xC2, 0xC2, 0xC3} //pipe 2, 5 byte address
+#define NRF24L01_ADDRP3 {0xC1, 0xC2, 0xC2, 0xC2, 0xC4} //pipe 3, 5 byte address
+#define NRF24L01_ADDRP4 {0xC1, 0xC2, 0xC2, 0xC2, 0xC5} //pipe 4, 5 byte address
+#define NRF24L01_ADDRP5 {0xC1, 0xC2, 0xC2, 0xC2, 0xC6} //pipe 5, 5 byte address
+#define NRF24L01_ADDRTX {0xE8, 0xE8, 0xF0, 0xF0, 0xE2} //tx default address*/
 
  //enable print info function
-#define NRF24L01_PRINTENABLE 1
-
-extern uint8_t nrf24l01_addr[7][NRF24L01_ADDRSIZE];
+#define NRF24L01_PRINTENABLE 0
 
 extern void nrf24l01_init();
 extern uint8_t nrf24l01_getstatus();
-extern uint8_t nrf24l01_readready(uint8_t* pipe);
+uint8_t nrf24l01_readready(uint8_t* pipe);
 extern void nrf24l01_read(uint8_t *data);
 extern uint8_t nrf24l01_write(uint8_t *data);
-extern void nrf24l01_setrxaddr(uint8_t pipe, uint8_t *addr);
+extern void nrf24l01_setrxaddr(uint8_t channel, uint8_t *addr);
 extern void nrf24l01_settxaddr(uint8_t *addr);
 #if NRF24L01_PRINTENABLE == 1
-extern void nrf24l01_printinfo(void(*prints)(const char *));
+extern void nrf24l01_printinfo(void(*prints)(const char *), void(*printc)(unsigned char data));
 #endif
+
+
+//address variables
+extern uint8_t nrf24l01_addr0[NRF24L01_ADDRSIZE];
+extern uint8_t nrf24l01_addr1[NRF24L01_ADDRSIZE];
+extern uint8_t nrf24l01_addr2[NRF24L01_ADDRSIZE];
+extern uint8_t nrf24l01_addr3[NRF24L01_ADDRSIZE];
+extern uint8_t nrf24l01_addr4[NRF24L01_ADDRSIZE];
+extern uint8_t nrf24l01_addr5[NRF24L01_ADDRSIZE];
+extern uint8_t nrf24l01_addrtx[NRF24L01_ADDRSIZE];
+
+#define nfr24l01_pipeAddr(base, number) \
+    base ## number
 
 #endif

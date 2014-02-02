@@ -75,7 +75,7 @@ extern uint16_t gID;
 /* Internal, aux functions */
 int isRootId(uint16_t id);
 int isInRange(uint16_t leafID, uint16_t rootID);
-uint16_t getRootFromID(uint16_t address);
+uint16_t getRootFromID(uint16_t id);
 uint8_t getFreeAddress(uint8_t rootAddr);
 uint8_t isInRIP(uint8_t inpAddr);
 
@@ -109,6 +109,14 @@ ret_t sendMessageTo(uint16_t id, packet_t type,
 //Specify ID to recieve from
  ret_t getMessageFrom(headerPack_p header, 
                  char *buf, uint8_t size); 
-
+                                                              
+#define printHeader(hdr) \
+    printf("Package header\nhdr addr:%d\ntype:%d\nsize:%d\nchecksum:%d\nttl:%d\nnumber:%d\nsrcID:%d\ndestID:%d\n\n", \
+    (hdr), (hdr)->type, (hdr)->size, (hdr)->checksum, (hdr)->ttl, (hdr)->number, (hdr)->idSrc, (hdr)->idDest)            
+    
+#define printRipEntry(re) \
+    printf("RipEntry\nrip entry addr:%d\naddress:%d\nisRoot:%d\nid:%d\n\n", \
+           (re), (re)->address, (re)->isRoot, (re)->id)
  
 #endif 
+

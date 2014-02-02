@@ -11,32 +11,24 @@ Please refer to LICENSE file for licensing information.
 
 
 //address variables
-uint8_t nrf24l01_addr[7][NRF24L01_ADDRSIZE] = {NRF24L01_ADDRP0, 
-                                               NRF24L01_ADDRP1,
-                                               NRF24L01_ADDRP2, 
-                                               NRF24L01_ADDRP3,
-                                               NRF24L01_ADDRP4, 
-                                               NRF24L01_ADDRP5, 
-                                               NRF24L01_ADDRTX};
-
-static uint8_t nrf24l01_reg_addr[7] = {NRF24L01_REG_RX_ADDR_P0,
-                                       NRF24L01_REG_RX_ADDR_P1,
-                                       NRF24L01_REG_RX_ADDR_P2,
-                                       NRF24L01_REG_RX_ADDR_P3,
-                                       NRF24L01_REG_RX_ADDR_P4,
-                                       NRF24L01_REG_RX_ADDR_P5,
-                                       NRF24L01_REG_TX_ADDR};
+uint8_t nrf24l01_addr0[NRF24L01_ADDRSIZE] = NRF24L01_ADDRP0;
+uint8_t nrf24l01_addr1[NRF24L01_ADDRSIZE] = NRF24L01_ADDRP1;
+uint8_t nrf24l01_addr2[NRF24L01_ADDRSIZE] = NRF24L01_ADDRP2;
+uint8_t nrf24l01_addr3[NRF24L01_ADDRSIZE] = NRF24L01_ADDRP3;
+uint8_t nrf24l01_addr4[NRF24L01_ADDRSIZE] = NRF24L01_ADDRP4;
+uint8_t nrf24l01_addr5[NRF24L01_ADDRSIZE] = NRF24L01_ADDRP5;
+uint8_t nrf24l01_addrtx[NRF24L01_ADDRSIZE] = NRF24L01_ADDRTX;
 
 /*
  * read one register
  */
 uint8_t nrf24l01_readregister(uint8_t reg) {
-  uint8_t result;
+    uint8_t result;
 	nrf24l01_CSNlo; //low CSN
 	spi_writereadbyte(NRF24L01_CMD_R_REGISTER | (NRF24L01_CMD_REGISTER_MASK & reg));
-  result = spi_writereadbyte(NRF24L01_CMD_NOP); //read write register
-  nrf24l01_CSNhi; //high CSN
-  return result;
+    result = spi_writereadbyte(NRF24L01_CMD_NOP); //read write register
+    nrf24l01_CSNhi; //high CSN
+    return result;
 }
 
 /*
@@ -87,12 +79,28 @@ void nrf24l01_revaddress(uint8_t *addr, uint8_t *addrrev) {
  * set rx address
  */
 void nrf24l01_setrxaddr(uint8_t pipe, uint8_t *addr) {
-	uint8_t addrrev[NRF24L01_ADDRSIZE];
-	memcpy(nfr23l01_pipeAddr(nrf24l01_addr, pipe),
-	       addr, NRF24L01_ADDRSIZE); //cache address
-	nrf24l01_revaddress(addr, (uint8_t *)addrrev);
-    	nrf24l01_writeregisters(nrf24l01_reg_addr[pipe], 
-			addrrev, NRF24L01_ADDRSIZE);
+    uint8_t addrrev[NRF24L01_ADDRSIZE];	
+	if(pipe == 0) {
+		memcpy(&nrf24l01_addr0, addr, NRF24L01_ADDRSIZE); //cache address
+		nrf24l01_revaddress(addr, (uint8_t *)addrrev);
+    	nrf24l01_writeregisters(NRF24L01_REG_RX_ADDR_P0, addrrev, NRF24L01_ADDRSIZE);
+	} else if(pipe == 1) {
+		memcpy(&nrf24l01_addr1, addr, NRF24L01_ADDRSIZE); //cache address
+		nrf24l01_revaddress(addr, (uint8_t *)addrrev);
+    	nrf24l01_writeregisters(NRF24L01_REG_RX_ADDR_P1, addrrev, NRF24L01_ADDRSIZE);
+	} else if(pipe == 2) {
+		memcpy(&nrf24l01_addr2, addr, NRF24L01_ADDRSIZE); //cache address
+		nrf24l01_writeregister(NRF24L01_REG_RX_ADDR_P2, addr[NRF24L01_ADDRSIZE-1]); //write only LSB MSBytes are equal to RX_ADDR_P
+	} else if(pipe == 3) {
+		memcpy(&nrf24l01_addr3, addr, NRF24L01_ADDRSIZE); //cache address
+		nrf24l01_writeregister(NRF24L01_REG_RX_ADDR_P3, addr[NRF24L01_ADDRSIZE-1]); //write only LSB MSBytes are equal to RX_ADDR_P
+	} else if(pipe == 4) {
+		memcpy(&nrf24l01_addr4, addr, NRF24L01_ADDRSIZE); //cache address
+		nrf24l01_writeregister(NRF24L01_REG_RX_ADDR_P4, addr[NRF24L01_ADDRSIZE-1]); //write only LSB MSBytes are equal to RX_ADDR_P
+	} else if(pipe == 5) {
+		memcpy(&nrf24l01_addr5, addr, NRF24L01_ADDRSIZE); //cache address
+		nrf24l01_writeregister(NRF24L01_REG_RX_ADDR_P5, addr[NRF24L01_ADDRSIZE-1]); //write only LSB MSBytes are equal to RX_ADDR_P
+	}
 }
 
 /*
@@ -100,15 +108,10 @@ void nrf24l01_setrxaddr(uint8_t pipe, uint8_t *addr) {
  */
 void nrf24l01_settxaddr(uint8_t *addr) {
 	uint8_t addrrev[NRF24L01_ADDRSIZE];
-	memcpy(nfr23l01_pipeAddr(nrf24l01_addr, TX_PIPE), 
-		addr, NRF24L01_ADDRSIZE); //cache address
+	memcpy(&nrf24l01_addrtx, addr, NRF24L01_ADDRSIZE); //cache address
 	nrf24l01_revaddress(addr, (uint8_t *)addrrev);
-        //set rx address for ack on pipe 0
-	nrf24l01_writeregisters(nrf24l01_reg_addr[0], 
-			addrrev, NRF24L01_ADDRSIZE); 
-	//set tx address 
-	nrf24l01_writeregisters(nrf24l01_reg_addr[TX_PIPE], 
-			addrrev, NRF24L01_ADDRSIZE); 
+	nrf24l01_writeregisters(NRF24L01_REG_RX_ADDR_P0, addrrev, NRF24L01_ADDRSIZE); //set rx address for ack on pipe 0
+	nrf24l01_writeregisters(NRF24L01_REG_TX_ADDR, addrrev, NRF24L01_ADDRSIZE); //set tx address
 }
 
 /*
@@ -133,8 +136,7 @@ void nrf24l01_flushTXfifo() {
  * set chip as RX
  */
 void nrf24l01_setRX() {
-	//restore pipe 0 address
-	nrf24l01_setrxaddr(0, nfr23l01_pipeAddr(nrf24l01_addr, 0)); 
+	nrf24l01_setrxaddr(0, nrf24l01_addr0); //restore pipe 0 address
 	nrf24l01_writeregister(NRF24L01_REG_CONFIG, nrf24l01_readregister(NRF24L01_REG_CONFIG) | (1<<NRF24L01_REG_PRIM_RX)); //prx mode
 	nrf24l01_writeregister(NRF24L01_REG_CONFIG, nrf24l01_readregister(NRF24L01_REG_CONFIG) | (1<<NRF24L01_REG_PWR_UP)); //power up
 	nrf24l01_writeregister(NRF24L01_REG_STATUS, (1<<NRF24L01_REG_RX_DR) | (1<<NRF24L01_REG_TX_DS) | (1<<NRF24L01_REG_MAX_RT)); //reset status
@@ -160,7 +162,7 @@ void nrf24l01_setTX() {
 /*
  * print info
  */
-void nrf24l01_printinfo(void(*prints)(const char *)) {
+void nrf24l01_printinfo(void(*prints)(const char *), void(*printc)(unsigned char data)) {
 	char buff[100];
 	prints("info\r\n");
 	sprintf(buff,"STATUS: %02X\r\n", nrf24l01_getstatus()); prints(buff);
@@ -203,7 +205,7 @@ uint8_t nrf24l01_readready(uint8_t* pipe) {
 /*
  * get data
  */
-void nrf24l01_read(uint8_t *data){
+void nrf24l01_read(uint8_t *data) {
 	uint8_t i = 0;
 	//read rx register
 	nrf24l01_CSNlo; //low CSN
@@ -328,7 +330,6 @@ void nrf24l01_setcrclength() {
  * init nrf24l01
  */
 void nrf24l01_init() {
-	int i;
 	//setup port
 	NRF24L01_DDR |= (1<<NRF24L01_CSN); //output
 	NRF24L01_DDR |= (1<<NRF24L01_CE); //output
@@ -400,19 +401,22 @@ void nrf24l01_init() {
 		nrf24l01_writeregister(NRF24L01_REG_EN_AA, nrf24l01_readregister(NRF24L01_REG_EN_AA) & ~(1<<NRF24L01_REG_ENAA_P0));
 		nrf24l01_writeregister(NRF24L01_REG_EN_AA, nrf24l01_readregister(NRF24L01_REG_EN_AA) & ~(1<<NRF24L01_REG_ENAA_P1));
 		nrf24l01_writeregister(NRF24L01_REG_EN_AA, nrf24l01_readregister(NRF24L01_REG_EN_AA) & ~(1<<NRF24L01_REG_ENAA_P2));
-		nrf24l01_writeregister(NRF24L01_REG_EN_AA, nrf24l01_readregister(NRF24L01_REG_EN_AA) & ~(1<<NRF24L01_REG_ENAA_P3));
-		nrf24l01_writeregister(NRF24L01_REG_EN_AA, nrf24l01_readregister(NRF24L01_REG_EN_AA) & ~(1<<NRF24L01_REG_ENAA_P4));
-		nrf24l01_writeregister(NRF24L01_REG_EN_AA, nrf24l01_readregister(NRF24L01_REG_EN_AA) & ~(1<<NRF24L01_REG_ENAA_P5));
-	#endif
+        nrf24l01_writeregister(NRF24L01_REG_EN_AA, nrf24l01_readregister(NRF24L01_REG_EN_AA) & ~(1<<NRF24L01_REG_ENAA_P3));
+        nrf24l01_writeregister(NRF24L01_REG_EN_AA, nrf24l01_readregister(NRF24L01_REG_EN_AA) & ~(1<<NRF24L01_REG_ENAA_P4));
+        nrf24l01_writeregister(NRF24L01_REG_EN_AA, nrf24l01_readregister(NRF24L01_REG_EN_AA) & ~(1<<NRF24L01_REG_ENAA_P5));
+    #endif
 
-	//rx address
-	for(i=0; i<MAX_PIPE; i++)
-	  nrf24l01_setrxaddr(i, nfr23l01_pipeAddr(nrf24l01_addr, i));
+    //rx address
+    nrf24l01_setrxaddr(0, nrf24l01_addr0);
+    nrf24l01_setrxaddr(1, nrf24l01_addr1);
+    nrf24l01_setrxaddr(2, nrf24l01_addr2);
+    nrf24l01_setrxaddr(3, nrf24l01_addr3);
+    nrf24l01_setrxaddr(4, nrf24l01_addr4);
+	nrf24l01_setrxaddr(5, nrf24l01_addr5);
 
 	//tx address
-	nrf24l01_settxaddr(nfr23l01_pipeAddr(nrf24l01_addr, TX_PIPE));
+	nrf24l01_settxaddr(nrf24l01_addrtx);
 
 	//set rx mode
 	nrf24l01_setRX();
 }
-

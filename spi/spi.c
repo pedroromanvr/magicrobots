@@ -18,15 +18,15 @@ void spi_init() {
 #if (NATIVE_SPI==1)
 //SPI initialization
 
-    SPCR = ((1<<SPE)|               // SPI Enable
-            (0<<SPIE)|              // SPI Interupt Enable
-            (0<<DORD)|              // Data Order (0:MSB first / 1:LSB first)
-            (1<<MSTR)|              // Master/Slave select
-            (0<<SPR1)|(1<<SPR0)|    // SPI Clock Rate
-            (0<<CPOL)|              // Clock Polarity (0:SCK low / 1:SCK hi when idle)
-            (0<<CPHA));             // Clock Phase (0:leading / 1:trailing edge sampling)
+// SPI initialization
+// SPI Type: Master
+// SPI Clock Rate: 2*500,000 kHz
+// SPI Clock Phase: Cycle Start
+// SPI Clock Polarity: Low
+// SPI Data Order: MSB First
+SPCR=0x51;
+SPSR=0x01;
 
-    SPSR = (1<<SPI2X); // Double SPI Speed Bit
 #else            
 // USI initialization
 // Mode: Three Wire (SPI)
