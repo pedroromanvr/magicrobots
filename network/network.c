@@ -9,7 +9,7 @@ ripEntry_t ripTable[_MAX_PIPES_] = {{0,0,0},
 uint8_t usedEntries = 0;
 uint8_t isPaired = FALSE;
 uint8_t isRoot = 255;   //Initialize with any value
-uint16_t gID = 0;   
+uint16_t gID = 0xf0;   
 
 #include "../movement/movement.h"
 #include "platform.h"
@@ -28,8 +28,10 @@ uint16_t gID = 0;
 ret_t joinNetwork()
 {
     // ----------- Variable declarations ----------
+    ret_t ret;
     uint8_t address;
     uint8_t retryN;
+    uint8_t pipe;
     char rxData[NRF24L01_PAYLOAD];
     discPack_p tempPacket = (discPack_p) rxData; 
     headerPack_p tempHeader = (headerPack_p) rxData;
@@ -56,6 +58,7 @@ join_retry:
         while(retryN < _MAX_RETRIES_)
         {
             //Wait for a non-root node in range to send a message
+            printRipTable();
             printf("I'm waiting for a leaf...\n");
             while( !nrf24l01_readready(_JOIN_PIPE_) );
             //Someone sends us a message  
@@ -65,16 +68,27 @@ join_retry:
             {
                 if(usedEntries < _MAX_PIPES_)
                 {
-                    printf("Adding leaf to RIP, %s:%d:%d\n", __FILE__, __LINE__, gID); 
-                    insertEntry(entryP); 
+                    printf("Adding leaf to RIP, %s:%d:%d\n", __FILE__, __LINE__, gID);
+                    printRipEntry(entryP); 
+                    ret = insertEntry(entryP);
+                    if(ret != SUCCESS)
+                        printf("InsertEntry FAILED");
                     //Send package to leaf node
                     myRootReply.isAcceptedConnection = TRUE;
                     myRootReply.address = getFreeAddress(address); //Based on my current root address 
-                    myRootReply.gID2 = 0;
+                    myRootReply.gID2 = 0;                              
+                    
+                    printRootReply(&myRootReply);
 
-                    sendMessageTo(tempHeader->idSrc, DISCOVERY,
+                    ret = sendMessageTo(tempHeader->idSrc, DISCOVERY,
                               (char *)&myRootReply, sizeof(myRootReply));
-                    printf("Sent root reply message %s:%d:%d\n", __FILE__, __LINE__, gID); 
+                    if(ret != SUCCESS && ret != WARNING)
+                    {
+                        printf("sendMessageTo failed\n");
+                        return ERROR;
+                    }
+                    else
+                        printf("Sent root reply message %s:%d:%d\n", __FILE__, __LINE__, gID); 
                 }  
                 else                           
                 {
@@ -96,23 +110,32 @@ join_retry:
         while(retryN < _MAX_RETRIES_)
         {
             //Check if someone has just sent something
-            if( !nrf24l01_readready(_JOIN_PIPE_) )
+            if( !nrf24l01_readready(&pipe) )
             {
                 //Send a message to our root, build packet to send
                 myLeafInfo.id   = gID;
                 myLeafInfo.address = address;
-                myLeafInfo.isRoot = 0; 
+                myLeafInfo.isRoot = 0;
                 
+                printf("Send a message to our root\n");
+                printRipEntry(&myLeafInfo);
                 
-                sendMessageTo(getRootFromID(gID), DISCOVERY,
+                ret = sendMessageTo(getRootFromID(gID), DISCOVERY,
                               (char *)&myLeafInfo, sizeof(myLeafInfo));
-                printf("Sent discovery message %s:%d:%d\n", __FILE__, __LINE__, gID);   
+                if(ret != SUCCESS && ret != WARNING)
+                {
+                    printf("sendMessageTo FAILED\n");
+                    retryN++;
+                }
+                else
+                    printf("Sent discovery message %s:%d:%d\n", __FILE__, __LINE__, gID);   
             }
             else
             {
                 //Verify packet destiny
                 nrf24l01_read(rxData);
-                printf("L_Got package, %s:%d:gID:%d:addr:%d:type:%d:size:%d:checksum:%d:ttl:%d:numb:%d:srcID:%d:destID:%d-\n", __FILE__, __LINE__, gID, address, tempHeader->type, tempHeader->size, tempHeader->checksum, tempHeader->ttl, tempHeader->number, tempHeader->idSrc, tempHeader->idDest); 
+                printf("L_Got package, %d:pipe:%d:gID:%d:addr:%d:type:%d:size:%d:checksum:%d:ttl:%d:numb:%d:srcID:%d:destID:%d-\n", 
+                        __LINE__, pipe, gID, address, tempHeader->type, tempHeader->size, tempHeader->checksum, tempHeader->ttl, tempHeader->number, tempHeader->idSrc, tempHeader->idDest); 
                 if( isRootId(tempHeader->idSrc) )                 
                 {                                
                     if( isInRange(gID, tempHeader->idSrc) ) //If the packet is from our root
@@ -125,10 +148,11 @@ join_retry:
                             /* Reuse leaf entry to fill the unique entry for this leaf */ 
                             myLeafInfo.id       = tempHeader->idSrc;
                             myLeafInfo.address  = rootReply->address;
-                            myLeafInfo.isRoot   = FALSE;
+                            myLeafInfo.isRoot   = TRUE;
                             insertEntry(&myLeafInfo);
-                            printf("Success pairing %s:%d:gID:%d:srcID:%d:rootAddr:%d\n", __FILE__, __LINE__, gID, tempHeader->idSrc,
-                                    rootReply->address);   
+                            printRipTable();   
+                            printf("Success pairing %d:gID:%d:srcID:%d:rootAddr:%d\n", 
+                                    __LINE__, gID, tempHeader->idSrc, rootReply->address);
                             return SUCCESS;
                         }
                         //TODO: root did not accept connection
@@ -178,15 +202,41 @@ ret_t sendMessageTo(uint16_t id, packet_t type,
   ripEntry_p re; 
   discPack_t packet;
   headerPack_p hdr = (headerPack_p)&packet;
-  char address[NRF24L01_ADDRSIZE];
+  char address[NRF24L01_ADDRSIZE];   
+  
+  printf("sendMessageTo start\n");
 
   hdr->type = type;
   hdr->size = size;
   hdr->ttl = DEFAULT_TTL;
   hdr->idSrc = gID;
   hdr->idDest = id;           
+  hdr->number = 0;
   
-  printHeader(hdr);
+  printHeader(hdr);             
+  
+  if(type == DISCOVERY)
+  {
+    /* DISCOVERY packets are special, since are sent at the beggining.
+     * ripTable is presumably empty so we basically just send the message to a
+     * default pipe. Hopefully a root will be waiting for us.
+     * A DISCOVERY message should be shorter than DATA_SIZE
+      */
+     printf("sendMessageTo:DISCOVERY packet\n");
+     if(size > DATA_SIZE)
+     {
+        printf("sendMessageTo:DATA_SIZE exceeded\n");
+        return ERROR;
+     }
+     hdr->checksum = checksumCalculator(hdr, 
+                       &msg[done], size - done);  
+     memcpy(packet.data, msg, DATA_SIZE);
+     memcpy(address, nrf24l01_addr0, NRF24L01_ADDRSIZE);
+     nrf24l01_settxaddr(address);
+     nrf24l01_write((uint8_t *)&packet);
+    printf("sendMessageTo:DISCOVERY packet sent!\n");
+    return SUCCESS;
+  }
   
   for(idx=0; idx<_MAX_PIPES_; idx++)
   {                          
@@ -205,7 +255,7 @@ ret_t sendMessageTo(uint16_t id, packet_t type,
   {
     idx = 0;
 nextEntry:
-    printf("sendMessageTo:nextEntry: idx=%d", idx);
+    printf("sendMessageTo:nextEntry: idx=%d\n", idx);
     if(idx == _MAX_PIPES_)
       return WARNING;
     re = &ripTable[idx];    
@@ -315,31 +365,42 @@ ret_t insertEntry(ripEntry_p newEntry)
       int i;
       for(i=0; i<_MAX_PIPES_; i++)
       {
+        if(newEntry->id == ripTable[i].id)
+        {
+            printf("ripEntry id already present in ripTable\n");
+            printRipEntry(newEntry);
+            printRipEntry(&(ripTable[i]));
+            return ERROR;
+        }
+
+      }
+      if(isInRIP(newEntry->address))
+      {
+        //Error, address already in table
+        printf("Address already in table %d:%d:%d\n", 
+        __LINE__, usedEntries, newEntry->address);
+        printRipEntry(&(ripTable[i]));
+        return ERROR;
+      }
+      for(i=0; i<_MAX_PIPES_; i++)
+      {
         if(ripTable[i].address == 0) // Free
         {
-          if( !isInRIP(newEntry->address) ) //If address is not currently in table
-          {
             memcpy(&ripTable[i], newEntry, sizeof(ripEntry_t)); 
             usedEntries++;
             return SUCCESS;
-          }
-          else
-          {
-            //Error, address already in table
-            printf("Address already in table %d:%d:%d\n", __LINE__, usedEntries,
-                                        newEntry->address);
-            return ERROR;
-
-          }
         }
       }
       //No free spot available, should never reach here
+      while(1)
+        printf("insertEntry: Inconsistant usedEntries value\n");
       return ERROR;
     }
     else
     {
-      printf("ripTable is full %d:%d:%d\n", __LINE__, usedEntries,
-                                        newEntry->address);
+      printf("ripTable is full %d:%d:%d\n", 
+             __LINE__, usedEntries, newEntry->address);     
+      printRipTable();
       return ERROR;
     }
 }
@@ -404,9 +465,7 @@ uint8_t isInRIP(uint8_t inpAddr)
  * param left: Size of bytes left to send 
  */
 
-uint8_t checksumCalculator(headerPack_p hdr, 
-                                   char *msg, 
-                                uint8_t left)
+uint8_t checksumCalculator(headerPack_p hdr, char *msg, uint8_t left)
 {
   uint8_t i, checksum = 0;
   uint8_t limit = left < DATA_SIZE ? left : DATA_SIZE;

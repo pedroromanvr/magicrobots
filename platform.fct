@@ -1,6 +1,6 @@
 main DSTACK_USAGE:64 DSTACK_LEVEL:64 FILE:"main.c" LINE:40
-joinNetwork DSTACK_USAGE:50 DSTACK_LEVEL:114 FILE:"network\network.c" LINE:28
-sendMessageTo DSTACK_USAGE:51 DSTACK_LEVEL:165 FILE:"network\network.c" LINE:171
-printf DSTACK_USAGE:10 DSTACK_LEVEL:175 FILE:"C:\cvavr2\lib\stdio.lib" LINE:1476
-_print DSTACK_USAGE:20 DSTACK_LEVEL:195 FILE:"C:\cvavr2\lib\stdio.lib" LINE:503
-strlen DSTACK_USAGE:2 DSTACK_LEVEL:197 FILE:"C:\cvavr2\lib\string.lib" LINE:1706
+joinNetwork DSTACK_USAGE:53 DSTACK_LEVEL:117 FILE:"network\network.c" LINE:28
+sendMessageTo DSTACK_USAGE:51 DSTACK_LEVEL:168 FILE:"network\network.c" LINE:198
+printf DSTACK_USAGE:10 DSTACK_LEVEL:178 FILE:"C:\cvavr2\lib\stdio.lib" LINE:1476
+_print DSTACK_USAGE:20 DSTACK_LEVEL:198 FILE:"C:\cvavr2\lib\stdio.lib" LINE:503
+strlen DSTACK_USAGE:2 DSTACK_LEVEL:200 FILE:"C:\cvavr2\lib\string.lib" LINE:1706

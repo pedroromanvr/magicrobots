@@ -36,6 +36,8 @@ typedef enum {
 }
 ret_t;
 
+//flash char* retNames[] = {"SUCCESS", "WARNING", "FAIL", "ERROR", "UNIMPLEMENTED"};
+
 /* Status updates for the movement process */
 typedef enum {
     DONE,
