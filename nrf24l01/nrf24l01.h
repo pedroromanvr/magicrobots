@@ -116,7 +116,7 @@ extern uint8_t nrf24l01_getstatus();
 uint8_t nrf24l01_readready(uint8_t* pipe);
 extern void nrf24l01_read(uint8_t *data);
 extern uint8_t nrf24l01_write(uint8_t *data);
-extern void nrf24l01_setrxaddr(uint8_t channel, uint8_t *addr);
+extern void nrf24l01_setrxaddr(uint8_t pipe, uint8_t *addr);
 extern void nrf24l01_settxaddr(uint8_t *addr);
 #if NRF24L01_PRINTENABLE == 1
 extern void nrf24l01_printinfo(void(*prints)(const char *), void(*printc)(unsigned char data));

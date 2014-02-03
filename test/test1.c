@@ -1,5 +1,5 @@
 /*******************************************************
-Test 1: Simple rootIDidations to aux functions in network.c
+Test 1: Simple rootID validations to aux functions in network.c
 
 *******************************************************/
 

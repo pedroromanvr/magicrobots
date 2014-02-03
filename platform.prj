@@ -7,7 +7,7 @@ A=
 C=
 D=07/12/2013
 <<<<<<< HEAD
-Files=6
+Files=7
 OpenedFiles=8
 =======
 Files=5
@@ -23,7 +23,7 @@ OutputListFilesDirectory=Release\List
 OutputObjectFilesDirectory=Release
 OutputExecutableFilesDirectory=Release\Exe
 OutputLinkerFilesDirectory=Release\Exe
-AllowDisplayFunctionCallTree=1
+AllowDisplayFunctionCallTree=0
 CleanUp=2
 EditorPanelMode=0
 ActiveEditorPanel=0
@@ -84,6 +84,7 @@ F3=spi\spi.c
 F4=movement\movement.c
 F5=network\network.c
 F6=random\random.c
+F7=chat\chat.c
 [CompilerDebug]
 Chip=ATmega328P
 CPUClock=8000000
@@ -285,7 +286,7 @@ LinkageInformationPresent=1
 COFFileTimeStamp=-1
 <<<<<<< HEAD
 <<<<<<< HEAD
-Build=105
+Build=113
 =======
 Build=81
 >>>>>>> 123d5f2fbe82e313e0cd1802ded98c4e69fdf5e6
@@ -650,7 +651,7 @@ BK7=-1
 BK8=-1
 BK9=-1
 [Bookmarks5]
-TimeStamp=1144552116
+TimeStamp=1145220323
 Row=0
 Column=0
 ScrollPosX=0
@@ -795,8 +796,6 @@ BK6=-1
 BK7=-1
 BK8=-1
 BK9=-1
-[FoldedCode5]
-Blocks=0
 [Assembler]
 OutputFormat=1
 [Bookmarks14]
@@ -817,10 +816,10 @@ BK8=-1
 BK9=-1
 [Bookmarks15]
 TimeStamp=982416322
-Row=7
-Column=34
+Row=121
+Column=17
 ScrollPosX=0
-ScrollPosY=0
+ScrollPosY=100
 BK0=-1
 BK1=-1
 BK2=-1
@@ -831,14 +830,12 @@ BK6=-1
 BK7=-1
 BK8=-1
 BK9=-1
-[FoldedCode15]
-Blocks=0
 [Bookmarks16]
 TimeStamp=982093597
-Row=565
-Column=15
+Row=23
+Column=41
 ScrollPosX=0
-ScrollPosY=553
+ScrollPosY=15
 BK0=-1
 BK1=-1
 BK2=-1
@@ -850,8 +847,6 @@ BK7=-1
 BK8=-1
 BK9=-1
 [FoldedCode14]
-Blocks=0
-[FoldedCode16]
 Blocks=0
 [FoldedCode2]
 Line1=40
@@ -875,14 +870,19 @@ Blocks=0
 Blocks=0
 [FoldedCode8]
 Blocks=0
+[FoldedCode15]
+Blocks=0
+[FoldedCode16]
+Blocks=0
 [HeadersList]
-Files=6
-F1=C:\Users\marc\Desktop\Shared\magicrobots\main.c
-F2=C:\Users\marc\Desktop\Shared\magicrobots\nrf24l01\nrf24l01.c
-F3=C:\Users\marc\Desktop\Shared\magicrobots\spi\spi.c
-F4=C:\Users\marc\Desktop\Shared\magicrobots\movement\movement.c
-F5=C:\Users\marc\Desktop\Shared\magicrobots\network\network.c
-F6=C:\Users\marc\Desktop\Shared\magicrobots\random\random.c
+Files=7
+F1=C:\Users\PedroRomán\Desktop\mr\magicrobots\main.c
+F2=C:\Users\PedroRomán\Desktop\mr\magicrobots\nrf24l01\nrf24l01.c
+F3=C:\Users\PedroRomán\Desktop\mr\magicrobots\spi\spi.c
+F4=C:\Users\PedroRomán\Desktop\mr\magicrobots\movement\movement.c
+F5=C:\Users\PedroRomán\Desktop\mr\magicrobots\network\network.c
+F6=C:\Users\PedroRomán\Desktop\mr\magicrobots\random\random.c
+F7=C:\Users\PedroRomán\Desktop\mr\magicrobots\chat\chat.c
 [Header1]
 Files=13
 F1=platform.h
@@ -949,3 +949,21 @@ F2=C:\cvavr2\inc\stdint.h
 F3=platform.h
 F4=C:\cvavr2\inc\mega328p.h
 F5=C:\cvavr2\inc\mega328p_bits.h
+[Header7]
+Files=14
+F1=chat\chat.h
+F2=C:\cvavr2\inc\stdint.h
+F3=platform.h
+F4=C:\cvavr2\inc\mega328p.h
+F5=C:\cvavr2\inc\mega328p_bits.h
+F6=network\network.h
+F7=C:\cvavr2\inc\string.h
+F8=nrf24l01\nrf24l01.h
+F9=C:\cvavr2\inc\delay.h
+F10=C:\cvavr2\inc\stdio.h
+F11=C:\cvavr2\inc\stdarg.h
+F12=spi\spi.h
+F13=nrf24l01\nrf24l01registers.h
+F14=movement\movement.h
+[FoldedCode5]
+Blocks=0
