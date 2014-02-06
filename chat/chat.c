@@ -79,7 +79,6 @@ ret_t enterRoom()
        if(ret != SUCCESS && ret != WARNING)
        {
           printf("getMessage failed\n");
-          return ERROR;
        }
        PRINT(header.idSrc, msgBuf);
     }

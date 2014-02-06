@@ -112,8 +112,8 @@ ret_t sendMessageTo(uint16_t id, packet_t type,
                  char *buf, uint8_t size); 
                                                               
 #define printHeader(hdr) \
-//    printf("Package header\nhdr addr:%d\ntype:%d\nsize:%d\nchecksum:%d\nttl:%d\nnumber:%d\nsrcID:%d\ndestID:%d\n\n", \
-//    (hdr), (hdr)->type, (hdr)->size, (hdr)->checksum, (hdr)->ttl, (hdr)->number, (hdr)->idSrc, (hdr)->idDest)            
+    printf("Package header\nhdr addr:%d\ntype:%d\nsize:%d\nchecksum:%d\nttl:%d\nnumber:%d\nsrcID:%d\ndestID:%d\n\n", \
+    (hdr), (hdr)->type, (hdr)->size, (hdr)->checksum, (hdr)->ttl, (hdr)->number, (hdr)->idSrc, (hdr)->idDest)            
     
 #define printRipEntry(re) \
 //    printf("RipEntry\nrip entry addr:%d\naddress:%d\nisRoot:%d\nid:%d\n\n", \
