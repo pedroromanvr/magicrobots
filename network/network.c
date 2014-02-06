@@ -286,9 +286,9 @@ nextEntry:
   hdr->number = 0;
   while(done <= size)
   {
-    printHeader(hdr);
     hdr->checksum = checksumCalculator(hdr, 
                        &msg[done], size - done);  
+    printHeader(hdr);
     memcpy(packet.data, &msg[done], DATA_SIZE);
     getAddrByPipe(idx, address);
     nrf24l01_settxaddr(address);
@@ -317,6 +317,8 @@ nextPacket:
     {
         nrf24l01_read((uint8_t *)&packet);    
         printf("getMessage: packet recieved!\n");
+
+        printHeader(hdr);
         
         /* Can't handle the size */
         if(hdr->size > size)
