@@ -2,6 +2,7 @@
 #define __CHAT__
 
 #include <stdint.h>
+#include <string.h>
 #include "../platform.h"
 #include "../network/network.h"
 
