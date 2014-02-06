@@ -56,12 +56,12 @@ ret_t enterRoom()
     if (DATA_FROM_PC)
     {
         //Read data and broadcast it
-       PRINT(g_user, ">");       
+        PRINT(g_user, ">");       
         gets(msgBuf, BUF_SIZE);  // gets returns a null terminated string
         printf("About to send message=");
         puts(msgBuf);
         printf("\n");
-       if(strcmp(msgBuf, "Quit") == 0)
+        if(strcmp(msgBuf, "Quit") == 0)
         break;
        ret = sendMessage(msgBuf, strlen(msgBuf));
        if(ret != SUCCESS && ret != WARNING)

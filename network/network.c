@@ -25,8 +25,6 @@ uint16_t gID = 0xf0;
 #define _JOIN_PIPE_ 0
 #define _MAX_RETRIES_ 100
 #define _DELTA_DELAY_ 10
-// Voltage Reference: AREF pin
-#define ADC_VREF_TYPE ((0<<REFS1) | (0<<REFS0) | (0<<ADLAR))
 
 
 //To use outside this API
@@ -63,7 +61,7 @@ join_retry:
         while(retryN < _MAX_RETRIES_)
         {
             //Wait for a non-root node in range to send a message
-            printRipTable();
+            //printRipTable();
             printf("I'm waiting for a leaf...\n");
             while( !nrf24l01_readready(_JOIN_PIPE_) );
             //Someone sends us a message  
@@ -163,7 +161,7 @@ join_retry:
                             myLeafInfo.address  = rootReply->address;
                             myLeafInfo.isRoot   = TRUE;
                             insertEntry(&myLeafInfo);
-                            printRipTable();   
+                            //printRipTable();   
                             printf("Success pairing %d:gID:%d:srcID:%d:rootAddr:%d\n", 
                                     __LINE__, gID, tempHeader->idSrc, rootReply->address);
                             return SUCCESS;
@@ -507,7 +505,8 @@ uint8_t checksumCalculator(headerPack_p hdr, char *msg, uint8_t left)
   
   for(i = 0; i < limit; i++)
     checksum ^= msg[i];
-    
+  printf("checksumCalculator\nlimit:%d\nsize:%d\nchecksum:%d\n\n", 
+         limit, hdr->size, checksum);    
   return checksum;
 }
 
