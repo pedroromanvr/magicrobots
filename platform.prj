@@ -332,7 +332,7 @@ COFFileTimeStamp=-1
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-Build=122
+Build=123
 =======
 Build=120
 >>>>>>> 89cf83fd0472502a59e85ca142bc847d900f265c
@@ -610,7 +610,7 @@ L11=[.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 L12=
 Lines=12
 [BookmarksFoldedCode]
-Files=16
+Files=17
 F1=C:\cvavreval\inc\mega328p_bits.h
 F2=main.c
 F3=nrf24l01\nrf24l01.c
@@ -627,6 +627,7 @@ F13=movement\movement.h
 F14=test\test1.c
 F15=C:\cvavr2\inc\mega328p.h
 F16=C:\cvavr2\inc\mega328p_bits.h
+F17=chat\chat.c
 [Bookmarks1]
 TimeStamp=982091552
 Row=0
@@ -1000,9 +1001,26 @@ Blocks=0
 Blocks=0
 [FoldedCode6]
 Blocks=0
+[Bookmarks17]
+TimeStamp=1145421349
+Row=69
+Column=28
+ScrollPosX=0
+ScrollPosY=56
+BK0=-1
+BK1=-1
+BK2=-1
+BK3=-1
+BK4=-1
+BK5=-1
+BK6=-1
+BK7=-1
+BK8=-1
+BK9=-1
+[FoldedCode17]
+Blocks=0
 [HeadersList]
 Files=7
-<<<<<<< HEAD
 F1=C:\Users\pedro\Desktop\mr\magicrobots\main.c
 F2=C:\Users\pedro\Desktop\mr\magicrobots\nrf24l01\nrf24l01.c
 F3=C:\Users\pedro\Desktop\mr\magicrobots\spi\spi.c
@@ -1010,15 +1028,6 @@ F4=C:\Users\pedro\Desktop\mr\magicrobots\movement\movement.c
 F5=C:\Users\pedro\Desktop\mr\magicrobots\network\network.c
 F6=C:\Users\pedro\Desktop\mr\magicrobots\random\random.c
 F7=C:\Users\pedro\Desktop\mr\magicrobots\chat\chat.c
-=======
-F1=C:\Users\marc\Desktop\Shared\magicrobots\main.c
-F2=C:\Users\marc\Desktop\Shared\magicrobots\nrf24l01\nrf24l01.c
-F3=C:\Users\marc\Desktop\Shared\magicrobots\spi\spi.c
-F4=C:\Users\marc\Desktop\Shared\magicrobots\movement\movement.c
-F5=C:\Users\marc\Desktop\Shared\magicrobots\network\network.c
-F6=C:\Users\marc\Desktop\Shared\magicrobots\random\random.c
-F7=C:\Users\marc\Desktop\Shared\magicrobots\chat\chat.c
->>>>>>> 89cf83fd0472502a59e85ca142bc847d900f265c
 [Header1]
 Files=14
 F1=platform.h
