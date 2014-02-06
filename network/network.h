@@ -112,23 +112,23 @@ ret_t sendMessageTo(uint16_t id, packet_t type,
                  char *buf, uint8_t size); 
                                                               
 #define printHeader(hdr) \
-    printf("Package header\nhdr addr:%d\ntype:%d\nsize:%d\nchecksum:%d\nttl:%d\nnumber:%d\nsrcID:%d\ndestID:%d\n\n", \
-    (hdr), (hdr)->type, (hdr)->size, (hdr)->checksum, (hdr)->ttl, (hdr)->number, (hdr)->idSrc, (hdr)->idDest)            
+//    printf("Package header\nhdr addr:%d\ntype:%d\nsize:%d\nchecksum:%d\nttl:%d\nnumber:%d\nsrcID:%d\ndestID:%d\n\n", \
+//    (hdr), (hdr)->type, (hdr)->size, (hdr)->checksum, (hdr)->ttl, (hdr)->number, (hdr)->idSrc, (hdr)->idDest)            
     
 #define printRipEntry(re) \
-    printf("RipEntry\nrip entry addr:%d\naddress:%d\nisRoot:%d\nid:%d\n\n", \
-           (re), (re)->address, (re)->isRoot, (re)->id)                        
+//    printf("RipEntry\nrip entry addr:%d\naddress:%d\nisRoot:%d\nid:%d\n\n", \
+//           (re), (re)->address, (re)->isRoot, (re)->id)                        
            
 #define printRootReply(rr) \
-    printf("RootRepy addr: %d\nisAcceptedConnection:%d\naddress:%d\ngID2:%d\n", \
-          (rr), (rr)->isAcceptedConnection, (rr)->address, (rr)->gID2)            
+//    printf("RootRepy addr: %d\nisAcceptedConnection:%d\naddress:%d\ngID2:%d\n", \
+//          (rr), (rr)->isAcceptedConnection, (rr)->address, (rr)->gID2)            
           
 #define printRipTable() \
-    do{ \
-        uint8_t __i; \
-        printf("ripTable contents\n"); \
-        for(__i=0; __i<_MAX_PIPES_; __i++) \
-            printRipEntry(&(ripTable[__i])); \
-    }while(0)
+//    do{ \
+//        uint8_t __i; \
+//        printf("ripTable contents\n"); \
+//        for(__i=0; __i<_MAX_PIPES_; __i++) \
+//            printRipEntry(&(ripTable[__i])); \
+//    }while(0)
  
 #endif

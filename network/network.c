@@ -61,7 +61,7 @@ join_retry:
         while(retryN < _MAX_RETRIES_)
         {
             //Wait for a non-root node in range to send a message
-            printRipTable();
+            //printRipTable();
             printf("I'm waiting for a leaf...\n");
             while( !nrf24l01_readready(_JOIN_PIPE_) );
             //Someone sends us a message  
@@ -161,7 +161,7 @@ join_retry:
                             myLeafInfo.address  = rootReply->address;
                             myLeafInfo.isRoot   = TRUE;
                             insertEntry(&myLeafInfo);
-                            printRipTable();   
+                            //printRipTable();   
                             printf("Success pairing %d:gID:%d:srcID:%d:rootAddr:%d\n", 
                                     __LINE__, gID, tempHeader->idSrc, rootReply->address);
                             return SUCCESS;
