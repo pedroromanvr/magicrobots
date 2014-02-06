@@ -333,7 +333,7 @@ COFFileTimeStamp=-1
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-Build=123
+Build=127
 =======
 Build=126
 >>>>>>> a00b9ce2cef936600af1c7bfc345e3b0765dfd6a
@@ -1018,13 +1018,13 @@ Line11=428
 Blocks=11
 [HeadersList]
 Files=7
-F1=C:\Users\marc\Desktop\Shared\magicrobots\main.c
-F2=C:\Users\marc\Desktop\Shared\magicrobots\nrf24l01\nrf24l01.c
-F3=C:\Users\marc\Desktop\Shared\magicrobots\spi\spi.c
-F4=C:\Users\marc\Desktop\Shared\magicrobots\movement\movement.c
-F5=C:\Users\marc\Desktop\Shared\magicrobots\network\network.c
-F6=C:\Users\marc\Desktop\Shared\magicrobots\random\random.c
-F7=C:\Users\marc\Desktop\Shared\magicrobots\chat\chat.c
+F1=C:\Users\pedro\Desktop\mr\magicrobots\main.c
+F2=C:\Users\pedro\Desktop\mr\magicrobots\nrf24l01\nrf24l01.c
+F3=C:\Users\pedro\Desktop\mr\magicrobots\spi\spi.c
+F4=C:\Users\pedro\Desktop\mr\magicrobots\movement\movement.c
+F5=C:\Users\pedro\Desktop\mr\magicrobots\network\network.c
+F6=C:\Users\pedro\Desktop\mr\magicrobots\random\random.c
+F7=C:\Users\pedro\Desktop\mr\magicrobots\chat\chat.c
 [Header1]
 Files=14
 F1=platform.h
