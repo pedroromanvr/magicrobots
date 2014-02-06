@@ -293,6 +293,7 @@ nextEntry:
     getAddrByPipe(idx, address);
     nrf24l01_settxaddr(address);
     nrf24l01_write((uint8_t *)&packet);
+    _delay_ms(1);
     done += DATA_SIZE;
     hdr->number += 1;
   }
