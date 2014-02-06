@@ -26,10 +26,9 @@ Data Stack size         : 512
 #include "nrf24l01/nrf24l01.h"
 //#include "movement/movement.h"
 #include "network/network.h"
+#include "chat/chat.h"
 #include <delay.h>
 #include <string.h>
-
-#define TXMODE 1
 
 // Declare your global variables here
 // Standard Input/Output functions
@@ -39,10 +38,6 @@ Data Stack size         : 512
 
 void main(void)
 {
-  uint8_t writeret; 
-	uint8_t bufferout[NRF24L01_PAYLOAD] = {2,11,83,97,197};
-    uint8_t pipe = 3;
-	uint8_t bufferin[NRF24L01_PAYLOAD];
 
 {
 // Crystal Oscillator division factor: 1
@@ -167,47 +162,15 @@ UCSR0C=0x06;
 UBRR0H=0x00;
 UBRR0L=0x0C;
 
-printf("Hello ");
-#if TXMODE==1
-printf("I'm TX!\n");
-#else
-printf("I'm RX!\n");
-#endif
+printf("Welcome to chatroom!\n");
 nrf24l01_init();
 printf("nrf24L01 inited\n");
 // Global enable interrupts
 #asm("sei")
-  if(joinNetwork() == SUCCESS)
-    printf("joinNetwork SUCCESS\n");
-  else
-    printf("joinNetwork FAILED\n");
+if(enterRoom() == SUCCESS)
+    printf("Thanks for using chatroom!\n");
+else
+    printf("chatroom service terminated abnormally!\n");
     
-  while(1);
-    
-  while(1)
-  {                     
-#if TXMODE==1
-    printf("Writing...\n");
-    //set tx address for pipe 3
-    nrf24l01_settxaddr(nfr24l01_pipeAddr(nrf24l01_addr, 3));
-    //write buffer
-    writeret = nrf24l01_write(bufferout);
-    printf("Done!\n");
-    delay_ms(500);
-#else
-    if(nrf24l01_readready(&pipe))
-    {            
-        printf("Recieved\n");             
-      memset(bufferin, 0, sizeof(bufferin));
-      nrf24l01_read(bufferin);
-      if(strncmp(bufferin, bufferout, sizeof(bufferin)))
-      {
-        printf("Error detected! D:\n");
-      }
-    }
-    else
-      delay_ms(10);
-    
-#endif
-  }
+return;
 }

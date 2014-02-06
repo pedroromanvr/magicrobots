@@ -9,7 +9,7 @@ ripEntry_t ripTable[_MAX_PIPES_] = {{0,0,0},
 uint8_t usedEntries = 0;
 uint8_t isPaired = FALSE;
 uint8_t isRoot = 255;   //Initialize with any value
-uint16_t gID = 0xf0;   
+uint16_t gID = 0xf1;   
 
 #include "../movement/movement.h"
 #include "platform.h"
@@ -88,7 +88,10 @@ join_retry:
                         return ERROR;
                     }
                     else
+                    {
                         printf("Sent root reply message %s:%d:%d\n", __FILE__, __LINE__, gID); 
+                        return SUCCESS;
+                    }
                 }  
                 else                           
                 {
@@ -128,7 +131,9 @@ join_retry:
                     retryN++;
                 }
                 else
-                    printf("Sent discovery message %s:%d:%d\n", __FILE__, __LINE__, gID);   
+                    printf("Sent discovery message %s:%d:%d\n", __FILE__, __LINE__, gID);
+                
+                _delay_ms(10);
             }
             else
             {
@@ -198,7 +203,7 @@ ret_t sendMessage(char *msg,  uint8_t size)
 ret_t sendMessageTo(uint16_t id, packet_t type, 
                         char *msg, uint8_t size)
 {
-  uint8_t idx, done = 0, found = 0;
+  uint8_t idx=0, done = 0, found = 0;
   ripEntry_p re; 
   discPack_t packet;
   headerPack_p hdr = (headerPack_p)&packet;
@@ -237,7 +242,11 @@ ret_t sendMessageTo(uint16_t id, packet_t type,
     printf("sendMessageTo:DISCOVERY packet sent!\n");
     return SUCCESS;
   }
-  
+  if(type == BROADCAST)
+  {
+    printf("sendMessageTo: BROADCAST message detected!\n");
+    goto nextEntry;
+  }
   for(idx=0; idx<_MAX_PIPES_; idx++)
   {                          
     re = &ripTable[idx];
@@ -294,19 +303,25 @@ ret_t getMessage(headerPack_p header, char *buf, uint8_t size)
     headerPack_p hdr = (headerPack_p)&packet;
 
 nextPacket:    
+    printf("getMessage: waiting for packet...\n");
     while(!nrf24l01_readready(&pipe))
+        _delay_ms(10);
+    if(pipe != 0)
     {
-        nrf24l01_read((uint8_t *)&packet);
+        nrf24l01_read((uint8_t *)&packet);    
+        printf("getMessage: packet recieved!\n");
         
         /* Can't handle the size */
         if(hdr->size > size)
             return WARNING;
+        printf("getMessage: packet size OK!\n");
             
         /* Bad packet */
         if(hdr->checksum != checksumCalculator(hdr, 
                                         packet.data,
                                         hdr->size - recieved))
             return ERROR;
+        printf("getMessage: packet checksum correct!\n");
                 
         /* First iteration: setup header,
          * on the other ones ignore messages from other idSrc
@@ -320,12 +335,11 @@ nextPacket:
                DATA_SIZE > (hdr->size - recieved) ? 
                DATA_SIZE : (hdr->size - recieved));
         recieved += DATA_SIZE;
-        if(recieved > hdr->size)
-            break;
-        else
+        if(recieved < hdr->size)
             goto nextPacket;        
     }
-        
+    else
+        goto nextPacket;    
     return SUCCESS;
 }
 //Specify ID to recieve from
