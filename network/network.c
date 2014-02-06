@@ -25,8 +25,6 @@ uint16_t gID = 0xf0;
 #define _JOIN_PIPE_ 0
 #define _MAX_RETRIES_ 100
 #define _DELTA_DELAY_ 10
-// Voltage Reference: AREF pin
-#define ADC_VREF_TYPE ((0<<REFS1) | (0<<REFS0) | (0<<ADLAR))
 
 
 //To use outside this API
@@ -507,7 +505,8 @@ uint8_t checksumCalculator(headerPack_p hdr, char *msg, uint8_t left)
   
   for(i = 0; i < limit; i++)
     checksum ^= msg[i];
-    
+  printf("checksumCalculator\nlimit:%d\nsize:%d\nchecksum:%d\n\n", 
+         limit, checksum, hdr->size);    
   return checksum;
 }
 
