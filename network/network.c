@@ -506,7 +506,7 @@ uint8_t checksumCalculator(headerPack_p hdr, char *msg, uint8_t left)
   for(i = 0; i < limit; i++)
     checksum ^= msg[i];
   printf("checksumCalculator\nlimit:%d\nsize:%d\nchecksum:%d\n\n", 
-         limit, checksum, hdr->size);    
+         limit, hdr->size, checksum);    
   return checksum;
 }
 
