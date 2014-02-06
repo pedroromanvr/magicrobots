@@ -9,7 +9,7 @@ ripEntry_t ripTable[_MAX_PIPES_] = {{0,0,0},
 uint8_t usedEntries = 0;
 uint8_t isPaired = FALSE;
 uint8_t isRoot = 255;   //Initialize with any value
-uint16_t gID = 0xf0;   
+uint16_t gID = 0xf1;   
 
 #include "../movement/movement.h"
 #include "platform.h"
@@ -335,7 +335,7 @@ nextPacket:
             goto nextPacket;
         
         memcpy(buf + hdr->number * DATA_SIZE, packet.data, 
-               DATA_SIZE > (hdr->size - recieved) ? 
+               (hdr->size - recieved) > DATA_SIZE ? 
                DATA_SIZE : (hdr->size - recieved));
         recieved += DATA_SIZE;
         if(recieved < hdr->size)

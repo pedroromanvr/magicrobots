@@ -25,12 +25,13 @@ OutputExecutableFilesDirectory=Release\Exe
 OutputLinkerFilesDirectory=Release\Exe
 AllowDisplayFunctionCallTree=1
 CleanUp=2
-EditorPanelMode=0
+EditorPanelMode=1
 ActiveEditorPanel=0
 Active0=0
 EditorPanel0=0
 PageIndex0=0
 EditorPanel1=0
+<<<<<<< HEAD
 TimeStamp1=1145419942
 PageIndex1=1
 OF2=nrf24l01\nrf24l01.h
@@ -63,9 +64,44 @@ Active7=0
 EditorPanel7=0
 TimeStamp7=1145419942
 PageIndex7=7
+=======
+TimeStamp1=1145152475
+PageIndex1=1
+OF2=nrf24l01\nrf24l01.h
+Active2=0
+EditorPanel2=1
+TimeStamp2=1145145126
+PageIndex2=1
+OF3=movement\movement.h
+Active3=0
+EditorPanel3=1
+TimeStamp3=1145199962
+PageIndex3=3
+OF4=network\network.h
+Active4=0
+EditorPanel4=1
+TimeStamp4=1145216192
+PageIndex4=0
+OF5=movement\movement.c
+Active5=0
+EditorPanel5=0
+TimeStamp5=1144948276
+PageIndex5=2
+OF6=spi\spi.h
+Active6=0
+EditorPanel6=1
+TimeStamp6=1144948276
+PageIndex6=2
+OF7=nrf24l01\nrf24l01.c
+Active7=0
+EditorPanel7=0
+TimeStamp7=1145145137
+PageIndex7=3
+>>>>>>> 89cf83fd0472502a59e85ca142bc847d900f265c
 OF8=network\network.c
 Active8=1
 EditorPanel8=0
+<<<<<<< HEAD
 TimeStamp8=1145419955
 PageIndex8=8
 OF9=spi\spi.c
@@ -73,6 +109,15 @@ Active9=0
 EditorPanel9=0
 TimeStamp9=1145419942
 PageIndex9=9
+=======
+TimeStamp8=1145216564
+PageIndex8=5
+OF9=spi\spi.c
+Active9=0
+EditorPanel9=0
+TimeStamp9=1145150127
+PageIndex9=4
+>>>>>>> 89cf83fd0472502a59e85ca142bc847d900f265c
 OF10=movement\movement.c
 Active10=0
 EditorPanel10=0
@@ -286,7 +331,11 @@ LinkageInformationPresent=1
 COFFileTimeStamp=-1
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 Build=122
+=======
+Build=120
+>>>>>>> 89cf83fd0472502a59e85ca142bc847d900f265c
 =======
 Build=81
 >>>>>>> 123d5f2fbe82e313e0cd1802ded98c4e69fdf5e6
@@ -601,11 +650,19 @@ Row=0
 Column=0
 ScrollPosX=0
 ScrollPosY=0
+<<<<<<< HEAD
 TimeStamp=1145419969
 [Bookmarks2]
 TimeStamp=1145419942
 Row=0
 Column=0
+=======
+TimeStamp=1145283988
+[Bookmarks2]
+TimeStamp=1145152475
+Row=166
+Column=18
+>>>>>>> 89cf83fd0472502a59e85ca142bc847d900f265c
 ScrollPosX=0
 ScrollPosY=0
 BK0=-1
@@ -619,11 +676,17 @@ BK7=-1
 BK8=-1
 BK9=-1
 [Bookmarks3]
+<<<<<<< HEAD
 TimeStamp=1145419942
 Row=0
 Column=0
+=======
+TimeStamp=1145145137
+Row=13
+Column=22
+>>>>>>> 89cf83fd0472502a59e85ca142bc847d900f265c
 ScrollPosX=0
-ScrollPosY=0
+ScrollPosY=6
 BK0=-1
 BK1=-1
 BK2=-1
@@ -635,11 +698,19 @@ BK7=-1
 BK8=-1
 BK9=-1
 [Bookmarks4]
+<<<<<<< HEAD
 TimeStamp=1145419942
 Row=0
 Column=0
 ScrollPosX=0
 ScrollPosY=0
+=======
+TimeStamp=1145150127
+Row=29
+Column=0
+ScrollPosX=0
+ScrollPosY=57
+>>>>>>> 89cf83fd0472502a59e85ca142bc847d900f265c
 BK0=-1
 BK1=-1
 BK2=-1
@@ -667,11 +738,17 @@ BK7=-1
 BK8=-1
 BK9=-1
 [Bookmarks6]
+<<<<<<< HEAD
 TimeStamp=1145419942
 Row=0
 Column=0
+=======
+TimeStamp=1145283973
+Row=99
+Column=25
+>>>>>>> 89cf83fd0472502a59e85ca142bc847d900f265c
 ScrollPosX=0
-ScrollPosY=0
+ScrollPosY=75
 BK0=-1
 BK1=-1
 BK2=-1
@@ -683,11 +760,17 @@ BK7=-1
 BK8=-1
 BK9=-1
 [Bookmarks7]
+<<<<<<< HEAD
 TimeStamp=1145419942
 Row=0
 Column=0
+=======
+TimeStamp=1144948276
+Row=41
+Column=35
+>>>>>>> 89cf83fd0472502a59e85ca142bc847d900f265c
 ScrollPosX=0
-ScrollPosY=0
+ScrollPosY=9
 BK0=-1
 BK1=-1
 BK2=-1
@@ -737,7 +820,7 @@ TimeStamp=1145419942
 Row=0
 Column=0
 ScrollPosX=0
-ScrollPosY=0
+ScrollPosY=51
 BK0=-1
 BK1=-1
 BK2=-1
@@ -749,9 +832,15 @@ BK7=-1
 BK8=-1
 BK9=-1
 [Bookmarks11]
+<<<<<<< HEAD
 TimeStamp=1145419955
 Row=11
 Column=19
+=======
+TimeStamp=1145216564
+Row=16
+Column=75
+>>>>>>> 89cf83fd0472502a59e85ca142bc847d900f265c
 ScrollPosX=0
 ScrollPosY=63
 BK0=-1
@@ -765,9 +854,15 @@ BK7=-1
 BK8=-1
 BK9=-1
 [Bookmarks12]
+<<<<<<< HEAD
 TimeStamp=1145419942
 Row=0
 Column=0
+=======
+TimeStamp=1145216192
+Row=20
+Column=53
+>>>>>>> 89cf83fd0472502a59e85ca142bc847d900f265c
 ScrollPosX=0
 ScrollPosY=0
 BK0=-1
@@ -781,11 +876,17 @@ BK7=-1
 BK8=-1
 BK9=-1
 [Bookmarks13]
+<<<<<<< HEAD
 TimeStamp=1145419942
 Row=0
 Column=0
+=======
+TimeStamp=1145199962
+Row=19
+Column=44
+>>>>>>> 89cf83fd0472502a59e85ca142bc847d900f265c
 ScrollPosX=0
-ScrollPosY=0
+ScrollPosY=27
 BK0=-1
 BK1=-1
 BK2=-1
@@ -857,7 +958,13 @@ Blocks=0
 [FoldedCode5]
 Blocks=0
 [FoldedCode2]
+<<<<<<< HEAD
 Blocks=0
+=======
+Line1=1
+Line2=47
+Blocks=2
+>>>>>>> 89cf83fd0472502a59e85ca142bc847d900f265c
 [FoldedCode3]
 Blocks=0
 [FoldedCode4]
@@ -865,7 +972,26 @@ Blocks=0
 [FoldedCode10]
 Blocks=0
 [FoldedCode11]
-Blocks=0
+Line1=59
+Line2=183
+Line3=200
+Line4=219
+Line5=255
+Line6=272
+Line7=289
+Line8=332
+Line9=360
+Line10=367
+Line11=378
+Line12=410
+Line13=419
+Line14=427
+Line15=433
+Line16=448
+Line17=460
+Line18=469
+Line19=488
+Blocks=19
 [FoldedCode7]
 Blocks=0
 [FoldedCode12]
@@ -876,6 +1002,7 @@ Blocks=0
 Blocks=0
 [HeadersList]
 Files=7
+<<<<<<< HEAD
 F1=C:\Users\pedro\Desktop\mr\magicrobots\main.c
 F2=C:\Users\pedro\Desktop\mr\magicrobots\nrf24l01\nrf24l01.c
 F3=C:\Users\pedro\Desktop\mr\magicrobots\spi\spi.c
@@ -883,6 +1010,15 @@ F4=C:\Users\pedro\Desktop\mr\magicrobots\movement\movement.c
 F5=C:\Users\pedro\Desktop\mr\magicrobots\network\network.c
 F6=C:\Users\pedro\Desktop\mr\magicrobots\random\random.c
 F7=C:\Users\pedro\Desktop\mr\magicrobots\chat\chat.c
+=======
+F1=C:\Users\marc\Desktop\Shared\magicrobots\main.c
+F2=C:\Users\marc\Desktop\Shared\magicrobots\nrf24l01\nrf24l01.c
+F3=C:\Users\marc\Desktop\Shared\magicrobots\spi\spi.c
+F4=C:\Users\marc\Desktop\Shared\magicrobots\movement\movement.c
+F5=C:\Users\marc\Desktop\Shared\magicrobots\network\network.c
+F6=C:\Users\marc\Desktop\Shared\magicrobots\random\random.c
+F7=C:\Users\marc\Desktop\Shared\magicrobots\chat\chat.c
+>>>>>>> 89cf83fd0472502a59e85ca142bc847d900f265c
 [Header1]
 Files=14
 F1=platform.h
