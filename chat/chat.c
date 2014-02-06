@@ -11,7 +11,7 @@
  * Param msg: Null-terminated string to print
  */
 #define PRINT(id,msg) \
-      printf("[%04x] says: %s\n", (id), (msg))
+      printf("[%x] says: %s\n", (id), (msg))
 
 uint8_t g_user;
 
@@ -63,7 +63,7 @@ ret_t enterRoom()
         printf("\n");
        if(strcmp(msgBuf, "Quit") == 0)
         break;
-       ret = sendMessage(msgBuf, BUF_SIZE);
+       ret = sendMessage(msgBuf, strlen(mdgBuf));
        if(ret != SUCCESS && ret != WARNING)
        {
           printf("sendMessage failed\n");

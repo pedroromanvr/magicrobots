@@ -332,7 +332,7 @@ nextPacket:
             goto nextPacket;
         
         memcpy(buf + hdr->number * DATA_SIZE, packet.data, 
-               DATA_SIZE > (hdr->size - recieved) ? 
+               (hdr->size - recieved) > DATA_SIZE ? 
                DATA_SIZE : (hdr->size - recieved));
         recieved += DATA_SIZE;
         if(recieved < hdr->size)
