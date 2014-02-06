@@ -71,6 +71,7 @@ ret_t enterRoom()
        }
        //Print msg to this PC
        PRINT(g_user, msgBuf);       
+       memset(msgBuf, 0, BUF_SIZE);
     }
     if (DATA_FROM_NET)
     {
@@ -81,6 +82,7 @@ ret_t enterRoom()
           printf("getMessage failed\n");
        }
        PRINT(header.idSrc, msgBuf);
+       memset(msgBuf, 0, BUF_SIZE);
     }
   }
 
