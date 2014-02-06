@@ -9,11 +9,13 @@ ripEntry_t ripTable[_MAX_PIPES_] = {{0,0,0},
 uint8_t usedEntries = 0;
 uint8_t isPaired = FALSE;
 uint8_t isRoot = 255;   //Initialize with any value
+
 #if MLEONAY == 1
 uint16_t gID = 0xf1;   
 #else
 uint16_t gID = 0xf0;   
 #endif
+
 #include "../movement/movement.h"
 #include "platform.h"
 #include "stdlib.h"
@@ -384,6 +386,7 @@ ret_t insertEntry(ripEntry_p newEntry)
     {
       /* Find free spot available i.e. address == 0 */
       int i;
+      char tmpBuf[NRF24L01_ADDRSIZE];
       for(i=0; i<_MAX_PIPES_; i++)
       {
         if(newEntry->id == ripTable[i].id)
@@ -408,6 +411,9 @@ ret_t insertEntry(ripEntry_p newEntry)
         if(ripTable[i].address == 0) // Free
         {
             memcpy(&ripTable[i], newEntry, sizeof(ripEntry_t)); 
+             //Configure address in RF module
+            getAddrByPipe(i, tmpBuf);
+            nrf24l01_setrxaddr(i+1, tmpBuf);
             usedEntries++;
             return SUCCESS;
         }
