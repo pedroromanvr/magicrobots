@@ -139,7 +139,7 @@ join_retry:
                 else
                     printf("Sent discovery message %s:%d:%d\n", __FILE__, __LINE__, gID);
                 
-                _delay_ms(10);
+                _delay_ms(100);
             }
             else
             {
