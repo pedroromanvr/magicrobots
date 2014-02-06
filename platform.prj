@@ -23,7 +23,7 @@ OutputListFilesDirectory=Release\List
 OutputObjectFilesDirectory=Release
 OutputExecutableFilesDirectory=Release\Exe
 OutputLinkerFilesDirectory=Release\Exe
-AllowDisplayFunctionCallTree=1
+AllowDisplayFunctionCallTree=0
 CleanUp=2
 EditorPanelMode=1
 ActiveEditorPanel=0
@@ -332,7 +332,7 @@ COFFileTimeStamp=-1
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-Build=123
+Build=122
 =======
 Build=120
 >>>>>>> 89cf83fd0472502a59e85ca142bc847d900f265c
@@ -471,7 +471,8 @@ LibraryPath61=
 LibraryPath62=
 LibraryPath63=
 [DefinedSymbols]
-Count=0
+Count=1
+Symbol0= MLEONAY 1
 [Libraries]
 Use1Wire=0
 UseI2C=0
@@ -834,16 +835,16 @@ BK8=-1
 BK9=-1
 [Bookmarks11]
 <<<<<<< HEAD
-TimeStamp=1145419955
-Row=11
-Column=19
+TimeStamp=1145438659
+Row=410
+Column=32
 =======
 TimeStamp=1145216564
 Row=16
 Column=75
 >>>>>>> 89cf83fd0472502a59e85ca142bc847d900f265c
 ScrollPosX=0
-ScrollPosY=63
+ScrollPosY=53
 BK0=-1
 BK1=-1
 BK2=-1
@@ -972,27 +973,6 @@ Blocks=0
 Blocks=0
 [FoldedCode10]
 Blocks=0
-[FoldedCode11]
-Line1=59
-Line2=183
-Line3=200
-Line4=219
-Line5=255
-Line6=272
-Line7=289
-Line8=332
-Line9=360
-Line10=367
-Line11=378
-Line12=410
-Line13=419
-Line14=427
-Line15=433
-Line16=448
-Line17=460
-Line18=469
-Line19=488
-Blocks=19
 [FoldedCode7]
 Blocks=0
 [FoldedCode12]
@@ -1019,15 +999,28 @@ BK8=-1
 BK9=-1
 [FoldedCode17]
 Blocks=0
+[FoldedCode11]
+Line1=4
+Line2=29
+Line3=192
+Line4=208
+Line5=227
+Line6=249
+Line7=254
+Line8=267
+Line9=304
+Line10=353
+Line11=428
+Blocks=11
 [HeadersList]
 Files=7
-F1=C:\Users\pedro\Desktop\mr\magicrobots\main.c
-F2=C:\Users\pedro\Desktop\mr\magicrobots\nrf24l01\nrf24l01.c
-F3=C:\Users\pedro\Desktop\mr\magicrobots\spi\spi.c
-F4=C:\Users\pedro\Desktop\mr\magicrobots\movement\movement.c
-F5=C:\Users\pedro\Desktop\mr\magicrobots\network\network.c
-F6=C:\Users\pedro\Desktop\mr\magicrobots\random\random.c
-F7=C:\Users\pedro\Desktop\mr\magicrobots\chat\chat.c
+F1=C:\Users\marc\Desktop\Shared\magicrobots\main.c
+F2=C:\Users\marc\Desktop\Shared\magicrobots\nrf24l01\nrf24l01.c
+F3=C:\Users\marc\Desktop\Shared\magicrobots\spi\spi.c
+F4=C:\Users\marc\Desktop\Shared\magicrobots\movement\movement.c
+F5=C:\Users\marc\Desktop\Shared\magicrobots\network\network.c
+F6=C:\Users\marc\Desktop\Shared\magicrobots\random\random.c
+F7=C:\Users\marc\Desktop\Shared\magicrobots\chat\chat.c
 [Header1]
 Files=14
 F1=platform.h

@@ -9,8 +9,11 @@ ripEntry_t ripTable[_MAX_PIPES_] = {{0,0,0},
 uint8_t usedEntries = 0;
 uint8_t isPaired = FALSE;
 uint8_t isRoot = 255;   //Initialize with any value
+#if MLEONAY == 1
 uint16_t gID = 0xf1;   
-
+#else
+uint16_t gID = 0xf0;   
+#endif
 #include "../movement/movement.h"
 #include "platform.h"
 #include "stdlib.h"
@@ -267,7 +270,6 @@ ret_t sendMessageTo(uint16_t id, packet_t type,
   {
     idx = 0;
 nextEntry:
-    printf("sendMessageTo:nextEntry: idx=%d\n", idx);
     if(idx == _MAX_PIPES_)
       return WARNING;
     re = &ripTable[idx];    
@@ -277,6 +279,8 @@ nextEntry:
       goto nextEntry;
     }
   }
+  printf("sendMessageTo:nextEntry: idx=%d\n", idx);
+
   printRipEntry(re);
 
   hdr->number = 0;
