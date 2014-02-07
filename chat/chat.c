@@ -3,6 +3,8 @@
 
 #define BUF_SIZE 100    //  Maximum size of any message sent from PC
 #define DATA_FROM_PC  (UCSR0A & (1 << RXC0 ))
+#define RX_BUF        UDR0
+#define EOL_CHAR      0x0A
 #define DATA_FROM_NET (nrf24l01_readready(NULL))
 /*
  * Prints message to STDOUT
@@ -37,6 +39,7 @@ ret_t enterRoom()
   // Local variables
   char msgBuf[BUF_SIZE];
   ret_t ret;
+  uint8_t i = 0 ;
 
   headerPack_t header;
   // -------------------
@@ -55,23 +58,29 @@ ret_t enterRoom()
   {
     if (DATA_FROM_PC)
     {
-        //Read data and broadcast it
-        memset(msgBuf, 0, BUF_SIZE);
-        PRINT(g_user, ">");       
-        gets(msgBuf, BUF_SIZE);  // gets returns a null terminated string
-        printf("About to send message=");
-        puts(msgBuf);
-        printf("\n");
-        if(strcmp(msgBuf, "Quit") == 0)
-        break;
-       ret = sendMessage(msgBuf, strlen(msgBuf));
-       if(ret != SUCCESS && ret != WARNING)
-       {
-          printf("sendMessage failed\n");
-          return ERROR;
-       }
-       //Print msg to this PC
-       PRINT(g_user, msgBuf);       
+        // Read data and broadcast it
+        msgBuf[i] = RX_BUF;
+        // If we recieved end of line, send buffer to network
+        if(msgBuf[i] == EOL_CHAR)
+        {
+          msgBuf[i] = '\0'; //Replace EOL with null
+          printf("About to send message:%s\n",msgBuf);
+          if(strcmp(msgBuf, "Quit") == 0)
+          break;
+          ret = sendMessage(msgBuf, strlen(msgBuf));
+          if(ret != SUCCESS && ret != WARNING)
+          {
+             printf("sendMessage failed\n");
+             return ERROR;
+          }
+          // Print msg to this PC
+          PRINT(g_user, msgBuf);       
+          // Clean buffer and index
+          memset(msgBuf, 0, BUF_SIZE);
+          i = 0;
+        }
+        else
+          i++;
     }
     if (DATA_FROM_NET)
     {

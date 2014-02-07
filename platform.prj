@@ -333,7 +333,35 @@ COFFileTimeStamp=-1
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 Build=139
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+Build=133
+=======
+Build=130
+>>>>>>> b4d76c5123c1475a5576f47cb9103d969562a2c2
+=======
+Build=132
+>>>>>>> 9b0c546c419acdd41c251eaaa3c583e62c8887a8
+=======
+Build=133
+>>>>>>> cf6cab727af4b847b6791900bbe098ac4ccec412
+=======
+Build=136
+>>>>>>> 93dc260a2050e11f1e49ef7a4c550a19af99c1b6
+=======
+Build=137
+>>>>>>> 360199753b7bcd601ef6e3ccb25b98418f6f4be3
+=======
+Build=138
+>>>>>>> 262223b58605706aa0052742c53c5f183a7b4d2f
+>>>>>>> 45a736020ed9441d49b4ac391a3d33b7b599c676
 =======
 Build=126
 >>>>>>> a00b9ce2cef936600af1c7bfc345e3b0765dfd6a
@@ -1018,13 +1046,13 @@ Line11=428
 Blocks=11
 [HeadersList]
 Files=7
-F1=C:\Users\marc\Desktop\Shared\magicrobots\main.c
-F2=C:\Users\marc\Desktop\Shared\magicrobots\nrf24l01\nrf24l01.c
-F3=C:\Users\marc\Desktop\Shared\magicrobots\spi\spi.c
-F4=C:\Users\marc\Desktop\Shared\magicrobots\movement\movement.c
-F5=C:\Users\marc\Desktop\Shared\magicrobots\network\network.c
-F6=C:\Users\marc\Desktop\Shared\magicrobots\random\random.c
-F7=C:\Users\marc\Desktop\Shared\magicrobots\chat\chat.c
+F1=C:\Users\pedro\Desktop\mr\magicrobots\main.c
+F2=C:\Users\pedro\Desktop\mr\magicrobots\nrf24l01\nrf24l01.c
+F3=C:\Users\pedro\Desktop\mr\magicrobots\spi\spi.c
+F4=C:\Users\pedro\Desktop\mr\magicrobots\movement\movement.c
+F5=C:\Users\pedro\Desktop\mr\magicrobots\network\network.c
+F6=C:\Users\pedro\Desktop\mr\magicrobots\random\random.c
+F7=C:\Users\pedro\Desktop\mr\magicrobots\chat\chat.c
 [Header1]
 Files=14
 F1=platform.h
