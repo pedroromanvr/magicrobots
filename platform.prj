@@ -326,14 +326,14 @@ WarningStaticRamEepromStorageAllocConstStrLit=0
 DebugBootLoader=0
 WatchAVR8LAutoVariables=0
 UseEEPROMLocation0=1
-RebuildAll=1
-LinkageInformationPresent=0
+RebuildAll=0
+LinkageInformationPresent=1
 COFFileTimeStamp=-1
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-Build=138
+Build=139
 =======
 Build=126
 >>>>>>> a00b9ce2cef936600af1c7bfc345e3b0765dfd6a

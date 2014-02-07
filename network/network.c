@@ -316,6 +316,7 @@ nextPacket:
         _delay_ms(10);
     if(pipe != 0)
     {
+        GPIO_5 != GPIO_5;
         nrf24l01_read((uint8_t *)&packet);    
         printf("getMessage: packet recieved!\n");
 
@@ -345,6 +346,9 @@ nextPacket:
                (hdr->size - recieved) > DATA_SIZE ? 
                DATA_SIZE : (hdr->size - recieved));
         recieved += DATA_SIZE;
+
+        GPIO_5 != GPIO_5;
+
         if(recieved < hdr->size)
             goto nextPacket;        
     }
