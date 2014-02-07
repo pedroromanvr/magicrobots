@@ -15,6 +15,8 @@
 #define TRUE    1
 #define FALSE   0
 
+#define INIT_NW_STACK()  nrf24l01_init()
+
 #define GET_ADDRESS(a) \
   ((a)%_MAXIMUM_ADDRESS_ + 1)
 
