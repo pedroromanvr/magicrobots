@@ -326,14 +326,14 @@ WarningStaticRamEepromStorageAllocConstStrLit=0
 DebugBootLoader=0
 WatchAVR8LAutoVariables=0
 UseEEPROMLocation0=1
-RebuildAll=0
-LinkageInformationPresent=1
+RebuildAll=1
+LinkageInformationPresent=0
 COFFileTimeStamp=-1
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-Build=137
+Build=138
 =======
 Build=126
 >>>>>>> a00b9ce2cef936600af1c7bfc345e3b0765dfd6a
@@ -476,7 +476,7 @@ LibraryPath62=
 LibraryPath63=
 [DefinedSymbols]
 Count=1
-Symbol0= MLEONAY 1
+Symbol0=MLEONAY 1
 [Libraries]
 Use1Wire=0
 UseI2C=0

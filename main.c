@@ -56,10 +56,10 @@ PORTB=0x00;
 DDRB=0xBF;
 
 // Port C initialization
-// Func6=In Func5=In Func4=In Func3=In Func2=In Func1=In Func0=In 
-// State6=T State5=T State4=T State3=T State2=T State1=T State0=T 
+// Func6=In Func5=Out Func4=In Func3=In Func2=In Func1=In Func0=In 
+// State6=T State5=0 State4=T State3=T State2=T State1=T State0=T 
 PORTC=0x00;
-DDRC=0x00;
+DDRC=0x20;
 
 // Port D initialization
 // Func7=In Func6=In Func5=In Func4=In Func3=In Func2=In Func1=In Func0=In 

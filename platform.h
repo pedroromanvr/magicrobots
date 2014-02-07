@@ -9,3 +9,5 @@
 //0 if USI module 
 #define NATIVE_SPI 1
 #endif
+
+#define GPIO_5 PORTC.5

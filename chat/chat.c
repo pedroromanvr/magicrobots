@@ -56,6 +56,7 @@ ret_t enterRoom()
     if (DATA_FROM_PC)
     {
         //Read data and broadcast it
+        memset(msgBuf, 0, BUF_SIZE);
         PRINT(g_user, ">");       
         gets(msgBuf, BUF_SIZE);  // gets returns a null terminated string
         printf("About to send message=");
@@ -71,18 +72,17 @@ ret_t enterRoom()
        }
        //Print msg to this PC
        PRINT(g_user, msgBuf);       
-       memset(msgBuf, 0, BUF_SIZE);
     }
     if (DATA_FROM_NET)
     {
        //Read data and display it to the host PC
+       memset(msgBuf, 0, BUF_SIZE);
        ret = getMessage(&header, msgBuf, BUF_SIZE);
        if(ret != SUCCESS && ret != WARNING)
        {
           printf("getMessage failed\n");
        }
        PRINT(header.idSrc, msgBuf);
-       memset(msgBuf, 0, BUF_SIZE);
     }
   }
 
