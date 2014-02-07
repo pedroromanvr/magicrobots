@@ -293,7 +293,7 @@ nextEntry:
     getAddrByPipe(idx, address);
     nrf24l01_settxaddr(address);
     nrf24l01_write((uint8_t *)&packet);
-    _delay_ms(1);
+    _delay_ms(100);
     done += DATA_SIZE;
     hdr->number += 1;
   }
@@ -312,8 +312,7 @@ ret_t getMessage(headerPack_p header, char *buf, uint8_t size)
 
 nextPacket:    
     printf("getMessage: waiting for packet...\n");
-    while(!nrf24l01_readready(&pipe))
-        _delay_ms(10);
+    while(!nrf24l01_readready(&pipe));
     if(pipe != 0)
     {
         GPIO_COMPLEMENT_BIT(5);
