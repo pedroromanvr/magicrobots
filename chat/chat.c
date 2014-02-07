@@ -85,13 +85,13 @@ ret_t enterRoom()
     if (DATA_FROM_NET)
     {
        //Read data and display it to the host PC
+       memset(msgBuf, 0, BUF_SIZE);
        ret = getMessage(&header, msgBuf, BUF_SIZE);
        if(ret != SUCCESS && ret != WARNING)
        {
           printf("getMessage failed\n");
        }
        PRINT(header.idSrc, msgBuf);
-       memset(msgBuf, 0, BUF_SIZE);
     }
   }
 
