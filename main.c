@@ -34,8 +34,6 @@ Data Stack size         : 512
 // Standard Input/Output functions
 #include <stdio.h>
 
-
-
 void main(void)
 {
 
@@ -150,21 +148,10 @@ ADCSRA=0x00;
 TWCR=0x00;    
 }
 
-// USART initialization
-// Communication Parameters: 8 Data, 1 Stop, No Parity
-// USART Receiver: On
-// USART Transmitter: On
-// USART0 Mode: Asynchronous
-// USART Baud Rate: 38400
-UCSR0A=0x00;
-UCSR0B=0x18;
-UCSR0C=0x06;
-UBRR0H=0x00;
-UBRR0L=0x0C;
-
 printf("Welcome to chatroom!\n");
-nrf24l01_init();
-printf("nrf24L01 inited\n");
+INIT_NW_STACK();
+printf("NW stack inited\n");
+initChat();
 // Global enable interrupts
 #asm("sei")
 if(enterRoom() == SUCCESS)
