@@ -61,7 +61,7 @@ ret_t enterRoom()
         // Read data and broadcast it
         msgBuf[i] = RX_BUF;
         // If we recieved end of line, send buffer to network
-        if(msgBuf[i] == EOL_CHAR)
+        if (msgBuf[i] == EOL_CHAR || i == (BUF_SIZE - 1))
         {
           msgBuf[i] = '\0'; //Replace EOL with null
           printf("About to send message:%s\n",msgBuf);
