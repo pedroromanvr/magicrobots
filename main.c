@@ -147,11 +147,10 @@ ADCSRA=0x00;
 // TWI disabled
 TWCR=0x00;    
 }
-
+initChat();
 printf("Welcome to chatroom!\n");
 INIT_NW_STACK();
 printf("NW stack inited\n");
-initChat();
 // Global enable interrupts
 #asm("sei")
 if(enterRoom() == SUCCESS)
