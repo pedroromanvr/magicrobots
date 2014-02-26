@@ -8,12 +8,12 @@
  * You should place a random sequence in the eeprom before hand.
  * CodeVisionAVR will use the required functions to read from the EEPROM
  */
-eeprom uint8_t numbers[1024]; 
+extern eeprom uint8_t numbers[1024];
 extern uint16_t randomIdx;
 
 #define random8() \
-    numbers[(randomIdx++)%1024]
-    
+    (numbers[(randomIdx++)%1024])
+
 uint16_t random16();
 
-#endif 
+#endif
