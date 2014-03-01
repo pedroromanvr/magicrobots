@@ -12,8 +12,6 @@
 
 #define DEFAULT_PIPE 0
 #define DEFAULT_TTL 7
-#define TRUE    1
-#define FALSE   0
 
 #define INIT_NW_STACK()  nrf24l01_init()
 

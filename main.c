@@ -25,18 +25,34 @@ Data Stack size         : 512
 #include "platform.h"
 #include "nrf24l01/nrf24l01.h"
 //#include "movement/movement.h"
-#include "network/network.h"
-#include "chat/chat.h"
+#include "movement/pid.h"
+#include "movement/stateMachine.h"
+//#include "network/network.h"
+#include "chat/chat.h"        
 #include <delay.h>
 #include <string.h>
+#include <stdio.h>          
 
-// Declare your global variables here
-// Standard Input/Output functions
-#include <stdio.h>
+// Timer 0 overflow interrupt service routine
+interrupt [TIM0_OVF] void timer0_ovf_isr(void)
+{
+  // Reinitialize Timer 0 value                
+  TCNT0=0xF3;
+  // Manage timer constants
+  timerVector[TBASE]++;
+  timerVector[TPWM]++;                    // Used in the state machine
+  if (timerVector[TBASE] == TBASE_CONST)  // Each 1ms
+  {
+    timerVector[TBASE] = 0;
+    timerVector[TSTART]++;
+    timerVector[TEXEC]++;
+  }
+}
 
 void main(void)
 {
-
+    pidCtx_t pidCtx;
+    int temp, val = 45, des = 50;
 {
 // Crystal Oscillator division factor: 1
 #pragma optsize-
@@ -54,10 +70,10 @@ PORTB=0x00;
 DDRB=0xBF;
 
 // Port C initialization
-// Func6=In Func5=Out Func4=In Func3=In Func2=In Func1=In Func0=In 
-// State6=T State5=0 State4=T State3=T State2=T State1=T State0=T 
+// Func6=Out Func5=Out Func4=Out Func3=Out Func2=Out Func1=Out Func0=Out 
+// State6=0 State5=0 State4=0 State3=0 State2=0 State1=0 State0=0 
 PORTC=0x00;
-DDRC=0x20;
+DDRC=0x7F;
 
 // Port D initialization
 // Func7=In Func6=In Func5=In Func4=In Func3=In Func2=In Func1=In Func0=In 
@@ -147,16 +163,44 @@ ADCSRA=0x00;
 // TWI disabled
 TWCR=0x00;    
 }
-initChat();
-printf("Welcome to chatroom!\n");
-INIT_NW_STACK();
-printf("NW stack inited\n");
-// Global enable interrupts
-#asm("sei")
-if(enterRoom() == SUCCESS)
-    printf("Thanks for using chatroom!\n");
-else
-    printf("chatroom service terminated abnormally!\n");
+    initChat();    
+    initMachine();        
+    initPID(10, 10, 10, 255, &pidCtx);
+    printf("Hello World\n");
+    while(1)
+    {                  
+       //processMachine();
+       temp = pid(des, val, &pidCtx);
+       printf("Pid val: %d -- \n", temp);
+       delay_ms(200);
+    }
+   /*
+    EXEC_N_CHECK(movementCommandExecute(FRONT));     
+    EXEC_N_CHECK(workerMovement());
+    delay_ms(4000);
+    EXEC_N_CHECK(movementCommandExecute(BACK));  
+    EXEC_N_CHECK(workerMovement());
+    delay_ms(4000);    
+    EXEC_N_CHECK(movementCommandExecute(RIGHT));  
+    EXEC_N_CHECK(workerMovement());
+    delay_ms(4000);
+    EXEC_N_CHECK(movementCommandExecute(LEFT));    
+    EXEC_N_CHECK(workerMovement());
+    delay_ms(4000);
+    EXEC_N_CHECK(movementCommandExecute(ROTATE_RIGHT));  
+    EXEC_N_CHECK(workerMovement());
+    delay_ms(4000);
+    EXEC_N_CHECK(movementCommandExecute(ROTATE_LEFT));  
+    EXEC_N_CHECK(workerMovement());
+    delay_ms(4000);
+    EXEC_N_CHECK(movementCommandExecute(ROTATE_RIGHT_INVERTED));    
+    EXEC_N_CHECK(workerMovement());
+    delay_ms(4000);
+    EXEC_N_CHECK(movementCommandExecute(ROTATE_LEFT_INVERTED));
+    EXEC_N_CHECK(workerMovement());
+    delay_ms(4000);
+              */   
+    while(1);
     
 return;
 }

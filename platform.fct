@@ -1,8 +1,5 @@
-main DSTACK_USAGE:0 DSTACK_LEVEL:0 FILE:"main.c" LINE:39
-enterRoom DSTACK_USAGE:111 DSTACK_LEVEL:111 FILE:"chat\chat.c" LINE:37
-joinNetwork DSTACK_USAGE:52 DSTACK_LEVEL:163 FILE:"network\network.c" LINE:31
-sendMessageTo DSTACK_USAGE:51 DSTACK_LEVEL:214 FILE:"network\network.c" LINE:209
-checksumCalculator DSTACK_USAGE:9 DSTACK_LEVEL:223 FILE:"network\network.c" LINE:499
-printf DSTACK_USAGE:10 DSTACK_LEVEL:233 FILE:"C:\cvavr2\lib\stdio.lib" LINE:1476
-_print DSTACK_USAGE:20 DSTACK_LEVEL:253 FILE:"C:\cvavr2\lib\stdio.lib" LINE:503
-strlen DSTACK_USAGE:2 DSTACK_LEVEL:255 FILE:"C:\cvavr2\lib\string.lib" LINE:1706
+main DSTACK_USAGE:12 DSTACK_LEVEL:12 FILE:"main.c" LINE:52
+printf DSTACK_USAGE:10 DSTACK_LEVEL:22 FILE:"C:\cvavr2\lib\stdio.lib" LINE:1476
+_print DSTACK_USAGE:20 DSTACK_LEVEL:42 FILE:"C:\cvavr2\lib\stdio.lib" LINE:503
+strlen DSTACK_USAGE:2 DSTACK_LEVEL:44 FILE:"C:\cvavr2\lib\string.lib" LINE:1706
+timer0_ovf_isr DSTACK_USAGE:5 DSTACK_LEVEL:49 FILE:"main.c" LINE:37

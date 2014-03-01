@@ -1,5 +1,6 @@
 
 #include "movement.h"
+#include "../platform.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -18,6 +19,7 @@ ret_t (*movementFuncArr[MOVE_MAX])(void *args) = {
 globalState_t global = {NULL, NULL,0, 0};
 globalState_p globalP = &global;
 curMovement_t curMovement = {0, 0, NULL};
+
 //Array defining the correct bit combinations for each case:
 unsigned char movementVals[MOVE_MAX] = {
     // Unused

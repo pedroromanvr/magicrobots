@@ -2,13 +2,10 @@
 #ifndef __MOVEMENT_MODULE__
 #define __MOVEMENT_MODULE__
 
-#define FRONT_PIN   PORTC.0
-#define BACK_PIN    PORTC.1
-#define RIGHT_PIN   PORTC.2
-#define LEFT_PIN    PORTC.3
+#include "../platform.h"
 
 #define PWM_FRECUENCY_MAX 10
-#define PWM_FRECUENCY_CNT 3
+#define PWM_FRECUENCY_CNT 5
 #define MAX_LIST_SIZE 100
 
 /* Valid commands that can be called remotely */
@@ -25,16 +22,6 @@ typedef enum {
     MOVE_MAX
 } 
 moveCmd_t;
-
-/* Valid return types for the movement module */
-typedef enum {
-    SUCCESS,                          
-    WARNING, /* You should retry */
-    FAIL, /* No reason, it just failed */
-    ERROR, /* Something was printed to stdout */
-    UNIMPLEMENTED
-}
-ret_t;
 
 //flash char* retNames[] = {"SUCCESS", "WARNING", "FAIL", "ERROR", "UNIMPLEMENTED"};
 
