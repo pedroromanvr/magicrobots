@@ -8,7 +8,7 @@ typedef struct {
   uint16_t Ki;            // Integral gain
   uint16_t Kd;            // Derivativegain
   int16_t errorSum;       // Used to save historical error 
-  int16_t lastError;      // Used to save the last error 
+  int16_t lastVal;        // Used to save the last value 
   uint16_t overflowVal;   // Max allowed value in error
 } 
 pidCtx_t;

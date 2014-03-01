@@ -8,7 +8,7 @@ void initPID(uint16_t Kp, uint16_t Ki, uint16_t Kd,
   ctx->Ki          = Ki;
   ctx->Kd          = Kd;
   ctx->errorSum    = (int16_t)0;
-  ctx->lastError   = (int16_t)0;
+  ctx->lastVal     = (int16_t)0;
   ctx->overflowVal = overflow;
 }
 
@@ -26,9 +26,9 @@ int16_t pid(int16_t setPoint, int16_t procVal, pidCtx_p ctx)
     // PID values
     pidP = ctx->Kp * curError;
     pidI = ctx->Ki * ctx->errorSum;
-    pidD = ctx->Kd * (curError - ctx->lastError);
+    pidD = ctx->Kd * (procVal - ctx->lastVal);
 
-    ctx->lastError = curError;  // Save last error
+    ctx->lastVal = procVal;  // Save last value
 
     return (int16_t)(pidP + pidI + pidD);
 }
