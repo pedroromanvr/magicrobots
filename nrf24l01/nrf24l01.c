@@ -74,12 +74,13 @@ void nrf24l01_revaddress(uint8_t *addr, uint8_t *addrrev) {
 	for(i=0; i<NRF24L01_ADDRSIZE; i++)
 		memcpy(&addrrev[i], &addr[NRF24L01_ADDRSIZE-1-i], 1);
 }
+ 
 
 /*
  * set rx address
  */
 void nrf24l01_setrxaddr(uint8_t pipe, uint8_t *addr) {
-    uint8_t addrrev[NRF24L01_ADDRSIZE];	
+    uint8_t addrrev[NRF24L01_ADDRSIZE];
 	if(pipe == 0) {
 		memcpy(&nrf24l01_addr0, addr, NRF24L01_ADDRSIZE); //cache address
 		nrf24l01_revaddress(addr, (uint8_t *)addrrev);

@@ -8,7 +8,11 @@ C=
 D=07/12/2013
 <<<<<<< HEAD
 Files=9
+<<<<<<< HEAD
 OpenedFiles=4
+=======
+OpenedFiles=5
+>>>>>>> ec36d4710c01f2cab1f490c19751c7bb7f91d11d
 =======
 Files=5
 OpenedFiles=9
@@ -32,6 +36,7 @@ EditorPanel0=0
 PageIndex0=0
 EditorPanel1=0
 <<<<<<< HEAD
+<<<<<<< HEAD
 TimeStamp1=1146404681
 PageIndex1=1
 OF2=movement\movement.c
@@ -48,21 +53,39 @@ OF4=network\network.h
 Active4=0
 EditorPanel4=0
 TimeStamp4=1145748600
+=======
+TimeStamp1=1146657640
+PageIndex1=1
+OF2=network\network.h
+Active2=0
+EditorPanel2=0
+TimeStamp2=1146658357
+PageIndex2=2
+OF3=network\network.c
+Active3=1
+EditorPanel3=0
+TimeStamp3=1146659057
+PageIndex3=3
+OF4=chat\chat.c
+Active4=0
+EditorPanel4=0
+TimeStamp4=1146618798
+>>>>>>> ec36d4710c01f2cab1f490c19751c7bb7f91d11d
 PageIndex4=4
-OF5=movement\movement.c
+OF5=platform.h
 Active5=0
 EditorPanel5=0
-TimeStamp5=1145419942
+TimeStamp5=1146658469
 PageIndex5=5
 OF6=spi\spi.h
 Active6=0
 EditorPanel6=0
-TimeStamp6=1145419942
+TimeStamp6=1146265147
 PageIndex6=6
 OF7=nrf24l01\nrf24l01.c
 Active7=0
 EditorPanel7=0
-TimeStamp7=1145419942
+TimeStamp7=1146265147
 PageIndex7=7
 =======
 TimeStamp1=1145152475
@@ -102,12 +125,12 @@ OF8=network\network.c
 Active8=1
 EditorPanel8=0
 <<<<<<< HEAD
-TimeStamp8=1145419955
+TimeStamp8=1146265147
 PageIndex8=8
 OF9=spi\spi.c
 Active9=0
 EditorPanel9=0
-TimeStamp9=1145419942
+TimeStamp9=1146265147
 PageIndex9=9
 =======
 TimeStamp8=1145216564
@@ -130,8 +153,13 @@ F4=movement\movement.c
 F5=network\network.c
 F6=random\random.c
 F7=chat\chat.c
+<<<<<<< HEAD
 F8=movement\stateMachine.c
 F9=movement\pid.c
+=======
+F8=locator\locator.c
+F9=dongle\dongle.c
+>>>>>>> ec36d4710c01f2cab1f490c19751c7bb7f91d11d
 [CompilerDebug]
 Chip=ATmega328P
 CPUClock=8000000
@@ -280,7 +308,7 @@ WarningSuspiciousPointerConversion=1
 WarningRegisterAllocated=1
 WarningMacroRedefined=1
 WarningFunctionReturn=1
-WarningUnreferencedFunction=1
+WarningUnreferencedFunction=0
 WarningUnreferencedFunctionParameter=1
 WarningFunctionParameterName=1
 WarningUnreferencedLocalVariable=1
@@ -336,7 +364,11 @@ COFFileTimeStamp=-1
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 Build=217
+=======
+Build=253
+>>>>>>> ec36d4710c01f2cab1f490c19751c7bb7f91d11d
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -505,7 +537,7 @@ LibraryPath61=
 LibraryPath62=
 LibraryPath63=
 [DefinedSymbols]
-Count=1
+Count=0
 Symbol0=MLEONAY 1
 [Libraries]
 Use1Wire=0
@@ -645,7 +677,11 @@ L11=[.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 L12=
 Lines=12
 [BookmarksFoldedCode]
+<<<<<<< HEAD
 Files=23
+=======
+Files=19
+>>>>>>> ec36d4710c01f2cab1f490c19751c7bb7f91d11d
 F1=C:\cvavreval\inc\mega328p_bits.h
 F2=main.c
 F3=nrf24l01\nrf24l01.c
@@ -663,12 +699,17 @@ F14=test\test1.c
 F15=C:\cvavr2\inc\mega328p.h
 F16=C:\cvavr2\inc\mega328p_bits.h
 F17=chat\chat.c
+<<<<<<< HEAD
 F18=C:\cvavr2\inc\delay.h
 F19=movement\stateMachine.c
 F20=C:\cvavr2\inc\stdint.h
 F21=C:\cvavr2\inc\stdlib.h
 F22=movement\pid.h
 F23=movement\pid.c
+=======
+F18=random\random.c
+F19=random\random.h
+>>>>>>> ec36d4710c01f2cab1f490c19751c7bb7f91d11d
 [Bookmarks1]
 TimeStamp=982091552
 Row=0
@@ -693,15 +734,39 @@ Column=0
 ScrollPosX=0
 ScrollPosY=0
 <<<<<<< HEAD
+<<<<<<< HEAD
 TimeStamp=1146404698
 [Bookmarks2]
-TimeStamp=1146404681
-Row=0
+TimeStamp=1147471605
+Row=42
+=======
+TimeStamp=1146725773
+Column=36
+ScrollPosX=0
+ScrollPosY=48
+BK0=-1
+BK1=-1
+BK2=-1
+BK3=-1
+BK4=-1
+BK5=-1
+BK6=-1
+BK7=-1
+BK8=-1
+BK9=-1
+[Bookmarks2]
+TimeStamp=1146657640
+Row=154
+>>>>>>> ec36d4710c01f2cab1f490c19751c7bb7f91d11d
 Column=0
 =======
 TimeStamp=1145283988
 ScrollPosX=0
+<<<<<<< HEAD
 ScrollPosY=0
+=======
+ScrollPosY=30
+>>>>>>> ec36d4710c01f2cab1f490c19751c7bb7f91d11d
 BK0=-1
 BK1=-1
 BK2=-1
@@ -731,9 +796,15 @@ BK8=-1
 BK9=-1
 [Bookmarks3]
 <<<<<<< HEAD
+<<<<<<< HEAD
 TimeStamp=1145220323
 Row=0
 Column=0
+=======
+TimeStamp=1147440421
+Row=69
+Column=3
+>>>>>>> ec36d4710c01f2cab1f490c19751c7bb7f91d11d
 =======
 TimeStamp=1145145137
 Row=13
@@ -753,11 +824,15 @@ BK8=-1
 BK9=-1
 [Bookmarks4]
 <<<<<<< HEAD
+<<<<<<< HEAD
 TimeStamp=1145220323
+=======
+TimeStamp=1146265147
+>>>>>>> ec36d4710c01f2cab1f490c19751c7bb7f91d11d
 Row=0
 Column=0
 ScrollPosX=0
-ScrollPosY=0
+ScrollPosY=54
 =======
 TimeStamp=1145150127
 Row=29
@@ -793,9 +868,15 @@ BK8=-1
 BK9=-1
 [Bookmarks6]
 <<<<<<< HEAD
+<<<<<<< HEAD
 TimeStamp=1145245336
 Row=34
 Column=32
+=======
+TimeStamp=1146265147
+Row=9
+Column=40
+>>>>>>> ec36d4710c01f2cab1f490c19751c7bb7f91d11d
 =======
 TimeStamp=1145283973
 Row=99
@@ -815,7 +896,11 @@ BK8=-1
 BK9=-1
 [Bookmarks7]
 <<<<<<< HEAD
+<<<<<<< HEAD
 TimeStamp=1144593787
+=======
+TimeStamp=1146265147
+>>>>>>> ec36d4710c01f2cab1f490c19751c7bb7f91d11d
 Row=0
 Column=0
 =======
@@ -824,7 +909,11 @@ Row=41
 Column=35
 >>>>>>> 89cf83fd0472502a59e85ca142bc847d900f265c
 ScrollPosX=0
+<<<<<<< HEAD
 ScrollPosY=0
+=======
+ScrollPosY=24
+>>>>>>> ec36d4710c01f2cab1f490c19751c7bb7f91d11d
 BK0=-1
 BK1=-1
 BK2=-1
@@ -836,9 +925,9 @@ BK7=-1
 BK8=-1
 BK9=-1
 [Bookmarks8]
-TimeStamp=1144948276
-Row=0
-Column=0
+TimeStamp=1146658469
+Row=15
+Column=17
 ScrollPosX=0
 ScrollPosY=0
 BK0=-1
@@ -870,11 +959,19 @@ BK9=-1
 [FoldedCode9]
 Blocks=0
 [Bookmarks10]
+<<<<<<< HEAD
 TimeStamp=1146271612
 Row=27
 Column=8
 ScrollPosX=0
 ScrollPosY=21
+=======
+TimeStamp=1146265147
+Row=231
+Column=62
+ScrollPosX=0
+ScrollPosY=0
+>>>>>>> ec36d4710c01f2cab1f490c19751c7bb7f91d11d
 BK0=-1
 BK1=-1
 BK2=-1
@@ -887,16 +984,26 @@ BK8=-1
 BK9=-1
 [Bookmarks11]
 <<<<<<< HEAD
+<<<<<<< HEAD
 TimeStamp=1145748600
 Row=245
 Column=17
+=======
+TimeStamp=1146917595
+Row=31
+Column=56
+>>>>>>> ec36d4710c01f2cab1f490c19751c7bb7f91d11d
 =======
 TimeStamp=1145216564
 Row=16
 Column=75
 >>>>>>> 89cf83fd0472502a59e85ca142bc847d900f265c
 ScrollPosX=0
+<<<<<<< HEAD
 ScrollPosY=172
+=======
+ScrollPosY=0
+>>>>>>> ec36d4710c01f2cab1f490c19751c7bb7f91d11d
 BK0=-1
 BK1=-1
 BK2=-1
@@ -909,16 +1016,22 @@ BK8=-1
 BK9=-1
 [Bookmarks12]
 <<<<<<< HEAD
+<<<<<<< HEAD
 TimeStamp=1145748600
 Row=10
 Column=58
+=======
+TimeStamp=1146658357
+Row=133
+Column=56
+>>>>>>> ec36d4710c01f2cab1f490c19751c7bb7f91d11d
 =======
 TimeStamp=1145216192
 Row=20
 Column=53
 >>>>>>> 89cf83fd0472502a59e85ca142bc847d900f265c
 ScrollPosX=0
-ScrollPosY=0
+ScrollPosY=115
 BK0=-1
 BK1=-1
 BK2=-1
@@ -931,7 +1044,11 @@ BK8=-1
 BK9=-1
 [Bookmarks13]
 <<<<<<< HEAD
+<<<<<<< HEAD
 TimeStamp=1146402173
+=======
+TimeStamp=1146265147
+>>>>>>> ec36d4710c01f2cab1f490c19751c7bb7f91d11d
 Row=0
 Column=0
 =======
@@ -1003,8 +1120,6 @@ BK8=-1
 BK9=-1
 [FoldedCode14]
 Blocks=0
-[FoldedCode8]
-Blocks=0
 [FoldedCode15]
 Blocks=0
 [FoldedCode16]
@@ -1012,11 +1127,19 @@ Blocks=0
 [FoldedCode5]
 Blocks=0
 [Bookmarks17]
+<<<<<<< HEAD
 TimeStamp=1145748600
 Row=27
 Column=24
 ScrollPosX=0
 ScrollPosY=93
+=======
+TimeStamp=1146618798
+Row=84
+Column=2
+ScrollPosX=0
+ScrollPosY=19
+>>>>>>> ec36d4710c01f2cab1f490c19751c7bb7f91d11d
 BK0=-1
 BK1=-1
 BK2=-1
@@ -1027,6 +1150,7 @@ BK6=-1
 BK7=-1
 BK8=-1
 BK9=-1
+<<<<<<< HEAD
 [FoldedCode6]
 Blocks=0
 [FoldedCode7]
@@ -1052,8 +1176,6 @@ BK7=-1
 BK8=-1
 BK9=-1
 [FoldedCode18]
-Blocks=0
-[FoldedCode2]
 Blocks=0
 [FoldedCode10]
 Blocks=0
@@ -1083,6 +1205,12 @@ Blocks=0
 TimeStamp=953301748
 Row=6
 Column=105
+=======
+[Bookmarks18]
+TimeStamp=1146271074
+Row=69
+Column=0
+>>>>>>> ec36d4710c01f2cab1f490c19751c7bb7f91d11d
 ScrollPosX=0
 ScrollPosY=0
 BK0=-1
@@ -1095,10 +1223,56 @@ BK6=-1
 BK7=-1
 BK8=-1
 BK9=-1
+<<<<<<< HEAD
 [FoldedCode11]
 Blocks=0
-[FoldedCode17]
+=======
+[Bookmarks19]
+TimeStamp=1146270884
+Row=18
+Column=7
+ScrollPosX=0
+ScrollPosY=0
+BK0=-1
+BK1=-1
+BK2=-1
+BK3=-1
+BK4=-1
+BK5=-1
+BK6=-1
+BK7=-1
+BK8=-1
+BK9=-1
+[FoldedCode19]
 Blocks=0
+[FoldedCode18]
+Line1=5
+Blocks=1
+[FoldedCode4]
+Blocks=0
+[FoldedCode7]
+Blocks=0
+[FoldedCode10]
+Line1=200
+Blocks=1
+[FoldedCode6]
+Blocks=0
+[FoldedCode13]
+Blocks=0
+[FoldedCode2]
+Line1=40
+Blocks=0
+>>>>>>> ec36d4710c01f2cab1f490c19751c7bb7f91d11d
+[FoldedCode17]
+Line1=21
+Line2=53
+Line3=63
+Blocks=3
+[FoldedCode8]
+Blocks=0
+[FoldedCode12]
+Blocks=0
+<<<<<<< HEAD
 [FoldedCode20]
 Blocks=0
 [Bookmarks21]
@@ -1168,6 +1342,25 @@ F8=C:\Users\PedroRomán\Desktop\mr\magicrobots\movement\stateMachine.c
 F9=C:\Users\PedroRomán\Desktop\mr\magicrobots\movement\pid.c
 [Header1]
 Files=16
+=======
+[FoldedCode11]
+Blocks=0
+[FoldedCode3]
+Blocks=0
+[HeadersList]
+Files=9
+F1=C:\Users\marc\dagas4\magicrobots\main.c
+F2=C:\Users\marc\dagas4\magicrobots\nrf24l01\nrf24l01.c
+F3=C:\Users\marc\dagas4\magicrobots\spi\spi.c
+F4=C:\Users\marc\dagas4\magicrobots\movement\movement.c
+F5=C:\Users\marc\dagas4\magicrobots\network\network.c
+F6=C:\Users\marc\dagas4\magicrobots\random\random.c
+F7=C:\Users\marc\dagas4\magicrobots\chat\chat.c
+F8=C:\Users\marc\dagas4\magicrobots\locator\locator.c
+F9=C:\Users\marc\dagas4\magicrobots\dongle\dongle.c
+[Header1]
+Files=18
+>>>>>>> ec36d4710c01f2cab1f490c19751c7bb7f91d11d
 F1=platform.h
 F2=C:\cvavr2\inc\mega328p.h
 F3=C:\cvavr2\inc\mega328p_bits.h
@@ -1179,11 +1372,21 @@ F8=C:\cvavr2\inc\stdio.h
 F9=C:\cvavr2\inc\stdarg.h
 F10=spi\spi.h
 F11=nrf24l01\nrf24l01registers.h
+<<<<<<< HEAD
 F12=movement\pid.h
 F13=movement\stateMachine.h
 F14=movement\movement.h
 F15=chat\chat.h
 F16=network\network.h
+=======
+F12=network\network.h
+F13=C:\cvavr2\inc\math.h
+F14=movement\movement.h
+F15=random\random.h
+F16=chat\chat.h
+F17=dongle\dongle.h
+F18=locator\locator.h
+>>>>>>> ec36d4710c01f2cab1f490c19751c7bb7f91d11d
 [Header2]
 Files=11
 F1=nrf24l01\nrf24l01.h
@@ -1217,6 +1420,7 @@ F8=C:\cvavr2\inc\string.h
 [Header5]
 Files=16
 F1=network\network.h
+<<<<<<< HEAD
 F2=C:\cvavr2\inc\stdint.h
 F3=C:\cvavr2\inc\string.h
 F4=nrf24l01\nrf24l01.h
@@ -1232,6 +1436,22 @@ F13=movement\movement.h
 F14=random\random.h
 F15=C:\cvavr2\inc\stdlib.h
 F16=C:\cvavr2\inc\math.h
+=======
+F2=C:\cvavr2\inc\math.h
+F3=C:\cvavr2\inc\delay.h
+F4=C:\cvavr2\inc\stdint.h
+F5=C:\cvavr2\inc\string.h
+F6=nrf24l01\nrf24l01.h
+F7=platform.h
+F8=C:\cvavr2\inc\mega328p.h
+F9=C:\cvavr2\inc\mega328p_bits.h
+F10=C:\cvavr2\inc\stdio.h
+F11=C:\cvavr2\inc\stdarg.h
+F12=spi\spi.h
+F13=nrf24l01\nrf24l01registers.h
+F14=movement\movement.h
+F15=random\random.h
+>>>>>>> ec36d4710c01f2cab1f490c19751c7bb7f91d11d
 [Header6]
 Files=5
 F1=random\random.h
@@ -1240,7 +1460,7 @@ F3=platform.h
 F4=C:\cvavr2\inc\mega328p.h
 F5=C:\cvavr2\inc\mega328p_bits.h
 [Header7]
-Files=14
+Files=16
 F1=chat\chat.h
 F2=C:\cvavr2\inc\stdint.h
 F3=C:\cvavr2\inc\string.h
@@ -1248,8 +1468,9 @@ F4=platform.h
 F5=C:\cvavr2\inc\mega328p.h
 F6=C:\cvavr2\inc\mega328p_bits.h
 F7=network\network.h
-F8=nrf24l01\nrf24l01.h
+F8=C:\cvavr2\inc\math.h
 F9=C:\cvavr2\inc\delay.h
+<<<<<<< HEAD
 F10=C:\cvavr2\inc\stdio.h
 F11=C:\cvavr2\inc\stdarg.h
 F12=spi\spi.h
@@ -1271,3 +1492,49 @@ Files=3
 F1=movement\pid.h
 F2=C:\cvavr2\inc\stdint.h
 F3=C:\cvavr2\inc\stdlib.h
+=======
+F10=nrf24l01\nrf24l01.h
+F11=C:\cvavr2\inc\stdio.h
+F12=C:\cvavr2\inc\stdarg.h
+F13=spi\spi.h
+F14=nrf24l01\nrf24l01registers.h
+F15=movement\movement.h
+F16=random\random.h
+[Header8]
+Files=16
+F1=locator\locator.h
+F2=network\network.h
+F3=C:\cvavr2\inc\math.h
+F4=C:\cvavr2\inc\delay.h
+F5=C:\cvavr2\inc\stdint.h
+F6=C:\cvavr2\inc\string.h
+F7=nrf24l01\nrf24l01.h
+F8=platform.h
+F9=C:\cvavr2\inc\mega328p.h
+F10=C:\cvavr2\inc\mega328p_bits.h
+F11=C:\cvavr2\inc\stdio.h
+F12=C:\cvavr2\inc\stdarg.h
+F13=spi\spi.h
+F14=nrf24l01\nrf24l01registers.h
+F15=movement\movement.h
+F16=random\random.h
+[Header9]
+Files=17
+F1=dongle\dongle.h
+F2=network\network.h
+F3=C:\cvavr2\inc\math.h
+F4=C:\cvavr2\inc\delay.h
+F5=C:\cvavr2\inc\stdint.h
+F6=C:\cvavr2\inc\string.h
+F7=nrf24l01\nrf24l01.h
+F8=platform.h
+F9=C:\cvavr2\inc\mega328p.h
+F10=C:\cvavr2\inc\mega328p_bits.h
+F11=C:\cvavr2\inc\stdio.h
+F12=C:\cvavr2\inc\stdarg.h
+F13=spi\spi.h
+F14=nrf24l01\nrf24l01registers.h
+F15=movement\movement.h
+F16=random\random.h
+F17=locator\locator.h
+>>>>>>> ec36d4710c01f2cab1f490c19751c7bb7f91d11d

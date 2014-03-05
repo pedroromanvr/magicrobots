@@ -25,13 +25,15 @@ Data Stack size         : 512
 #include "platform.h"
 #include "nrf24l01/nrf24l01.h"
 //#include "movement/movement.h"
-#include "movement/pid.h"
-#include "movement/stateMachine.h"
-//#include "network/network.h"
-#include "chat/chat.h"        
+#include "network/network.h"
+#include "chat/chat.h"
+#include "dongle/dongle.h"
 #include <delay.h>
 #include <string.h>
-#include <stdio.h>          
+
+// Declare your global variables here
+// Standard Input/Output functions
+#include <stdio.h>
 
 // Timer 0 overflow interrupt service routine
 interrupt [TIM0_OVF] void timer0_ovf_isr(void)
@@ -45,14 +47,12 @@ interrupt [TIM0_OVF] void timer0_ovf_isr(void)
   {
     timerVector[TBASE] = 0;
     timerVector[TSTART]++;
-    timerVector[TEXEC]++;
+    timerVector[TEXEC]++;    
+    timerVector[TSAVE_DATA]++;
   }
 }
 
-void main(void)
-{
-    pidCtx_t pidCtx;
-    int temp, val = 45, des = 50;
+void setupHardware()
 {
 // Crystal Oscillator division factor: 1
 #pragma optsize-
@@ -163,44 +163,34 @@ ADCSRA=0x00;
 // TWI disabled
 TWCR=0x00;    
 }
-    initChat();    
-    initMachine();        
-    initPID(10, 10, 10, 255, &pidCtx);
-    printf("Hello World\n");
-    while(1)
-    {                  
-       //processMachine();
-       temp = pid(des, val, &pidCtx);
-       printf("Pid val: %d -- \n", temp);
-       delay_ms(200);
-    }
-   /*
-    EXEC_N_CHECK(movementCommandExecute(FRONT));     
-    EXEC_N_CHECK(workerMovement());
-    delay_ms(4000);
-    EXEC_N_CHECK(movementCommandExecute(BACK));  
-    EXEC_N_CHECK(workerMovement());
-    delay_ms(4000);    
-    EXEC_N_CHECK(movementCommandExecute(RIGHT));  
-    EXEC_N_CHECK(workerMovement());
-    delay_ms(4000);
-    EXEC_N_CHECK(movementCommandExecute(LEFT));    
-    EXEC_N_CHECK(workerMovement());
-    delay_ms(4000);
-    EXEC_N_CHECK(movementCommandExecute(ROTATE_RIGHT));  
-    EXEC_N_CHECK(workerMovement());
-    delay_ms(4000);
-    EXEC_N_CHECK(movementCommandExecute(ROTATE_LEFT));  
-    EXEC_N_CHECK(workerMovement());
-    delay_ms(4000);
-    EXEC_N_CHECK(movementCommandExecute(ROTATE_RIGHT_INVERTED));    
-    EXEC_N_CHECK(workerMovement());
-    delay_ms(4000);
-    EXEC_N_CHECK(movementCommandExecute(ROTATE_LEFT_INVERTED));
-    EXEC_N_CHECK(workerMovement());
-    delay_ms(4000);
-              */   
-    while(1);
-    
-return;
+
+void main_for_chat(void)
+//void main(void)
+{
+    setupHardware();
+    initChat();
+    INIT_NW_STACK();
+    printf("NW stack inited\n");
+    // Global enable interrupts
+    #asm("sei")
+    if(enterMicroRoom() == SUCCESS)
+        printf("Thanks for using chatroom!\n");
+    else
+        printf("chatroom service terminated abnormally!\n");
+        
+    return;
+}
+//void main_for_dongle(void)
+void main(void)
+{
+    setupHardware();
+    dongleInit();
+    // Global enable interrupts
+    #asm("sei")
+    if(dongleMainThread() == SUCCESS)
+        printf("DEBUG=Thanks for using dongle!\n");
+    else
+        printf("DEBUG=dongle service terminated abnormally!\n");
+        
+    return;
 }

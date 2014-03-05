@@ -1,5 +1,4 @@
 #include "network.h"
-#include <stdint.h>
 
 ripEntry_t ripTable[_MAX_PIPES_] = {{0,0,0},
                                     {0,0,0},
@@ -9,190 +8,218 @@ ripEntry_t ripTable[_MAX_PIPES_] = {{0,0,0},
 uint8_t usedEntries = 0;
 uint8_t isPaired = FALSE;
 uint8_t isRoot = 255;   //Initialize with any value
+
 uint16_t gID = INVALID_GID;
 
-#include "../movement/movement.h"
-#include "../random/random.h"
-#include "../platform.h"
-#include "stdlib.h"
-#include <math.h>
-#include <delay.h>
-
-#define _JOIN_PIPE_ 0
-#define _MAX_RETRIES_ 100
-#define _DELTA_DELAY_ 10
-
-
-//To use outside this API
-ret_t joinNetwork()
+/*
+ * pp must be NULL for leaf nodes
+*/
+ret_t joinNetworkOnTheFly(discPack_p pp)
 {
-    // ----------- Variable declarations ----------
     ret_t ret;
     uint8_t address;
     uint8_t retryN;
     uint8_t pipe;
-    char rxData[NRF24L01_PAYLOAD];
-    discPack_p tempPacket = (discPack_p) rxData;
-    headerPack_p tempHeader = (headerPack_p) rxData;
+    discPack_p tempPacket;
+    headerPack_p tempHeader;
 
-    //Used by root node, leaf nodes send ripEntries
-    rootReplyP_t myRootReply;
-    ripEntry_p entryP = (ripEntry_p)tempPacket->data;
-
-    //Used by leaf node, root node sends rootReplies
-    ripEntry_t myLeafInfo;
-    rootReplyP_p rootReply = (rootReplyP_p)tempPacket->data;
-
-    if(gID == INVALID_GID)
-    {
-        gID = (uint16_t)random8();
-    }
-
-    // --------------------------------------------
-join_retry:
     retryN = 0;
-    //gID = rand();     // <--- DELETE_ME
-    // Select initial address, range 1-255
     address = GET_ADDRESS(gID);
-    printf("gID %d:%d\n", __LINE__, gID);
-    // Validate root
-    if(isRootId(gID))
+    // Validate root or leaf
+    if(pp == NULL && isRootId(gID) == TRUE ||
+       pp != NULL && isRootId(gID) == FALSE)
     {
-        printf("Hello I'm root :D\n");
-        while(retryN < _MAX_RETRIES_)
+        printf("DEBUG=joinNetworkOnTheFly: Invalid packet for gID\n");
+        return ERROR;
+    }
+    if(pp) /* A leaf wants to join the network */
+    {
+        rootReplyP_t myRootReply;
+        ripEntry_p entryP;
+        tempPacket = pp;
+        tempHeader = (headerPack_p)pp;
+        entryP = (ripEntry_p)tempPacket->data;
+
+        netDebugPrint("DEBUG=joinNetworkOnTheFly: recieved a leaf request\n");
+        printHeader(tempHeader);
+        printRipTable();
+        if(!isInRange(entryP->id, gID))
         {
-            //Wait for a non-root node in range to send a message
-            //printRipTable();
-            printf("I'm waiting for a leaf...\n");
-            while( !nrf24l01_readready(_JOIN_PIPE_) );
-            //Someone sends us a message
-            nrf24l01_read(rxData);
-            printf("R_Got package, %s:%d:gID:%d:addr:%d:type:%d:size:%d:checksum:%d:ttl:%d:numb:%d:srcID:%d:destID:%d-\n", __FILE__, __LINE__, gID, address, tempHeader->type, tempHeader->size, tempHeader->checksum, tempHeader->ttl, tempHeader->number, tempHeader->idSrc, tempHeader->idDest);
-            if(isInRange(entryP->id, gID)) //leaf in our range
+            printf("DEBUG=joinNetworkOnTheFly: Invalid range\n");
+            return WARNING;
+        }
+        if(usedEntries < _MAX_PIPES_)
+        {
+            //Send package to leaf node
+            myRootReply.isAcceptedConnection = TRUE;
+            myRootReply.address = getFreeAddress(address); //Based on my current root address
+            myRootReply.gID2 = 0;
+
+            printRootReply(&myRootReply);
+
+            netDebugPrint("DEBUG=joinNetworkOnTheFly: Adding leaf to RIP\n");
+            //Modify address of entryP to save it in our RIP
+            entryP->address = myRootReply.address;
+            printRipEntry(entryP);
+            ret = insertEntry(entryP);
+            if(ret != SUCCESS && ret != WARNING)
             {
-                if(usedEntries < _MAX_PIPES_)
-                {
-                    //Send package to leaf node
-                    myRootReply.isAcceptedConnection = TRUE;
-                    myRootReply.address = getFreeAddress(address); //Based on my current root address
-                    myRootReply.gID2 = 0;
+                printf("DEBUG=joinNetworkOnTheFly: InsertEntry FAILED");
+                return FAIL;
+            }
+            if(ret == WARNING)
+            {
+                printf("DEBUG=joinNetworkOnTheFly: Unimplemented feature\n");
+                return WARNING;
+            }
 
-                    printRootReply(&myRootReply);
+            tempHeader->type = DISCOVERY;
+            tempHeader->size = sizeof(myRootReply);
+            tempHeader->ttl = DEFAULT_TTL;
+            tempHeader->number = 0;
+            tempHeader->idDest = tempHeader->idSrc;
+            tempHeader->idSrc = gID;
 
-                    printf("Adding leaf to RIP, %s:%d:%d\n", __FILE__, __LINE__, gID);
-                    //Modify address of entryP to save it in our RIP
-                    entryP->address = myRootReply.address;
-                    printRipEntry(entryP);
-                    ret = insertEntry(entryP);
-                    if(ret != SUCCESS)
-                        printf("InsertEntry FAILED");
+            netDebugPrint("DEBUG=joinNetworkOnTheFly: Sent root reply message:%d\n", gID);
+            ret = sendMessageTo(tempHeader, (char *)&myRootReply,
+                                sizeof(myRootReply));
 
-                    ret = sendMessageTo(tempHeader->idSrc, DISCOVERY,
-                              (char *)&myRootReply, sizeof(myRootReply));
-                    if(ret != SUCCESS && ret != WARNING)
-                    {
-                        printf("sendMessageTo failed\n");
-                        return ERROR;
-                    }
-                    else
-                    {
-                        printf("Sent root reply message %s:%d:%d\n", __FILE__, __LINE__, gID);
-                        return SUCCESS;
-                    }
-                }
-                else
-                {
-                    //Convert leaf node to root
-                    //break outter while
-                }
+            if(ret != SUCCESS && ret != WARNING)
+            {
+                printf("DEBUG=joinNetworkOnTheFly: sendMessageTo failed\n");
+                return WARNING;
             }
             else
             {
-                retryN++;
+                isPaired = TRUE;
+                printf("DEBUG=joinNetworkOnTheFly: Root SUCCESS!\n");
+                return SUCCESS;
             }
+        }
+        else
+        {
+            /* Maybe a leaf that already was connected wants to re-join.
+               Just resend the myRootReply
+             */
+            printf("DEBUG=joinNetworkOnTheFly: sorry, not yet implemented\n");
+            return UNIMPLEMENTED;
+            //Convert leaf node to root
+            //break outter while
         }
         //TODO: autoconnect roots
     }
-    else // Leaf node
+    else /* I want to join the network */
     {
-        printf("Hello I'm a leaf! D:\n");
+        ripEntry_t myLeafInfo;
+        rootReplyP_p rootReply;
+        uint32_t cnt = 0;
+        uint8_t txData[NRF24L01_PAYLOAD];
+        tempPacket = (discPack_p)txData;
+        tempHeader = (headerPack_p)txData;
+        rootReply = (rootReplyP_p)tempPacket->data;
+
+        myLeafInfo.id   = gID;
+        myLeafInfo.address = address;
+        myLeafInfo.isRoot = 0;
+
+        printRipEntry(&myLeafInfo);
+
         //Look for our root to become available
+        retryN += 1;
         while(retryN < _MAX_RETRIES_)
         {
             //Check if someone has just sent something
             if( !nrf24l01_readready(&pipe) )
             {
-                //Send a message to our root, build packet to send
-                myLeafInfo.id   = gID;
-                myLeafInfo.address = address;
-                myLeafInfo.isRoot = 0;
-
-                printf("Send a message to our root\n");
-                printRipEntry(&myLeafInfo);
-
-                ret = sendMessageTo(getRootFromID(gID), DISCOVERY,
-                              (char *)&myLeafInfo, sizeof(myLeafInfo));
+                netDebugPrint("DEBUG=joinNetworkOnTheFly: Sent discovery message to root\n");
+                tempHeader->type = DISCOVERY;
+                tempHeader->size = sizeof(myLeafInfo);
+                tempHeader->ttl = DEFAULT_TTL;
+                tempHeader->number = 0;
+                tempHeader->idSrc = gID;
+                tempHeader->idDest = getRootFromID(gID);
+                ret = sendMessageTo(tempHeader, (char *)&myLeafInfo,
+                                    sizeof(myLeafInfo));
                 if(ret != SUCCESS && ret != WARNING)
                 {
-                    printf("sendMessageTo FAILED\n");
-                    retryN++;
+                    printf("DEBUG=joinNetworkOnTheFly: sendMessageTo FAILED\n");
+                    return WARNING;
+                }
+
+                netDebugPrint("DEBUG=joinNetworkOnTheFly: Waiting for root answer.\n");
+                while(!nrf24l01_readready(&pipe) && cnt != DEFAULT_TIMEOUT)
+                    cnt += 1;
+                if(cnt == DEFAULT_TIMEOUT)
+                {
+                    netDebugPrint("DEBUG=joinNetworkOnTheFly: Timeout.\n");
+                    return WARNING;
+                }
+                nrf24l01_read(txData);
+                netDebugPrint("DEBUG=joinNetworkOnTheFly: Message recieved.\n");
+
+                if(tempHeader->type != DISCOVERY ||
+                   tempHeader->idDest != gID ||
+                   tempHeader->idSrc != getRootFromID(gID))
+                {
+                    netDebugPrint("DEBUG=joinNetworkOnTheFly: The message seems to be not for us, retrying...\n");
+                    return SUCCESS;
+                }
+
+                /* We can assume we recieved a rootReply */
+                if(rootReply->isAcceptedConnection)
+                {
+                    isPaired            = TRUE;
+                    isRoot              = FALSE;
+                    /* Reuse leaf entry to fill the unique entry for this leaf */
+                    myLeafInfo.id       = tempHeader->idSrc;
+                    myLeafInfo.address  = rootReply->address;
+                    myLeafInfo.isRoot   = TRUE;
+                    insertEntry(&myLeafInfo);
+                    printRipTable();
+                    printf("DEBUG=joinNetworkOnTheFly: Leaf SUCCESS\n");
+                    return SUCCESS;
+                    break;
                 }
                 else
-                    printf("Sent discovery message %s:%d:%d\n", __FILE__, __LINE__, gID);
-
-                _delay_ms(100);
-            }
-            else
-            {
-                //Verify packet destiny
-                nrf24l01_read(rxData);
-                printf("L_Got package, %d:pipe:%d:gID:%d:addr:%d:type:%d:size:%d:checksum:%d:ttl:%d:numb:%d:srcID:%d:destID:%d-\n",
-                        __LINE__, pipe, gID, address, tempHeader->type, tempHeader->size, tempHeader->checksum, tempHeader->ttl, tempHeader->number, tempHeader->idSrc, tempHeader->idDest);
-                if( isRootId(tempHeader->idSrc) )
                 {
-                    if( isInRange(gID, tempHeader->idSrc) ) //If the packet is from our root
-                    {
-                        //Validate connection established
-                        if(rootReply->isAcceptedConnection)
-                        {
-                            isPaired            = TRUE;
-                            isRoot              = FALSE;
-                            /* Reuse leaf entry to fill the unique entry for this leaf */
-                            myLeafInfo.id       = tempHeader->idSrc;
-                            myLeafInfo.address  = rootReply->address;
-                            myLeafInfo.isRoot   = TRUE;
-                            insertEntry(&myLeafInfo);
-                            //printRipTable();
-                            printf("Success pairing %d:gID:%d:srcID:%d:rootAddr:%d\n",
-                                    __LINE__, gID, tempHeader->idSrc, rootReply->address);
-                            return SUCCESS;
-                        }
-                        //TODO: root did not accept connection
-                        break;
-                    }
-                    else //Packet from other root, simply discard it
-                        retryN++;
-                }
-                else //Got a packet from other leaf
-                {
-                    if( tempHeader->idSrc == gID)
-                    {
-                        //global ID collision detected, modify ours
-                        goto join_retry;
-                    }
-                    else //Packet from other leaf, simply discard it
-                        retryN++;
+                    printf("DEBUG=joinNetworkOnTheFly: Root rejected the connection\n");
+                    return WARNING;
+                    //TODO: root did not accept connection D:
                 }
             }
         }
         // MAX number of retries reached, move from range
-        //goto join_retry;  // <----- DELETE_ME
+        return UNIMPLEMENTED;
     }
-    printf("Error, could not pair %s:%d:gID:%d:addr:%d:\n", __FILE__, __LINE__, gID, address);
-    return ERROR;
+    printf("DEBUG=joinNetworkOnTheFly: Error, could not pair: gID:%d:addr:%d:\n",
+           gID, address);
+    return WARNING;
 }
+
 //Broadcast message originated in this host
 ret_t sendMessage(char *msg,  uint8_t size)
+{
+  uint8_t idx;
+  ripEntry_p re;
+  headerPack_t hdr;
+
+  hdr.type = BROADCAST;
+  hdr.idSrc = gID;
+  hdr.ttl = DEFAULT_TTL;
+
+  for(idx=0; idx<_MAX_PIPES_; idx++)
+  {
+    re = &ripTable[idx];
+    if(re->id == INVALID_GID)
+      continue;
+    hdr.idDest = re->id;
+    netDebugPrint("DEBUG=sendMessage: Calling sendMessageTo for idx=%d.\n", idx);
+    sendMessageTo(&hdr, msg, size);
+  }
+    return SUCCESS;
+}
+ret_t forwardMessage(headerPack_p header,
+                     char *msg,  uint8_t size)
 {
   uint8_t idx;
   ripEntry_p re;
@@ -202,13 +229,30 @@ ret_t sendMessage(char *msg,  uint8_t size)
     re = &ripTable[idx];
     if(re->id == INVALID_GID)
       continue;
-    sendMessageTo(re->id, BROADCAST, msg, size);
+    header->idDest = re->id;
+    netDebugPrint("DEBUG=forwardMessage: Calling sendMessageTo for idx=%d.\n", idx);
+    sendMessageTo(header, msg, size);
   }
     return SUCCESS;
 }
+/*
+ * Advanced way to send a message.
+ * No verification of any type is done.
+ * header + msg are transmited in one packet.
+ */
+ret_t microSendMessage(headerPack_p header,
+                     char *msg,  uint8_t size)
+{
+    discPack_t packet;
+    memcpy(&(packet.header), header, sizeof(headerPack_t));
+    memcpy(packet.data, msg, size);                        
+    nrf24l01_write((uint8_t *)&packet);    
+    netDebugPrint("DEBUG=microSendMessage: Message Sent.\n");
+    return SUCCESS;
+}
 //Send message to an specific ID
-ret_t sendMessageTo(uint16_t id, packet_t type,
-                        char *msg, uint8_t size)
+ret_t sendMessageTo(headerPack_p header,
+                    char *msg, uint8_t size)
 {
   uint8_t idx=0, done = 0, found = 0;
   ripEntry_p re;
@@ -216,42 +260,39 @@ ret_t sendMessageTo(uint16_t id, packet_t type,
   headerPack_p hdr = (headerPack_p)&packet;
   char address[NRF24L01_ADDRSIZE];
 
-  printf("sendMessageTo start\n");
+  memcpy(hdr, header, sizeof(headerPack_t));
 
-  hdr->type = type;
-  hdr->size = size;
-  hdr->ttl = DEFAULT_TTL;
-  hdr->idSrc = gID;
-  hdr->idDest = id;
-  hdr->number = 0;
+  hdr->ttl -= 1;
+  netDebugPrint("DEBUG=sendMessageTo: start.\n");
 
   printHeader(hdr);
 
-  if(type == DISCOVERY)
+  if(hdr->type == DISCOVERY)
   {
     /* DISCOVERY packets are special, since are sent at the beggining.
      * ripTable is presumably empty so we basically just send the message to a
      * default pipe. Hopefully a root will be waiting for us.
      * A DISCOVERY message should be shorter than DATA_SIZE
       */
-     printf("sendMessageTo:DISCOVERY packet\n");
+     netDebugPrint("DEBUG=sendMessageTo: DISCOVERY packet\n");
      if(size > DATA_SIZE)
      {
-        printf("sendMessageTo:DATA_SIZE exceeded\n");
+        printf("DEBUG=sendMessageTo: DATA_SIZE exceeded\n");
         return ERROR;
      }
      hdr->checksum = checksumCalculator(hdr,
-                       &msg[done], size - done);
+                       &msg[0], size);
      memcpy(packet.data, msg, DATA_SIZE);
      memcpy(address, nrf24l01_addr0, NRF24L01_ADDRSIZE);
+     printHeader(hdr);
      nrf24l01_settxaddr(address);
      nrf24l01_write((uint8_t *)&packet);
-    printf("sendMessageTo:DISCOVERY packet sent!\n");
+    netDebugPrint("DEBUG=sendMessageTo:DISCOVERY packet sent!\n");
     return SUCCESS;
   }
-  if(type == BROADCAST)
+  if(hdr->type == BROADCAST)
   {
-    printf("sendMessageTo: BROADCAST message detected!\n");
+    netDebugPrint("DEBUG=sendMessageTo: BROADCAST message detected!\n");
     goto nextEntry;
   }
   for(idx=0; idx<_MAX_PIPES_; idx++)
@@ -260,13 +301,13 @@ ret_t sendMessageTo(uint16_t id, packet_t type,
     printRipEntry(re);
     if(re->id == INVALID_GID)
       continue;
-    if(re->id == id)
+    if(re->id == hdr->idDest)
     {
       found = 1;
       break;
     }
   }
-  printf("sendMessageTo:found=%d\n", found);
+  //netDebugPrint("sendMessageTo:found=%d\n", found);
   if(!found)
   {
     idx = 0;
@@ -280,11 +321,25 @@ nextEntry:
       goto nextEntry;
     }
   }
-  printf("sendMessageTo:nextEntry: idx=%d\n", idx);
-
+  //netDebugPrint("sendMessageTo:nextEntry: idx=%d\n", idx);
   printRipEntry(re);
 
+  /* First send an empty header to inform the reciever
+   * about our willing to transmit
+   */
   hdr->number = 0;
+  hdr->size = 0;
+  hdr->checksum = checksumCalculator(hdr,
+                     msg, 0);
+  getAddrByPipe(idx, address);
+  nrf24l01_settxaddr(address);
+  nrf24l01_write((uint8_t *)&packet);
+  _delay_ms(DEFAULT_DELAY);
+  netDebugPrint("DEBUG=sendMessageTo: Empty header sent!\n");
+  printHeader(hdr);
+
+  hdr->size = size;
+  netDebugPrint("DEBUG=sendMessageTo: message loop start!\n");
   while(done <= size)
   {
     hdr->checksum = checksumCalculator(hdr,
@@ -294,97 +349,119 @@ nextEntry:
     getAddrByPipe(idx, address);
     nrf24l01_settxaddr(address);
     nrf24l01_write((uint8_t *)&packet);
-    _delay_ms(100);
+    netDebugPrint("sendMessageTo: Packet sent!\n");
+    _delay_ms(DEFAULT_DELAY);
     done += DATA_SIZE;
     hdr->number += 1;
   }
   idx++;
   if(!found)
     goto nextEntry;
+  netDebugPrint("DEBUG=sendMessageTo: SUCCESS!\n");
   return SUCCESS;
 }
 //Recieve message from any sender
 ret_t getMessage(headerPack_p header, char *buf, uint8_t size)
 {
-    uint8_t pipe;
-    int recieved = 0;
+    uint8_t pipe = 255;
+    uint32_t cnt = 0;
+    uint8_t recieved = 0;
     discPack_t packet;
     headerPack_p hdr = (headerPack_p)&packet;
 
-nextPacket:
-    printf("getMessage: waiting for packet...\n");
-    while(!nrf24l01_readready(&pipe));
-    if(pipe != 0)
-    {
-        GPIO_COMPLEMENT_BIT(5);
-        nrf24l01_read((uint8_t *)&packet);
-        printf("getMessage: packet recieved!\n");
+    while(1)
+	{
+		netDebugPrint("DEBUG=getMessage: waiting for packet...\n");
+		while(!nrf24l01_readready(&pipe) && cnt != DEFAULT_TIMEOUT)
+			cnt += 1;
+		if(cnt == DEFAULT_TIMEOUT)
+		{
+			netDebugPrint("DEBUG=getMessage: Timeout.\n");
+			return ERROR;
+		}
+		if(pipe != 0)
+		{
+			nrf24l01_read((uint8_t *)&packet);
+			netDebugPrint("DEBUG=getMessage: packet recieved!\n");
 
-        printHeader(hdr);
+			printHeader(hdr);
 
-        /* Can't handle the size */
-        if(hdr->size > size)
-            return WARNING;
-        printf("getMessage: packet size OK!\n");
+			if(hdr->size > size)
+			{
+				printf("DEBUG=getMessage: packet size too big.\n");
+				return WARNING;
+			}
 
-        /* Bad packet */
-        if(hdr->checksum != checksumCalculator(hdr,
-                                        packet.data,
-                                        hdr->size - recieved))
-            return ERROR;
-        printf("getMessage: packet checksum correct!\n");
+			if(hdr->checksum != checksumCalculator(hdr,
+											packet.data,
+											hdr->size - recieved))
+			{
+				printf("DEBUG=getMessage: packet checksum error!\n");
+				return WARNING;
+			}
+			if(recieved == 0)
+			{
+				netDebugPrint("DEBUG=getMessage: First packet, storing header.\n");
+				memcpy(header, hdr, sizeof(headerPack_t));
+			}
+			else if(header->idSrc != hdr->idSrc)
+			{
+				netDebugPrint("DEBUG=getMessage: The packet doesn't belong to this message.\n");
+				continue;
+			}
+			memcpy(buf + (hdr->number * DATA_SIZE), packet.data,
+				   (hdr->size - recieved) > DATA_SIZE ?
+				   DATA_SIZE : (hdr->size - recieved));
+			recieved += DATA_SIZE;
+			netDebugPrint("DEBUG=getMessage: copied data.\n");
 
-        /* First iteration: setup header,
-         * on the other ones ignore messages from other idSrc
-         */
-        if(recieved == 0)
-            memcpy(header, hdr, sizeof(headerPack_t));
-        else if(header->idSrc != hdr->idSrc)
-            goto nextPacket;
-
-        memcpy(buf + hdr->number * DATA_SIZE, packet.data,
-               (hdr->size - recieved) > DATA_SIZE ?
-               DATA_SIZE : (hdr->size - recieved));
-        recieved += DATA_SIZE;
-
-        GPIO_COMPLEMENT_BIT(5);
-
-        if(recieved < hdr->size)
-            goto nextPacket;
-    }
-    else
-        goto nextPacket;
+			if(recieved < hdr->size)
+				netDebugPrint("DEBUG=getMessage: Still data left.\n");
+			else
+				break;
+		}
+		else
+		{
+			netDebugPrint("DEBUG=getMessage: Incorrect pipe.\n");
+			continue;
+		}
+	}
+    netDebugPrint("DEBUG=getMessage: SUCCESS\n");
     return SUCCESS;
 }
+
 //Specify ID to recieve from
 ret_t getMessageFrom(headerPack_p header, char *buf,
                                         uint8_t size)
 {
-  /*
-   * We are like a girl in love,
-   * just waiting that special someone to call <3
-   */
    ret_t ret;
-   int retry = 0;
-   headerPack_p hdr = (headerPack_p)buf;
+   uint8_t retry = 0;
+   uint16_t idSrc = header->idSrc;
    int notHim = 1;
    while(notHim)
    {
-      /* we cannot be in love forever </3 */
       if(retry == _MAX_RETRIES_)
-        return WARNING;
-      ret = getMessage(header, buf, size);
-      if(ret != SUCCESS)
-        return ret;
-      if(hdr->idSrc == header->idSrc)
       {
+        return ERROR;
+	netDebugPrint("DEBUG=getMessageFrom: Max retry's reached.\n");
+      }
+      ret = getMessage(header, buf, size);
+      if(ret != SUCCESS || ret != WARNING)
+        return ret;
+      if(idSrc == header->idSrc)
+      {
+	netDebugPrint("DEBUG=getMessageFrom: Incorrect idSrc, retrying.\n");
         notHim = 0;
       }
       retry++;
    }
-   return ret;
+   return SUCCESS;
 }
 
+/* SUCCESS: rip entry inserted.
+   WARNING: rip entry NOT inserted.
+   Other: Something bad happened
+ */
 ret_t insertEntry(ripEntry_p newEntry)
 {
     if(usedEntries < _MAX_PIPES_)
@@ -396,20 +473,22 @@ ret_t insertEntry(ripEntry_p newEntry)
       {
         if(newEntry->id == ripTable[i].id)
         {
-            printf("ripEntry id already present in ripTable\n");
+            /* This is not catastrophic */
+            printf("DEBUG=insertEntry: ripEntry id already present in ripTable\n");
             printRipEntry(newEntry);
             printRipEntry(&(ripTable[i]));
-            return ERROR;
+            return WARNING;
         }
 
       }
       if(isInRIP(newEntry->address))
       {
         //Error, address already in table
-        printf("Address already in table %d:%d:%d\n",
+        /* This is not catastrophic */
+        printf("DEBUG=insertEntry: Address already in table %d:%d:%d\n",
         __LINE__, usedEntries, newEntry->address);
         printRipEntry(&(ripTable[i]));
-        return ERROR;
+        return WARNING;
       }
       for(i=0; i<_MAX_PIPES_; i++)
       {
@@ -425,40 +504,16 @@ ret_t insertEntry(ripEntry_p newEntry)
       }
       //No free spot available, should never reach here
       while(1)
-        printf("insertEntry: Inconsistant usedEntries value\n");
+        printf("DEBUG=insertEntry: Inconsistant usedEntries value\n");
       return ERROR;
     }
     else
     {
-      printf("ripTable is full %d:%d:%d\n",
+      printf("DEBUG=ripTable is full %d:%d:%d\n",
              __LINE__, usedEntries, newEntry->address);
       printRipTable();
       return ERROR;
     }
-}
-
-/* Internal, aux functions */
-int isRootId(uint16_t id)
-{
-    /* A root ID must be a multiple of _MAX_PIPES_ */
-    if(id%(uint16_t)_MAX_PIPES_ == 0)
-      return TRUE;
-    else
-      return FALSE;
-}
-
-int isInRange(uint16_t leafID, uint16_t rootID)
-{
-    if(getRootFromID(leafID) == rootID)
-        return TRUE;
-    else
-        return FALSE;
-}
-
-uint16_t getRootFromID(uint16_t id)
-{
-    uint16_t retN = _MAX_PIPES_*floor((float)id/_MAX_PIPES_);
-    return retN;
 }
 
 uint8_t getFreeAddress(uint8_t rootAddr)
@@ -512,8 +567,6 @@ uint8_t checksumCalculator(headerPack_p hdr, char *msg, uint8_t left)
 
   for(i = 0; i < limit; i++)
     checksum ^= msg[i];
-  printf("checksumCalculator\nlimit:%d\nsize:%d\nchecksum:%d\n\n",
-         limit, hdr->size, checksum);
   return checksum;
 }
 
@@ -531,3 +584,120 @@ ret_t getAddrByPipe(uint8_t pipe, char *addr)
     return SUCCESS;
 }
 
+/* if we return WARNING it means that something was placed
+ * in the buffer. You must read it.
+ * if we return SUCCESS the  no user action is required.
+ * if we return ERROR something went wrong, probably during
+ * transmission. It is not outstanding.
+*/
+ret_t networkManager(char *buffer, uint8_t size)
+{
+    discPack_t packet;
+    char pipe;
+    ret_t ret;
+    memset(&packet, 0, sizeof(discPack_t));
+
+    if(gID == INVALID_GID)
+    {
+        gID = (uint16_t)random8();
+        netDebugPrint("DEBUG=gID %d:%d\n", __LINE__, gID);
+        if(!isRootId(gID))
+            netDebugPrint("DEBUG=Hello I'm a leaf D:\n");
+        else
+            netDebugPrint("DEBUG=Hello I'm root :D\n");
+    }
+    if(!isPaired && !isRootId(gID))
+    {
+        netDebugPrint("DEBUG=networkManager: calling joinNetworkOnTheFly for leaf\n");
+        joinNetworkOnTheFly(NULL);
+    }
+    if(nrf24l01_readready(&pipe))
+    {
+        netDebugPrint("DEBUG=networkManager: packet recieved!\n");
+        nrf24l01_read((uint8_t *)&packet);
+        printHeader(&(packet.header));
+        if(packet.header.checksum != checksumCalculator(&(packet.header), packet.data, packet.header.size))
+        {
+            netDebugPrint("DEBUG=networkManager: checksum faield!\n");
+            return SUCCESS;
+        }
+        if(packet.header.idDest != gID)
+        {
+            netDebugPrint("DEBUG=networkManager: The message is not for us!\n");
+            return SUCCESS;
+        }
+        if(packet.header.type == DISCOVERY)
+        {
+            netDebugPrint("DEBUG=networkManager: DISCOVERY packet.\n");
+            ret = joinNetworkOnTheFly(&packet);
+            if(ret != WARNING && ret != SUCCESS)
+            {
+                printf("DEBUG=networkManager: joinNetworkOnTheFly FAILED\n");
+                return ERROR;
+            }
+            else
+                return SUCCESS;
+        }
+        if(packet.header.type == DATA)
+        {
+            netDebugPrint("DEBUG=networkManager: DATA packet.\n");
+            if(packet.header.size <= size)
+            {
+                ret = getMessageFrom(&(packet.header), buffer, size);
+                if(ret != WARNING && ret != SUCCESS)
+                {
+                    printf("DEBUG=networkManager: getMessageFrom FAILED\n");
+                    return ERROR;
+                }
+                return WARNING;
+            }
+            else
+            {
+                printf("DEBUG=networkManager: DATA size exceeded\n");
+                return ERROR;
+            }
+        }
+        if(packet.header.type == RAW)
+        {
+            netDebugPrint("DEBUG=networkManager: RAW packet.\n");
+            if(size >= sizeof(discPack_t))
+            {
+                memcpy(buffer, &packet, sizeof(discPack_t));
+                return WARNING;
+            }
+            else
+            {
+                printf("DEBUG=networkManager: RAW size exceeded\n");
+                return ERROR;
+            }
+        }
+        if(packet.header.type == BROADCAST)
+        {
+            if(packet.header.idSrc == gID)
+                return SUCCESS;
+            netDebugPrint("DEBUG=networkManager: BROADCAST packet.\n");
+            if(packet.header.size <= size)
+            {
+                ret = getMessageFrom(&(packet.header), buffer, size);
+                if(ret != SUCCESS && ret != WARNING)
+                {
+                    printf("DEBUG=networkManager: getMessageFrom FAILED\n");
+                    return ret;
+                }
+                if(ret == SUCCESS)
+                {
+                    forwardMessage(&(packet.header), buffer, packet.header.size);
+                    return WARNING;
+                }
+            }
+            else
+            {
+                printf("DEBUG=networkManager: BROADCAST size exceeded\n");
+                return ERROR;
+            }
+        }
+        netDebugPrint("DEBUG=networkManager: UNKNOWN packet.\n");
+
+    }
+    return SUCCESS;
+}
