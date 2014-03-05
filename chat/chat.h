@@ -27,7 +27,10 @@
                                       http://freeware.the-meiers.org/
 */
    
-   extern uint8_t g_user;
+   extern uint8_t g_user;       
+   
+#define DATA_FROM_NET (nrf24l01_readready(NULL))
+#define BUF_SIZE 100    //  Maximum size of any message sent from PC
 
 /* == Functions to be used externally == */
 
@@ -41,6 +44,7 @@
       
       returns ret_t (SUCCCESS,ERROR,WARNING)
    */
-   extern ret_t enterRoom();
+   extern ret_t enterRoom(); 
+   extern ret_t enterMicroRoom(); 
 
 #endif 

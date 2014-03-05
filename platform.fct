@@ -1,8 +1,8 @@
-main DSTACK_USAGE:0 DSTACK_LEVEL:0 FILE:"main.c" LINE:39
-enterRoom DSTACK_USAGE:111 DSTACK_LEVEL:111 FILE:"chat\chat.c" LINE:37
-joinNetwork DSTACK_USAGE:52 DSTACK_LEVEL:163 FILE:"network\network.c" LINE:31
-sendMessageTo DSTACK_USAGE:51 DSTACK_LEVEL:214 FILE:"network\network.c" LINE:209
-checksumCalculator DSTACK_USAGE:9 DSTACK_LEVEL:223 FILE:"network\network.c" LINE:499
-printf DSTACK_USAGE:10 DSTACK_LEVEL:233 FILE:"C:\cvavr2\lib\stdio.lib" LINE:1476
-_print DSTACK_USAGE:20 DSTACK_LEVEL:253 FILE:"C:\cvavr2\lib\stdio.lib" LINE:503
-strlen DSTACK_USAGE:2 DSTACK_LEVEL:255 FILE:"C:\cvavr2\lib\string.lib" LINE:1706
+main DSTACK_USAGE:0 DSTACK_LEVEL:0 FILE:"main.c" LINE:167
+dongleMainThread DSTACK_USAGE:74 DSTACK_LEVEL:74 FILE:"dongle\dongle.c" LINE:26
+networkManager DSTACK_USAGE:37 DSTACK_LEVEL:111 FILE:"network\network.c" LINE:593
+joinNetworkOnTheFly DSTACK_USAGE:52 DSTACK_LEVEL:163 FILE:"network\network.c" LINE:17
+sendMessageTo DSTACK_USAGE:50 DSTACK_LEVEL:213 FILE:"network\network.c" LINE:254
+printf DSTACK_USAGE:10 DSTACK_LEVEL:223 FILE:"C:\cvavr2\lib\stdio.lib" LINE:1476
+_print DSTACK_USAGE:20 DSTACK_LEVEL:243 FILE:"C:\cvavr2\lib\stdio.lib" LINE:503
+strlen DSTACK_USAGE:2 DSTACK_LEVEL:245 FILE:"C:\cvavr2\lib\string.lib" LINE:1706

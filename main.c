@@ -27,6 +27,7 @@ Data Stack size         : 512
 //#include "movement/movement.h"
 #include "network/network.h"
 #include "chat/chat.h"
+#include "dongle/dongle.h"
 #include <delay.h>
 #include <string.h>
 
@@ -34,9 +35,7 @@ Data Stack size         : 512
 // Standard Input/Output functions
 #include <stdio.h>
 
-void main(void)
-{
-
+void setupHardware()
 {
 // Crystal Oscillator division factor: 1
 #pragma optsize-
@@ -147,16 +146,34 @@ ADCSRA=0x00;
 // TWI disabled
 TWCR=0x00;    
 }
-initChat();
-printf("Welcome to chatroom!\n");
-INIT_NW_STACK();
-printf("NW stack inited\n");
-// Global enable interrupts
-#asm("sei")
-if(enterRoom() == SUCCESS)
-    printf("Thanks for using chatroom!\n");
-else
-    printf("chatroom service terminated abnormally!\n");
-    
-return;
+
+void main_for_chat(void)
+//void main(void)
+{
+    setupHardware();
+    initChat();
+    INIT_NW_STACK();
+    printf("NW stack inited\n");
+    // Global enable interrupts
+    #asm("sei")
+    if(enterMicroRoom() == SUCCESS)
+        printf("Thanks for using chatroom!\n");
+    else
+        printf("chatroom service terminated abnormally!\n");
+        
+    return;
+}
+//void main_for_dongle(void)
+void main(void)
+{
+    setupHardware();
+    dongleInit();
+    // Global enable interrupts
+    #asm("sei")
+    if(dongleMainThread() == SUCCESS)
+        printf("DEBUG=Thanks for using dongle!\n");
+    else
+        printf("DEBUG=dongle service terminated abnormally!\n");
+        
+    return;
 }
