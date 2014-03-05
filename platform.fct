@@ -1,11 +1,4 @@
-<<<<<<< HEAD
-main DSTACK_USAGE:12 DSTACK_LEVEL:12 FILE:"main.c" LINE:52
-printf DSTACK_USAGE:10 DSTACK_LEVEL:22 FILE:"C:\cvavr2\lib\stdio.lib" LINE:1476
-_print DSTACK_USAGE:20 DSTACK_LEVEL:42 FILE:"C:\cvavr2\lib\stdio.lib" LINE:503
-strlen DSTACK_USAGE:2 DSTACK_LEVEL:44 FILE:"C:\cvavr2\lib\string.lib" LINE:1706
-timer0_ovf_isr DSTACK_USAGE:5 DSTACK_LEVEL:49 FILE:"main.c" LINE:37
-=======
-main DSTACK_USAGE:0 DSTACK_LEVEL:0 FILE:"main.c" LINE:167
+main DSTACK_USAGE:0 DSTACK_LEVEL:0 FILE:"main.c" LINE:185
 dongleMainThread DSTACK_USAGE:74 DSTACK_LEVEL:74 FILE:"dongle\dongle.c" LINE:26
 networkManager DSTACK_USAGE:37 DSTACK_LEVEL:111 FILE:"network\network.c" LINE:593
 joinNetworkOnTheFly DSTACK_USAGE:52 DSTACK_LEVEL:163 FILE:"network\network.c" LINE:17
@@ -13,4 +6,4 @@ sendMessageTo DSTACK_USAGE:50 DSTACK_LEVEL:213 FILE:"network\network.c" LINE:254
 printf DSTACK_USAGE:10 DSTACK_LEVEL:223 FILE:"C:\cvavr2\lib\stdio.lib" LINE:1476
 _print DSTACK_USAGE:20 DSTACK_LEVEL:243 FILE:"C:\cvavr2\lib\stdio.lib" LINE:503
 strlen DSTACK_USAGE:2 DSTACK_LEVEL:245 FILE:"C:\cvavr2\lib\string.lib" LINE:1706
->>>>>>> ec36d4710c01f2cab1f490c19751c7bb7f91d11d
+timer0_ovf_isr DSTACK_USAGE:5 DSTACK_LEVEL:250 FILE:"main.c" LINE:40

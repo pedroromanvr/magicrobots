@@ -25,6 +25,7 @@ Data Stack size         : 512
 #include "platform.h"
 #include "nrf24l01/nrf24l01.h"
 //#include "movement/movement.h"
+#include "movement/stateMachine.h"
 #include "network/network.h"
 #include "chat/chat.h"
 #include "dongle/dongle.h"

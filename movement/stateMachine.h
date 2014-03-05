@@ -35,6 +35,7 @@ enum timerVectorEnum {
     TSTART,
     TPWM,
     TEXEC,
+    TSAVE_DATA,
     TSIZE
 };
 
