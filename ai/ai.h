@@ -10,6 +10,14 @@
 
 #define MAX_HIST_POS 5
 #define MAX_NO_RESPONSES 5
+#define MAX_ANGLE_CONST 360
+#define WEIGHT_GAIN_CONST 5
+#define ADD_ANGLES(a,b)   \
+  (((a)+(b)) % MAX_ANGLE_CONST)
+#define SUB_ANGLES(a,b)   \
+  (((a)-(b)) < 0) ? (MAX_ANGLE_CONST + ((a)+(b))) : ((a)-(b))
+#define NORMALIZE_ANGLE(a)\
+  ((a) < 0) ? (MAX_ANGLE_CONST+((a) % MAX_ANGLE_CONST): ((a) % MAX_ANGLE_CONST)
 
 /* The global position and angle */
 typedef struct {
@@ -25,17 +33,20 @@ extern pos_t g_pos;
 extern pos_t historicalPos[MAX_HIST_POS]; // Used to save historical positions
 extern int16_t robotResp[MAX_NO_RESPONSES]; // Save responses of all robots 
 extern uint8_t isValidPos;                  // Flag to save a valid position
+extern pidCtx_t pidCtx;                     // PID Context
 
 /* 
- * Function to obtain the PID required value using multicast to all nodes in
- * the network. 
+ * Function to obtain the PID required value from my PID and all responses
+ * from the network.
  */
 extern ret_t processMyPID(void);
 
 /* 
  * Function to process and send the response to any other robot.
+ *
+ * @param pack is the packet with the source information.
  */
-extern ret_t pronessResponsePID(void);
+extern ret_t processResponsePID(discPack_p pack);
 
 /* 
  * Function to multicast the current position of this robot.
