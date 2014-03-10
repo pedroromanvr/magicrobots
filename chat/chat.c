@@ -44,7 +44,7 @@ ret_t enterRoom()
   while(1)
   {
     g_user = gID;
-    ret = networkManager(buffer, BUF_SIZE);
+    ret = networkManager(&header, buffer, BUF_SIZE);
     if(ret != SUCCESS && ret != WARNING)
     {
         printf("enterRoom: networkManager failed!\n");
@@ -98,7 +98,7 @@ ret_t enterMicroRoom()
   while(1)
   {
     g_user = gID;
-    ret = networkManager(buffer, BUF_SIZE);
+    ret = networkManager(&header, buffer, BUF_SIZE);
     if(ret != SUCCESS && ret != WARNING)
     {
         printf("enterRoom: networkManager failed!\n");

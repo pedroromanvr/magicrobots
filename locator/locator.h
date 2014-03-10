@@ -10,14 +10,15 @@ typedef enum
 {
     UNUSED_LRT,
     REQUEST,
-    RESPONSE,
+    RESPONSE,          
+    ADVICE_REQUEST,
+    ADVICE_RESPONSE,
     SERVICE_UNAVAILABLE
 }locReqType_t;
 typedef struct
 {
     locReqType_t type;
-    uint8_t x;
-    uint8_t y;
+    pos_t    position;
 }locationRequest_t;
 typedef locationRequest_t* locationRequest_p;
 

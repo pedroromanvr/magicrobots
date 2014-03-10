@@ -7,7 +7,7 @@ A=
 C=
 D=07/12/2013
 <<<<<<< HEAD
-Files=11
+Files=12
 <<<<<<< HEAD
 OpenedFiles=11
 =======
@@ -164,6 +164,7 @@ F8=movement\stateMachine.c
 F9=movement\pid.c
 F10=dongle\dongle.c
 F11=ai\ai.c
+F12=locator\locator.c
 >>>>>>> ec36d4710c01f2cab1f490c19751c7bb7f91d11d
 [CompilerDebug]
 Chip=ATmega328P
@@ -370,7 +371,7 @@ COFFileTimeStamp=-1
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-Build=234
+Build=245
 =======
 Build=253
 >>>>>>> ec36d4710c01f2cab1f490c19751c7bb7f91d11d
@@ -623,9 +624,9 @@ PreserveEEPROM=0
 VerifyProgramming=1
 ProgrammingCounter=0
 RunUserProg=0
-UserProgPath=C:\MinGW\msys\1.0\bin\cp.exe
-UserProgCmdLine=- rf * E:\Shared
-UserProgWorkDir=C:\Users\marc\Desktop\Shared
+UserProgPath=
+UserProgCmdLine=
+UserProgWorkDir=
 [BuildInfoCompiler]
 L1=Build configuration: Debug
 L2=Chip: ATmega328P
@@ -804,9 +805,9 @@ BK9=-1
 [Bookmarks3]
 <<<<<<< HEAD
 <<<<<<< HEAD
-TimeStamp=1147471353
-Row=200
-Column=46
+TimeStamp=1147772480
+Row=0
+Column=0
 =======
 TimeStamp=1147440421
 Row=69
@@ -818,7 +819,7 @@ Row=13
 Column=22
 >>>>>>> 89cf83fd0472502a59e85ca142bc847d900f265c
 ScrollPosX=0
-ScrollPosY=183
+ScrollPosY=0
 BK0=-1
 BK1=-1
 BK2=-1
@@ -832,14 +833,14 @@ BK9=-1
 [Bookmarks4]
 <<<<<<< HEAD
 <<<<<<< HEAD
-TimeStamp=1145220323
+TimeStamp=1147772480
 =======
 TimeStamp=1146265147
 >>>>>>> ec36d4710c01f2cab1f490c19751c7bb7f91d11d
-Row=42
+Row=0
 Column=0
 ScrollPosX=0
-ScrollPosY=22
+ScrollPosY=0
 =======
 TimeStamp=1145150127
 Row=29
@@ -1135,11 +1136,11 @@ Blocks=0
 Blocks=0
 [Bookmarks17]
 <<<<<<< HEAD
-TimeStamp=1147471353
-Row=7
-Column=41
+TimeStamp=1147772480
+Row=69
+Column=0
 ScrollPosX=0
-ScrollPosY=0
+ScrollPosY=39
 =======
 TimeStamp=1146618798
 Row=84
@@ -1244,8 +1245,6 @@ Blocks=0
 [FoldedCode18]
 Line1=5
 Blocks=1
-[FoldedCode4]
-Blocks=0
 [FoldedCode7]
 Blocks=0
 [FoldedCode10]
@@ -1314,11 +1313,7 @@ BK8=-1
 BK9=-1
 [FoldedCode11]
 Blocks=0
-[FoldedCode3]
-Blocks=0
 [FoldedCode2]
-Blocks=0
-[FoldedCode17]
 Blocks=0
 [FoldedCode23]
 Blocks=0
@@ -1360,27 +1355,34 @@ BK8=-1
 BK9=-1
 [FoldedCode25]
 Blocks=0
+[FoldedCode4]
+Blocks=0
+[FoldedCode3]
+Blocks=0
+[FoldedCode17]
+Blocks=0
 [HeadersList]
-Files=11
-F1=C:\Users\PedroRomán\Desktop\mr\magicrobots\main.c
-F2=C:\Users\PedroRomán\Desktop\mr\magicrobots\nrf24l01\nrf24l01.c
-F3=C:\Users\PedroRomán\Desktop\mr\magicrobots\spi\spi.c
-F4=C:\Users\PedroRomán\Desktop\mr\magicrobots\movement\movement.c
-F5=C:\Users\PedroRomán\Desktop\mr\magicrobots\network\network.c
-F6=C:\Users\PedroRomán\Desktop\mr\magicrobots\random\random.c
-F7=C:\Users\PedroRomán\Desktop\mr\magicrobots\chat\chat.c
-F8=C:\Users\PedroRomán\Desktop\mr\magicrobots\movement\stateMachine.c
-F9=C:\Users\PedroRomán\Desktop\mr\magicrobots\movement\pid.c
-F10=C:\Users\PedroRomán\Desktop\mr\magicrobots\dongle\dongle.c
-F11=C:\Users\PedroRomán\Desktop\mr\magicrobots\ai\ai.c
+Files=12
+F1=C:\Users\marc\dagas4\magicrobots\main.c
+F2=C:\Users\marc\dagas4\magicrobots\nrf24l01\nrf24l01.c
+F3=C:\Users\marc\dagas4\magicrobots\spi\spi.c
+F4=C:\Users\marc\dagas4\magicrobots\movement\movement.c
+F5=C:\Users\marc\dagas4\magicrobots\network\network.c
+F6=C:\Users\marc\dagas4\magicrobots\random\random.c
+F7=C:\Users\marc\dagas4\magicrobots\chat\chat.c
+F8=C:\Users\marc\dagas4\magicrobots\movement\stateMachine.c
+F9=C:\Users\marc\dagas4\magicrobots\movement\pid.c
+F10=C:\Users\marc\dagas4\magicrobots\dongle\dongle.c
+F11=C:\Users\marc\dagas4\magicrobots\ai\ai.c
+F12=C:\Users\marc\dagas4\magicrobots\locator\locator.c
 [Header1]
 Files=19
 F1=platform.h
 F2=C:\cvavr2\inc\mega328p.h
 F3=C:\cvavr2\inc\mega328p_bits.h
-F4=nrf24l01\nrf24l01.h
-F5=C:\cvavr2\inc\delay.h
-F6=C:\cvavr2\inc\stdint.h
+F4=C:\cvavr2\inc\stdint.h
+F5=nrf24l01\nrf24l01.h
+F6=C:\cvavr2\inc\delay.h
 F7=C:\cvavr2\inc\string.h
 F8=C:\cvavr2\inc\stdio.h
 F9=C:\cvavr2\inc\stdarg.h
@@ -1415,15 +1417,16 @@ F3=C:\cvavr2\inc\mega328p.h
 F4=C:\cvavr2\inc\mega328p_bits.h
 F5=C:\cvavr2\inc\stdint.h
 [Header4]
-Files=8
+Files=9
 F1=movement\movement.h
 F2=platform.h
 F3=C:\cvavr2\inc\mega328p.h
 F4=C:\cvavr2\inc\mega328p_bits.h
-F5=C:\cvavr2\inc\stdio.h
-F6=C:\cvavr2\inc\stdarg.h
-F7=C:\cvavr2\inc\stdlib.h
-F8=C:\cvavr2\inc\string.h
+F5=C:\cvavr2\inc\stdint.h
+F6=C:\cvavr2\inc\stdio.h
+F7=C:\cvavr2\inc\stdarg.h
+F8=C:\cvavr2\inc\stdlib.h
+F9=C:\cvavr2\inc\string.h
 [Header5]
 Files=15
 F1=network\network.h
@@ -1472,11 +1475,11 @@ F1=movement\stateMachine.h
 F2=platform.h
 F3=C:\cvavr2\inc\mega328p.h
 F4=C:\cvavr2\inc\mega328p_bits.h
-F5=movement\movement.h
-F6=C:\cvavr2\inc\stdio.h
-F7=C:\cvavr2\inc\stdarg.h
-F8=C:\cvavr2\inc\string.h
-F9=C:\cvavr2\inc\stdint.h
+F5=C:\cvavr2\inc\stdint.h
+F6=movement\movement.h
+F7=C:\cvavr2\inc\stdio.h
+F8=C:\cvavr2\inc\stdarg.h
+F9=C:\cvavr2\inc\string.h
 [Header9]
 Files=3
 F1=movement\pid.h
@@ -1502,13 +1505,13 @@ F15=movement\movement.h
 F16=random\random.h
 F17=locator\locator.h
 [Header11]
-Files=17
+Files=18
 F1=ai\ai.h
 F2=platform.h
 F3=C:\cvavr2\inc\mega328p.h
 F4=C:\cvavr2\inc\mega328p_bits.h
-F5=movement\pid.h
-F6=C:\cvavr2\inc\stdint.h
+F5=C:\cvavr2\inc\stdint.h
+F6=movement\pid.h
 F7=network\network.h
 F8=C:\cvavr2\inc\math.h
 F9=C:\cvavr2\inc\delay.h
@@ -1520,3 +1523,22 @@ F14=spi\spi.h
 F15=nrf24l01\nrf24l01registers.h
 F16=movement\movement.h
 F17=random\random.h
+F18=locator\locator.h
+[Header12]
+Files=16
+F1=locator\locator.h
+F2=network\network.h
+F3=C:\cvavr2\inc\math.h
+F4=C:\cvavr2\inc\delay.h
+F5=C:\cvavr2\inc\stdint.h
+F6=C:\cvavr2\inc\string.h
+F7=nrf24l01\nrf24l01.h
+F8=platform.h
+F9=C:\cvavr2\inc\mega328p.h
+F10=C:\cvavr2\inc\mega328p_bits.h
+F11=C:\cvavr2\inc\stdio.h
+F12=C:\cvavr2\inc\stdarg.h
+F13=spi\spi.h
+F14=nrf24l01\nrf24l01registers.h
+F15=movement\movement.h
+F16=random\random.h
