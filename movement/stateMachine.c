@@ -1,6 +1,8 @@
 #include "stateMachine.h"
 
 static states_t curState;
+static states_t curStPID;
+static states_t curStReq;
 static uint8_t goLeft;
 static uint8_t goRight;
 
@@ -11,12 +13,16 @@ uint8_t g_angle = 0;
 ret_t initMachine()
 {
   curState = IDLE;
+  curStPID = IDLE;
+  curStReq = IDLE;
+  initTimer();
   return SUCCESS;
 }
 
 ret_t processMachine(void)
 {
   ret_t ret;
+  discPack_t nwPacket;
   // Change states accordingly
   switch(curState)
   {
@@ -29,8 +35,8 @@ ret_t processMachine(void)
         goRight = FALSE;
         if (INIT_FLAG)
         {
-          memset(timerVector, 0, TSIZE*sizeof(uint16_t));
-          initTimer();
+          // Reset 'till TEXEC as other timer values are used for other cases
+          memset(timerVector, 0, TEXEC*sizeof(uint16_t));
           curState = INIT_MOV0;    
         }
        break;
@@ -58,8 +64,6 @@ ret_t processMachine(void)
         else
          curState = BACK0; 
        break;
-    case INIT_MOV4:
-       break;
     case FRONT0:
         if (DUTY_REACHED)
           curState = FRONT1;
@@ -71,7 +75,6 @@ ret_t processMachine(void)
     case FRONT2:  // Used to restart timer counter
         if (TIMER_EXEC_MAX)
         {
-          stopTimer();
           curState = IDLE;
         }
         else
@@ -80,10 +83,6 @@ ret_t processMachine(void)
           curState = FRONT0;
         }
         break;
-    case FRONT3:
-     break;
-    case FRONT4:
-     break;
     case BACK0:
         if (DUTY_REACHED)
           curState = BACK1;
@@ -95,7 +94,6 @@ ret_t processMachine(void)
     case BACK2:  // Used to restart timer counter
         if (TIMER_EXEC_MAX)
         {
-          stopTimer();
           curState = IDLE;
         }
         else
@@ -104,16 +102,67 @@ ret_t processMachine(void)
           curState = BACK0;        
         }
         break;
-    case BACK3:
-     break;
-    case BACK4:
-     break;
     default:
-     break;
+        break;
   }
   // Process outputs
   EXEC_N_CHECK(processOutputs(), ret);
+  
+  // Distributed PID state machine
+  switch(curStPID)
+  {
+    case INVALID_S: // Should never come here
+        printf("Non-initialized state machine\n");
+        return ERROR;
+       break; 
+    case IDLE:      // Idle state,  get our position
+       if (readPosition() == SUCCESS)
+         curStPID = SEND_POS;
+       break;
+    case SEND_POS:
+       if (sendPosMulticast() == SUCCESS)
+       {
+         curStPID = WAIT_RES;
+         // Start timer val
+         timerVector[TRESP_TIMEOUT] = 0;
+       }
+       break;
+    case WAIT_RES:
+       if (getResponse() == (uint8_t)MIN_RESP_CONST || TIMER_RSP_TIMEOUT)
+       {
+         curStPID = CALC_PID;
+       }
+       break;
+    case CALC_PID:
+       if (processMyPID() == SUCCESS)
+         curStPID = IDLE;
+       break;
+    default:
+       break;
+  }
 
+  // Machine to calculate requests from other robots
+  switch(curStReq)
+  {
+    case INVALID_S: // Should never come here
+        printf("Non-initialized state machine\n");
+        return ERROR;
+       break; 
+    case IDLE:
+       if (getRequest(&nwPacket) == SUCCESS)
+         curStReq = CALC_RES;
+       break;
+    case CALC_RES:
+       if (processResponsePID(&nwPacket) == SUCCESS)
+         curStReq = IDLE;
+       break;  
+    default:
+       break;
+  }
+
+  // Save our position each 5 seconds
+  if (T_SAVE_DATA)
+    savePosition();
   return SUCCESS;
 }
 
@@ -123,6 +172,7 @@ ret_t processOutputs()
    BACK_PIN = (curState == INIT_MOV2) || (curState == BACK0) ? 1 : 0;
    RIGHT_PIN = goLeft;
    LEFT_PIN  = goRight; 
+
 
    return SUCCESS;
 }

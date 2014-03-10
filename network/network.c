@@ -590,7 +590,8 @@ ret_t getAddrByPipe(uint8_t pipe, char *addr)
  * if we return ERROR something went wrong, probably during
  * transmission. It is not outstanding.
 */
-ret_t networkManager(char *buffer, uint8_t size)
+ret_t networkManager(headerPack_p header,
+              char *buffer, uint8_t size)
 {
     discPack_t packet;
     char pipe;
@@ -643,7 +644,7 @@ ret_t networkManager(char *buffer, uint8_t size)
             netDebugPrint("DEBUG=networkManager: DATA packet.\n");
             if(packet.header.size <= size)
             {
-                ret = getMessageFrom(&(packet.header), buffer, size);
+                ret = getMessageFrom(header, buffer, size);
                 if(ret != WARNING && ret != SUCCESS)
                 {
                     printf("DEBUG=networkManager: getMessageFrom FAILED\n");
@@ -660,9 +661,10 @@ ret_t networkManager(char *buffer, uint8_t size)
         if(packet.header.type == RAW)
         {
             netDebugPrint("DEBUG=networkManager: RAW packet.\n");
-            if(size >= sizeof(discPack_t))
+            if(size >= DATA_SIZE)
             {
-                memcpy(buffer, &packet, sizeof(discPack_t));
+                memcpy(buffer, packet.data, DATA_SIZE);
+                memcpy(header, &packet, sizeof(headerPack_t));
                 return WARNING;
             }
             else
@@ -678,7 +680,7 @@ ret_t networkManager(char *buffer, uint8_t size)
             netDebugPrint("DEBUG=networkManager: BROADCAST packet.\n");
             if(packet.header.size <= size)
             {
-                ret = getMessageFrom(&(packet.header), buffer, size);
+                ret = getMessageFrom(header, buffer, size);
                 if(ret != SUCCESS && ret != WARNING)
                 {
                     printf("DEBUG=networkManager: getMessageFrom FAILED\n");
@@ -686,7 +688,7 @@ ret_t networkManager(char *buffer, uint8_t size)
                 }
                 if(ret == SUCCESS)
                 {
-                    forwardMessage(&(packet.header), buffer, packet.header.size);
+                    forwardMessage(header, buffer, packet.header.size);
                     return WARNING;
                 }
             }

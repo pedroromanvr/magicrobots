@@ -2,8 +2,9 @@
 #ifndef _PLATFORM_AVR_
 #define _PLATFORM_AVR_
 
-//Include chip specific library
+//Only system libraries are allowed to be include here!!!!
 #include <mega328p.h>
+#include <stdint.h>
 
 /* Valid return types for the movement module */
 typedef enum {
@@ -33,5 +34,15 @@ do{                                                              \
 #define DATA_FROM_PC  (UCSR0A & (1 << RXC0 ))
 #define RX_BUF        UDR0
 #define EOL_CHAR      0x0A
+
+/* The global position and angle */
+typedef struct {
+  uint8_t x;
+  uint8_t y;
+  int16_t angle; 
+}
+pos_t;
+typedef pos_t* pos_p;
+
 
 #endif

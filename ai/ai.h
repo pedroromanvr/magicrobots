@@ -6,6 +6,7 @@
 #include "../movement/pid.h"      // To modify left and right movement times
 #include "../network/network.h"   // Send and recieve messages
 #include "../nrf24l01/nrf24l01.h" // To check for valid pipes
+#include "../locator/locator.h"
 #include <stdint.h>
 
 #define MAX_HIST_POS 5
@@ -17,16 +18,7 @@
 #define SUB_ANGLES(a,b)   \
   (((a)-(b)) < 0) ? (MAX_ANGLE_CONST + ((a)+(b))) : ((a)-(b))
 #define NORMALIZE_ANGLE(a)\
-  ((a) < 0) ? (MAX_ANGLE_CONST+((a) % MAX_ANGLE_CONST): ((a) % MAX_ANGLE_CONST)
-
-/* The global position and angle */
-typedef struct {
-  uint8_t x;
-  uint8_t y;
-  int16_t angle; 
-}
-pos_t;
-typedef pos_t* pos_p;
+  ((a) < 0) ? (MAX_ANGLE_CONST+((a) % MAX_ANGLE_CONST)): ((a) % MAX_ANGLE_CONST)
 
 /* Global variables */
 extern pos_t g_pos; 
@@ -68,7 +60,7 @@ extern uint8_t getResponse(void);
  * @returns SUCCESS if a valid request was got.
  * @returns WARNING if a no valid request was got.
  */
-extern ret_t getRequest(void);
+extern ret_t getRequest(discPack_p packet);
 
 /* 
  * Function to read the real position of the robot. 
@@ -76,11 +68,18 @@ extern ret_t getRequest(void);
  * @returns SUCCESS if a valid position was got.
  * @returns WARNING if a no valid position was got.
  */
-extern ret_t readPosition(void);
+//extern ret_t readPosition(void);
+extern ret_t readPosition();
 
 /* 
  * Function to save current position on memory 
  */
 extern ret_t savePosition(void);
+
+/* Aux functions */
+void setPIDVals();
+void sortResp();
+
+#define aiDebugPrint printf
 
 #endif /* __AI__ */

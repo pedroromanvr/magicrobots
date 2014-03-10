@@ -38,7 +38,7 @@ ret_t dongleMainThread()
   dongleDebugPrint("DEBUG=dongleMainThread: Start.\n");
   while(1)
   {
-    ret = networkManager(buffer, sizeof(buffer));
+    ret = networkManager(hdr, buffer, sizeof(buffer));
     if(ret != SUCCESS && ret != WARNING)
     {
         dongleDebugPrint("DEBUG=dongleMainThread: networkManager failed.\n");

@@ -43,7 +43,8 @@ ret_t processMyPID(void)
     // Update new angle, delta contains new desired angle
     NORMALIZE_ANGLE(delta);
     desiredAngle = delta;
-    pid_ret = pid(desiredAngle, g_posP->ang, ctx);  
+    pid_ret = pid(desiredAngle, g_posP->angle, &pidCtx);  
+    // TODO:Add random number to delta
     //Generate new tasks
     
 }
@@ -51,67 +52,86 @@ ret_t processMyPID(void)
 ret_t processResponsePID(discPack_p pack)
 {
     uint8_t i;
+    int16_t sum = 0;
     if (isCTXInit = FALSE)
     {
        setPIDVals();
     }
     for (i=0; i < histSize; i++) 
     {
-       delta = robotResp[i] - robotResp[i-1];
-       // Save percentage
-       weightRes[i] =  100 * (MAX_ANGLE_CONST - delta)/MAX_ANGLE_CONST;
-       // Modify responses based on the weight and difference between them
-       robotResp[i] *= weightRes[i]/100;
-    } 
-    // Response 0 will be linked to weight 1
-    weightRes[0] = weightRes[1];
-    robotResp[0] *= weightRes[1]/100;
-    delta = 0;
-    for (i = 0; i < respSize; i++)
-      delta += (robotResp[i] - g_posP->angle) * weightRes[i]/(100*WEIGHT_GAIN_CONST);
-    // Update new angle, delta contains new desired angle
-    NORMALIZE_ANGLE(delta);
-    desiredAngle = delta;
-    pid_ret = pid(desiredAngle, g_posP->ang, ctx);  
-    //Generate
+       sum += historicalPos[i].angle;
+    }
+    // Normalize angle
+    sum = NORMALIZE_ANGLE(sum);
+    // Return a perpendicular line between our movement and the other robot
+     
 }
 
 ret_t sendPosMulticast(void)
 {
+    locationRequest_t req;
+    req.type = ADVICE_REQUEST;
+    if(isValidPos == FALSE)
+        return WARNING;
+    respSize = 0;
+    memcpy(&(req.position), g_posP, sizeof(pos_t));
+    aiDebugPrint("sendPosMulticast: Broadcasting current location\n");
+    return sendMessage((char *)&req, sizeof(locationRequest_t));
 }
 
 uint8_t getResponse(void)
 {
-}
-
-ret_t getRequest(void)
-{
-    
-}
-
-ret_t readPosition(void)
-{
-    uint8_t pipe;
-    pos_t posFromPC;
-    headerPack_t header;
-    ret_t ret;
-    // If there is something in the pipe 0 of the network
-    if (nrf24l01_readready(&pipe)) {
-      if (pipe == 0) {
-        EXEC_N_CHECK(getMessage(&header, (char *)&posFromPC, 
-                                sizeof(pos_t)), ret);
-        if (ret == WARNING)
-          return WARNING;
-        else
-        {
-          isValidPos = TRUE;
-          return SUCCESS;
+    ret_t ret;             
+    discPack_t packet;
+    locationRequest_p lr;    
+    ret = networkManager(&(packet.header), packet.data, DATA_SIZE);
+    if(ret == WARNING)
+    {                 
+        lr = (locationRequest_p)packet.data;
+        if(lr->type == ADVICE_RESPONSE)
+        {       
+            aiDebugPrint("getResponse: got ADVICE_RESPONSE\n");
+            robotResp[respSize % MAX_NO_RESPONSES] = lr->position.angle;
+            respSize++;
         }
-      }
     }
-    else {
-      return WARNING;     // Nothing was sent already
-    } 
+    return respSize;
+}
+
+ret_t getRequest(discPack_p packet)
+{
+    ret_t ret;
+    locationRequest_p lr;    
+    ret = networkManager(&(packet->header), packet->data, DATA_SIZE);
+    if(ret == WARNING)
+    {                 
+        lr = (locationRequest_p)packet->data;
+        if(lr->type == ADVICE_REQUEST)
+        {
+            aiDebugPrint("getRequest: got ADVICE_REQUEST\n");
+            return SUCCESS;
+        }
+    }
+    return WARNING;
+}
+
+extern ret_t readPosition()
+{
+    locationRequest_t loc;
+    ret_t ret;
+    
+    aiDebugPrint("readPosition: Calling getLocation\n");
+    isValidPos = FALSE;
+    ret = getLocation(&loc);
+    if(ret == WARNING && loc.type == RESPONSE)
+    {
+        aiDebugPrint("readPosition: Valid location found\n");
+        memcpy(&g_pos, &(loc.position), sizeof(pos_t));
+        isValidPos = TRUE;
+        return SUCCESS;
+    }
+    aiDebugPrint("readPosition: Can't provide valid position\n");
+    return WARNING;
 }
 
 ret_t savePosition(void)
@@ -126,7 +146,7 @@ ret_t savePosition(void)
 }
 
 /* Aux, init PID vals */
-void setPIDVals();
+void setPIDVals()
 {
      initPID(10,          // Kp
              5,           // Ki
@@ -136,7 +156,7 @@ void setPIDVals();
      isCTXInit = TRUE;
 }
 
-void sortRes()
+void sortResp()
 {
    // Mini sorting algorithm using insert sort
    uint8_t i,j;

@@ -8,8 +8,9 @@ ret_t getLocation(locationRequest_p lr)
     discPack_t packet;
     
     lr->type = REQUEST;
-    lr->x = 0;
-    lr->y = 0;
+    lr->position.x = 0;
+    lr->position.y = 0;
+    lr->position.angle = 0;
     
     header.type = RAW;
     header.size = sizeof(locationRequest_t);
@@ -26,7 +27,7 @@ ret_t getLocation(locationRequest_p lr)
     while(i < DEFAULT_TIMEOUT)
     {
         i++;
-        ret = networkManager((char *)(&packet), sizeof(discPack_t));
+        ret = networkManager(&header, (char *)(&packet), sizeof(discPack_t));
         if(ret == SUCCESS)
             continue;
         if(ret == WARNING)
@@ -37,7 +38,8 @@ ret_t getLocation(locationRequest_p lr)
     }
     locatorDebugPrint("DEBUG=getLocation: Timed out\n");
     lr->type = SERVICE_UNAVAILABLE;
-    lr->x = 0;
-    lr->y = 0;
+    lr->position.x = 0;
+    lr->position.y = 0;
+    lr->position.angle = 0;
     return SUCCESS;
 }

@@ -81,7 +81,8 @@ extern uint8_t isRoot;
 extern uint16_t gID;
 
 /* ------ To use outside this API ------  */
-ret_t networkManager(char *buffer, uint8_t size);
+ret_t networkManager(headerPack_p header,
+              char *buffer, uint8_t size);
 ret_t joinNetworkOnTheFly(discPack_p pp);
 //Forward a broadcast message
 ret_t forwardMessage(headerPack_p header,
