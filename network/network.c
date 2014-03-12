@@ -125,9 +125,9 @@ ret_t joinNetworkOnTheFly(discPack_p pp)
         printRipEntry(&myLeafInfo);
 
         //Look for our root to become available
-        retryN += 1;
         while(retryN < _MAX_RETRIES_)
         {
+            retryN++;
             //Check if someone has just sent something
             if( !nrf24l01_readready(&pipe) )
             {
@@ -137,7 +137,9 @@ ret_t joinNetworkOnTheFly(discPack_p pp)
                 tempHeader->ttl = DEFAULT_TTL;
                 tempHeader->number = 0;
                 tempHeader->idSrc = gID;
-                tempHeader->idDest = getRootFromID(gID);
+                tempHeader->idDest = getRootFromID(gID);  
+                // Global disable interrupts
+                #asm("cli") 
                 ret = sendMessageTo(tempHeader, (char *)&myLeafInfo,
                                     sizeof(myLeafInfo));
                 if(ret != SUCCESS && ret != WARNING)
@@ -148,7 +150,9 @@ ret_t joinNetworkOnTheFly(discPack_p pp)
 
                 netDebugPrint("DEBUG=joinNetworkOnTheFly: Waiting for root answer.\n");
                 while(!nrf24l01_readready(&pipe) && cnt != DEFAULT_TIMEOUT)
-                    cnt += 1;
+                    cnt += 1;   
+                // Global enable interrupts
+                #asm("sei")
                 if(cnt == DEFAULT_TIMEOUT)
                 {
                     netDebugPrint("DEBUG=joinNetworkOnTheFly: Timeout.\n");

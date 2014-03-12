@@ -65,34 +65,31 @@ extern ret_t setPWMDuty(uint8_t val);
 ret_t processOutputs();
 void initTimer();
 void stopTimer();
-uint16_t calculatePID();
 
 // Timer0 vector
 extern uint16_t timerVector[TSIZE];
 extern uint8_t g_pwmDuty;
 
-#define ANGLE_ADD(ang)    \
-  
+#define smDebug printf  
 
 /* ---- CONSTANTS ---- */
 #define TBASE_CONST       10
 #define TSTART_CONST      100
 #define TPWM_CONST        3 
-#define TPWM_MAX          10 
-#define TEXEC_CONST       2000
+#define TPWM_MAX          10
 #define TRES_TOUT_CONST   100
 #define MIN_RESP_CONST    3
 #define TSAVE_DATA_CONST  5000
 
 /* ---- INPUTS ---- */
-#define INIT_FLAG         1
+#define INIT_FLAG         (workerMovement() == SUCCESS)
 #define GO_FWD            1
-#define GO_RIGHT          1
-#define GO_LEFT           0
+#define GO_RIGHT          goRight
+#define GO_LEFT           goLeft
 #define DUTY_REACHED      (timerVector[TPWM] >= g_pwmDuty)
 #define FREQ_REACHED      (timerVector[TPWM] >= TPWM_MAX)
 #define TIMER_START_DONE  (timerVector[TSTART] >= TSTART_CONST)
-#define TIMER_EXEC_MAX    (timerVector[TEXEC] >= TEXEC_CONST) 
+#define TIMER_EXEC_MAX    (timerVector[TEXEC] >= g_timExec) 
 #define TIMER_RSP_TIMEOUT (timerVector[TRESP_TIMEOUT] >= TRES_TOUT_CONST)
 #define T_SAVE_DATA       (timerVector[TSAVE_DATA] >= TSAVE_DATA_CONST)
 

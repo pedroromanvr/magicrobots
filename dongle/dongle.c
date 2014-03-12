@@ -18,8 +18,8 @@ ret_t dongleInit()
   dongleDebugPrint("DEBUG=dongleInit: Serial port ready.\n");
   /* Turn ON nfr module */
   INIT_NW_STACK();    
-  gID = 240;
-  dongleDebugPrint("DEBUG=dongleInit: Ready to stablish peer to peer conections.\n");
+  gID = (uint16_t)random8();
+  dongleDebugPrint("DEBUG=dongleInit: Ready to stablish peer to peer conections. gID = %d\n",gID);
   return SUCCESS;
 }
 

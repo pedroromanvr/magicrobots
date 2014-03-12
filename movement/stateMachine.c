@@ -3,12 +3,12 @@
 static states_t curState;
 static states_t curStPID;
 static states_t curStReq;
-static uint8_t goLeft;
-static uint8_t goRight;
 
 uint16_t timerVector[TSIZE];
 uint8_t g_pwmDuty = TPWM_CONST;
-uint8_t g_angle = 0;
+uint8_t g_timExec = 0;
+uint8_t goLeft = 0;
+uint8_t goRight = 0;
 
 ret_t initMachine()
 {
@@ -24,6 +24,7 @@ ret_t processMachine(void)
   ret_t ret;
   discPack_t nwPacket;
   // Change states accordingly
+  smDebug("SM_stateBef:%d\n", curState);
   switch(curState)
   {
     case INVALID_S: // Should never come here
@@ -35,8 +36,13 @@ ret_t processMachine(void)
         goRight = FALSE;
         if (INIT_FLAG)
         {
+          if(curMov.command == ROTATE_RIGHT)
+            goRight = TRUE;
+          if(curMov.command == ROTATE_LEFT)
+            goLeft = TRUE;
+          g_timExec = curMov.time;
           // Reset 'till TEXEC as other timer values are used for other cases
-          memset(timerVector, 0, TEXEC*sizeof(uint16_t));
+          memset(timerVector, 0, TSAVE_DATA*sizeof(uint16_t));
           curState = INIT_MOV0;    
         }
        break;
@@ -108,6 +114,7 @@ ret_t processMachine(void)
   // Process outputs
   EXEC_N_CHECK(processOutputs(), ret);
   
+  smDebug("SM_stateAft:%d\n", curState);
   // Distributed PID state machine
   switch(curStPID)
   {
@@ -118,6 +125,8 @@ ret_t processMachine(void)
     case IDLE:      // Idle state,  get our position
        if (readPosition() == SUCCESS)
          curStPID = SEND_POS;
+       else
+        smDebug("Error getting position\n");
        break;
     case SEND_POS:
        if (sendPosMulticast() == SUCCESS)
@@ -126,12 +135,16 @@ ret_t processMachine(void)
          // Start timer val
          timerVector[TRESP_TIMEOUT] = 0;
        }
+       else
+        smDebug("Error multicasting position\n");
        break;
     case WAIT_RES:
        if (getResponse() == (uint8_t)MIN_RESP_CONST || TIMER_RSP_TIMEOUT)
        {
          curStPID = CALC_PID;
        }
+       else
+        smDebug("Not enough responses yet\n");
        break;
     case CALC_PID:
        if (processMyPID() == SUCCESS)

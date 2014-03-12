@@ -86,7 +86,7 @@ ret_t movementCommandExecute1(moveCmd_t command, uint16_t time);
  * curMov the next command to execute.
  *
  * @param command is the command to queue
- * @return ERROR if there is nothing to execture, check STDOUT
+ * @return ERROR if there is nothing to execute, check STDOUT
  */
 ret_t workerMovement();
 

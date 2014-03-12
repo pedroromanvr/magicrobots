@@ -3,16 +3,20 @@
 #define __AI__
 
 #include "../platform.h"
+#include "../random/random.h"     // to use random movement
 #include "../movement/pid.h"      // To modify left and right movement times
 #include "../network/network.h"   // Send and recieve messages
 #include "../nrf24l01/nrf24l01.h" // To check for valid pipes
 #include "../locator/locator.h"
 #include <stdint.h>
 
-#define MAX_HIST_POS 5
-#define MAX_NO_RESPONSES 5
-#define MAX_ANGLE_CONST 360
+#define MAX_HIST_POS      5
+#define MAGIC_FACTOR      30
+#define MAX_NO_RESPONSES  5
+#define MAX_ANGLE_CONST   360
 #define WEIGHT_GAIN_CONST 5
+#define TEXEC_CONST       2000
+
 #define ADD_ANGLES(a,b)   \
   (((a)+(b)) % MAX_ANGLE_CONST)
 #define SUB_ANGLES(a,b)   \
