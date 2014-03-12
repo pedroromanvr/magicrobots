@@ -165,7 +165,7 @@ ADCSRA=0x00;
 TWCR=0x00;    
 }
 
-void main_(void)
+void main(void)
 {
     setupHardware();
     dongleInit();
@@ -179,8 +179,8 @@ void main_(void)
     return;
 }
 
-//void main_for_chat(void)
-void main(void)
+void main_for_chat(void)
+//void main(void)
 {
     setupHardware();
     initChat();
