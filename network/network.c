@@ -18,12 +18,10 @@ ret_t joinNetworkOnTheFly(discPack_p pp)
 {
     ret_t ret;
     uint8_t address;
-    uint8_t retryN;
     uint8_t pipe;
     discPack_p tempPacket;
     headerPack_p tempHeader;
 
-    retryN = 0;
     address = GET_ADDRESS(gID);
     // Validate root or leaf
     if(pp == NULL && isRootId(gID) == TRUE ||
@@ -69,8 +67,12 @@ ret_t joinNetworkOnTheFly(discPack_p pp)
             }
             if(ret == WARNING)
             {
-                printf("DEBUG=joinNetworkOnTheFly: Unimplemented feature\n");
-                return WARNING;
+                printf("DEBUG=joinNetworkOnTheFly: Resending rootReply\n");
+                entryP = ripTable;
+                while(entryP->id != pp->header.idSrc)
+                    entryP++;
+                myRootReply.address = entryP->address;
+                //return WARNING;
             }
 
             tempHeader->type = DISCOVERY;
@@ -124,70 +126,65 @@ ret_t joinNetworkOnTheFly(discPack_p pp)
 
         printRipEntry(&myLeafInfo);
 
-        //Look for our root to become available
-        retryN += 1;
-        while(retryN < _MAX_RETRIES_)
+        //Check if someone has just sent something
+        if( !nrf24l01_readready(&pipe) )
         {
-            //Check if someone has just sent something
-            if( !nrf24l01_readready(&pipe) )
+            netDebugPrint("DEBUG=joinNetworkOnTheFly: Sent discovery message to root\n");
+            tempHeader->type = DISCOVERY;
+            tempHeader->size = sizeof(myLeafInfo);
+            tempHeader->ttl = DEFAULT_TTL;
+            tempHeader->number = 0;
+            tempHeader->idSrc = gID;
+            tempHeader->idDest = getRootFromID(gID);
+            ret = sendMessageTo(tempHeader, (char *)&myLeafInfo,
+                                sizeof(myLeafInfo));
+            if(ret != SUCCESS && ret != WARNING)
             {
-                netDebugPrint("DEBUG=joinNetworkOnTheFly: Sent discovery message to root\n");
-                tempHeader->type = DISCOVERY;
-                tempHeader->size = sizeof(myLeafInfo);
-                tempHeader->ttl = DEFAULT_TTL;
-                tempHeader->number = 0;
-                tempHeader->idSrc = gID;
-                tempHeader->idDest = getRootFromID(gID);
-                ret = sendMessageTo(tempHeader, (char *)&myLeafInfo,
-                                    sizeof(myLeafInfo));
-                if(ret != SUCCESS && ret != WARNING)
-                {
-                    printf("DEBUG=joinNetworkOnTheFly: sendMessageTo FAILED\n");
-                    return WARNING;
-                }
+                printf("DEBUG=joinNetworkOnTheFly: sendMessageTo FAILED\n");
+                return WARNING;
+            }
 
-                netDebugPrint("DEBUG=joinNetworkOnTheFly: Waiting for root answer.\n");
-                while(!nrf24l01_readready(&pipe) && cnt != DEFAULT_TIMEOUT)
-                    cnt += 1;
-                if(cnt == DEFAULT_TIMEOUT)
-                {
-                    netDebugPrint("DEBUG=joinNetworkOnTheFly: Timeout.\n");
-                    return WARNING;
-                }
-                nrf24l01_read(txData);
-                netDebugPrint("DEBUG=joinNetworkOnTheFly: Message recieved.\n");
+            netDebugPrint("DEBUG=joinNetworkOnTheFly: Waiting for root answer.\n");
+            while(!nrf24l01_readready(&pipe) && cnt != DEFAULT_TIMEOUT)
+                cnt += 1;
+            if(cnt == DEFAULT_TIMEOUT)
+            {
+                netDebugPrint("DEBUG=joinNetworkOnTheFly: Timeout.\n");
+                return WARNING;
+            }
+            nrf24l01_read(txData);
+            netDebugPrint("DEBUG=joinNetworkOnTheFly: Message recieved.\n");
 
-                if(tempHeader->type != DISCOVERY ||
-                   tempHeader->idDest != gID ||
-                   tempHeader->idSrc != getRootFromID(gID))
-                {
-                    netDebugPrint("DEBUG=joinNetworkOnTheFly: The message seems to be not for us, retrying...\n");
-                    return SUCCESS;
-                }
+            if(tempHeader->type != DISCOVERY ||
+               tempHeader->idDest != gID ||
+               tempHeader->idSrc != getRootFromID(gID))
+            {
+                netDebugPrint("DEBUG=joinNetworkOnTheFly: The message seems to be not for us, retrying...\n");
+                return SUCCESS;
+            }
 
-                /* We can assume we recieved a rootReply */
-                if(rootReply->isAcceptedConnection)
-                {
-                    isPaired            = TRUE;
-                    isRoot              = FALSE;
-                    /* Reuse leaf entry to fill the unique entry for this leaf */
-                    myLeafInfo.id       = tempHeader->idSrc;
-                    myLeafInfo.address  = rootReply->address;
-                    myLeafInfo.isRoot   = TRUE;
-                    insertEntry(&myLeafInfo);
-                    printRipTable();
-                    printf("DEBUG=joinNetworkOnTheFly: Leaf SUCCESS\n");
-                    return SUCCESS;
-                    break;
-                }
-                else
-                {
-                    printf("DEBUG=joinNetworkOnTheFly: Root rejected the connection\n");
-                    return WARNING;
-                    //TODO: root did not accept connection D:
-                }
+            /* We can assume we recieved a rootReply */
+            if(rootReply->isAcceptedConnection)
+            {
+                isPaired            = TRUE;
+                isRoot              = FALSE;
+                /* Reuse leaf entry to fill the unique entry for this leaf */
+                myLeafInfo.id       = tempHeader->idSrc;
+                myLeafInfo.address  = rootReply->address;
+                myLeafInfo.isRoot   = TRUE;
+                insertEntry(&myLeafInfo);
+                printRipTable();
+                printf("DEBUG=joinNetworkOnTheFly: Leaf SUCCESS\n");
+                return SUCCESS;
+            }
+            else
+            {
+                printf("DEBUG=joinNetworkOnTheFly: Root rejected the connection\n");
+                return WARNING;
+                //TODO: root did not accept connection D:
             }
         }
+
         // MAX number of retries reached, move from range
         return UNIMPLEMENTED;
     }
