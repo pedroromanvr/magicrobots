@@ -165,8 +165,23 @@ ADCSRA=0x00;
 TWCR=0x00;    
 }
 
-//void main_for_chat(void)
+//void main_for_robots(void)
 void main(void)
+{
+    setupHardware();
+    dongleInit();
+    initMachine();
+    printf("Initialization complete...\n");
+    
+    while(1)
+    {
+        processMachine();
+    }        
+    return;
+}
+
+void main_for_chat(void)
+//void main(void)
 {
     setupHardware();
     initChat();

@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>6.1</ProjectVersion>
     <ToolchainName>com.HPInfoTech.CodeVisionAVR.C</ToolchainName>
-    <ProjectGuid>{5AADEA55-423D-497C-A76A-A46C3F34E8A0}</ProjectGuid>
+    <ProjectGuid>{C8DF9A1B-423D-497C-A76A-A46C3F34E8A0}</ProjectGuid>
     <avrdevice>ATmega328P</avrdevice>
     <avrdeviceseries>none</avrdeviceseries>
     <OutputType>Executable</OutputType>
@@ -18,8 +18,27 @@
     <ToolchainFlavour>Native</ToolchainFlavour>
     <KeepTimersRunning>true</KeepTimersRunning>
     <OverrideVtor>false</OverrideVtor>
-    <OverrideVtorValue />
-    <eraseonlaunchrule>0</eraseonlaunchrule>
+    <OverrideVtorValue>exception_table</OverrideVtorValue>
+    <eraseonlaunchrule>1</eraseonlaunchrule>
+    <CacheFlash>true</CacheFlash>
+    <ProgFlashFromRam>true</ProgFlashFromRam>
+    <RamSnippetAddress>0x20000000</RamSnippetAddress>
+    <UncachedRange />
+    <BootSegment>2</BootSegment>
+    <avrtool>com.atmel.avrdbg.tool.avrdragon</avrtool>
+    <com_atmel_avrdbg_tool_avrdragon>
+      <ToolOptions>
+        <InterfaceProperties>
+          <JtagEnableExtResetOnStartSession>false</JtagEnableExtResetOnStartSession>
+        </InterfaceProperties>
+        <InterfaceName>debugWIRE</InterfaceName>
+      </ToolOptions>
+      <ToolType>com.atmel.avrdbg.tool.avrdragon</ToolType>
+      <ToolNumber>00A200007852</ToolNumber>
+      <ToolName>AVR Dragon</ToolName>
+    </com_atmel_avrdbg_tool_avrdragon>
+    <avrtoolinterface>debugWIRE</avrtoolinterface>
+    <preserveEEPROM>False</preserveEEPROM>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <ToolchainSettings>
@@ -53,6 +72,32 @@
     </Compile>
     <Folder Include="network\" />
     <Compile Include="network\network.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Folder Include="random\" />
+    <Compile Include="random\random.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Folder Include="chat\" />
+    <Compile Include="chat\chat.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="movement\stateMachine.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="movement\pid.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Folder Include="dongle\" />
+    <Compile Include="dongle\dongle.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Folder Include="ai\" />
+    <Compile Include="ai\ai.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Folder Include="locator\" />
+    <Compile Include="locator\locator.c">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>

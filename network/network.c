@@ -198,8 +198,8 @@ ret_t sendMessage(char *msg,  uint8_t size)
 {
   uint8_t idx;
   ripEntry_p re;
-  headerPack_t hdr;
-
+  headerPack_t hdr;  
+  
   hdr.type = BROADCAST;
   hdr.idSrc = gID;
   hdr.ttl = DEFAULT_TTL;
@@ -221,6 +221,7 @@ ret_t forwardMessage(headerPack_p header,
   uint8_t idx;
   ripEntry_p re;
 
+
   for(idx=0; idx<_MAX_PIPES_; idx++)
   {
     re = &ripTable[idx];
@@ -240,9 +241,12 @@ ret_t forwardMessage(headerPack_p header,
 ret_t microSendMessage(headerPack_p header,
                      char *msg,  uint8_t size)
 {
-    discPack_t packet;
+    discPack_t packet;                  
+    
+    memset(&packet, 0, sizeof(discPack_t));
     memcpy(&(packet.header), header, sizeof(headerPack_t));
-    memcpy(packet.data, msg, size);                        
+    memcpy(packet.data, msg, size);           
+    //dumpPacket(&packet);
     nrf24l01_write((uint8_t *)&packet);    
     netDebugPrint("DEBUG=microSendMessage: Message Sent.\n");
     return SUCCESS;
@@ -320,22 +324,24 @@ nextEntry:
   }
   //netDebugPrint("sendMessageTo:nextEntry: idx=%d\n", idx);
   printRipEntry(re);
-
+  
   /* First send an empty header to inform the reciever
    * about our willing to transmit
    */
   hdr->number = 0;
-  hdr->size = 0;
+  hdr->size = size;
   hdr->checksum = checksumCalculator(hdr,
                      msg, 0);
-  getAddrByPipe(idx, address);
-  nrf24l01_settxaddr(address);
-  nrf24l01_write((uint8_t *)&packet);
-  _delay_ms(DEFAULT_DELAY);
-  netDebugPrint("DEBUG=sendMessageTo: Empty header sent!\n");
-  printHeader(hdr);
+  if(size > DATA_SIZE)
+  {
+    getAddrByPipe(idx, address);
+    nrf24l01_settxaddr(address);
+    nrf24l01_write((uint8_t *)&packet);
+    _delay_ms(DEFAULT_DELAY);
+    netDebugPrint("DEBUG=sendMessageTo: Empty header sent!\n");
+    printHeader(hdr);
+  }
 
-  hdr->size = size;
   netDebugPrint("DEBUG=sendMessageTo: message loop start!\n");
   while(done <= size)
   {
@@ -364,7 +370,8 @@ ret_t getMessage(headerPack_p header, char *buf, uint8_t size)
     uint32_t cnt = 0;
     uint8_t recieved = 0;
     discPack_t packet;
-    headerPack_p hdr = (headerPack_p)&packet;
+    headerPack_p hdr = (headerPack_p)&packet;    
+    
 
     while(1)
 	{
@@ -434,7 +441,8 @@ ret_t getMessageFrom(headerPack_p header, char *buf,
    ret_t ret;
    uint8_t retry = 0;
    uint16_t idSrc = header->idSrc;
-   int notHim = 1;
+   int notHim = 1;     
+   
    while(notHim)
    {
       if(retry == _MAX_RETRIES_)
@@ -614,6 +622,7 @@ ret_t networkManager(headerPack_p header,
         netDebugPrint("DEBUG=networkManager: packet recieved!\n");
         nrf24l01_read((uint8_t *)&packet);
         printHeader(&(packet.header));
+        dumpPacket(&packet);
         if(packet.header.checksum != checksumCalculator(&(packet.header), packet.data, packet.header.size))
         {
             netDebugPrint("DEBUG=networkManager: checksum faield!\n");
@@ -639,6 +648,13 @@ ret_t networkManager(headerPack_p header,
         if(packet.header.type == DATA)
         {
             netDebugPrint("DEBUG=networkManager: DATA packet.\n");
+            if(packet.header.size <= DATA_SIZE)
+            {                               
+                netDebugPrint("DEBUG=networkManager: DATA_SIZE optimization.\n");
+                memcpy(header, &(packet.header), sizeof(headerPack_t));
+                memcpy(buffer, packet.data, packet.header.size);           
+                return WARNING;     
+            }
             if(packet.header.size <= size)
             {
                 ret = getMessageFrom(header, buffer, size);
@@ -675,6 +691,15 @@ ret_t networkManager(headerPack_p header,
             if(packet.header.idSrc == gID)
                 return SUCCESS;
             netDebugPrint("DEBUG=networkManager: BROADCAST packet.\n");
+            if(packet.header.size <= DATA_SIZE)
+            {                               
+                netDebugPrint("DEBUG=networkManager: DATA_SIZE optimization.\n");
+                memcpy(header, &(packet.header), sizeof(headerPack_t));
+                memcpy(buffer, packet.data, packet.header.size);           
+                forwardMessage(header, buffer, packet.header.size);
+                return WARNING;     
+            }
+
             if(packet.header.size <= size)
             {
                 ret = getMessageFrom(header, buffer, size);

@@ -9,7 +9,7 @@ D=07/12/2013
 <<<<<<< HEAD
 Files=12
 <<<<<<< HEAD
-OpenedFiles=11
+OpenedFiles=14
 =======
 OpenedFiles=5
 >>>>>>> ec36d4710c01f2cab1f490c19751c7bb7f91d11d
@@ -22,12 +22,12 @@ Active1=0
 DebugOutputListFilesDirectory=Debug\List
 DebugOutputObjectFilesDirectory=Debug
 DebugOutputExecutableFilesDirectory=Debug\Exe
-DebugOutputLinkerFilesDirectory=Debug\Exe
+DebugOutputLinkerFilesDirectory=Debug\Link
 OutputListFilesDirectory=Release\List
 OutputObjectFilesDirectory=Release
 OutputExecutableFilesDirectory=Release\Exe
-OutputLinkerFilesDirectory=Release\Exe
-AllowDisplayFunctionCallTree=0
+OutputLinkerFilesDirectory=Release\Link
+AllowDisplayFunctionCallTree=1
 CleanUp=2
 EditorPanelMode=0
 ActiveEditorPanel=0
@@ -37,22 +37,22 @@ PageIndex0=0
 EditorPanel1=0
 <<<<<<< HEAD
 <<<<<<< HEAD
-TimeStamp1=1146781829
-PageIndex1=9
+TimeStamp1=1148232392
+PageIndex1=1
 OF2=movement\stateMachine.h
-Active2=1
+Active2=0
 EditorPanel2=0
-TimeStamp2=1147471346
-PageIndex2=1
+TimeStamp2=1148169929
+PageIndex2=2
 OF3=movement\stateMachine.c
 Active3=0
 EditorPanel3=0
-TimeStamp3=1146919955
-PageIndex3=2
-OF4=chat\chat.c
+TimeStamp3=1148170419
+PageIndex3=3
+OF4=movement\pid.c
 Active4=0
 EditorPanel4=0
-TimeStamp4=1145748600
+TimeStamp4=1148165353
 =======
 TimeStamp1=1146657640
 PageIndex1=1
@@ -71,22 +71,22 @@ Active4=0
 EditorPanel4=0
 TimeStamp4=1146618798
 >>>>>>> ec36d4710c01f2cab1f490c19751c7bb7f91d11d
-PageIndex4=3
-OF5=movement\pid.c
+PageIndex4=4
+OF5=movement\pid.h
 Active5=0
 EditorPanel5=0
-TimeStamp5=1146923594
-PageIndex5=4
-OF6=movement\pid.h
+TimeStamp5=1148165353
+PageIndex5=5
+OF6=ai\ai.h
 Active6=0
 EditorPanel6=0
-TimeStamp6=1146923563
-PageIndex6=5
-OF7=spi\spi.c
+TimeStamp6=1148165353
+PageIndex6=6
+OF7=ai\ai.c
 Active7=0
 EditorPanel7=0
-TimeStamp7=1145220323
-PageIndex7=6
+TimeStamp7=1148165353
+PageIndex7=7
 =======
 TimeStamp1=1145152475
 PageIndex1=1
@@ -121,17 +121,17 @@ EditorPanel7=0
 TimeStamp7=1145145137
 PageIndex7=3
 >>>>>>> 89cf83fd0472502a59e85ca142bc847d900f265c
-OF8=nrf24l01\nrf24l01.c
+OF8=locator\locator.h
 Active8=0
 EditorPanel8=0
 <<<<<<< HEAD
-TimeStamp8=1145220323
-PageIndex8=7
-OF9=network\network.c
+TimeStamp8=1148165353
+PageIndex8=8
+OF9=chat\chat.c
 Active9=0
 EditorPanel9=0
-TimeStamp9=1146923073
-PageIndex9=8
+TimeStamp9=1147776376
+PageIndex9=9
 =======
 TimeStamp8=1145216564
 PageIndex8=5
@@ -141,18 +141,53 @@ EditorPanel9=0
 TimeStamp9=1145150127
 PageIndex9=4
 >>>>>>> 89cf83fd0472502a59e85ca142bc847d900f265c
-OF10=ai\ai.h
+OF10=main.c
 Active10=0
 EditorPanel10=0
-TimeStamp10=1147471208
+TimeStamp10=1148195366
 PageIndex10=10
 <<<<<<< HEAD
 =======
-OF11=main.c
+OF11=network\network.c
 Active11=0
 EditorPanel11=0
-TimeStamp11=1147471891
+TimeStamp11=1148194528
 PageIndex11=11
+OF12=dongle\dongle.c
+Active12=1
+EditorPanel12=0
+TimeStamp12=1148294509
+PageIndex12=12
+OF13=locator\locator.c
+Active13=0
+EditorPanel13=0
+TimeStamp13=1147776525
+PageIndex13=13
+OF14=platform.h
+Active14=0
+EditorPanel14=0
+TimeStamp14=1147773896
+PageIndex14=14
+OF15=locator\locator.c
+Active15=0
+EditorPanel15=0
+TimeStamp15=1147778671
+PageIndex15=15
+OF16=dongle\dongle.c
+Active16=0
+EditorPanel16=0
+TimeStamp16=1147845228
+PageIndex16=16
+OF17=movement\stateMachine.c
+Active17=0
+EditorPanel17=0
+TimeStamp17=1147843536
+PageIndex17=17
+OF18=movement\stateMachine.c
+Active18=0
+EditorPanel18=0
+TimeStamp18=1147843536
+PageIndex18=18
 F1=main.c
 F2=nrf24l01\nrf24l01.c
 F3=spi\spi.c
@@ -264,7 +299,7 @@ UseEEPROMLocation0=1
 RebuildAll=0
 LinkageInformationPresent=1
 COFFileTimeStamp=1144566801
-Build=175
+Build=286
 [DefinedSymbolsDebug]
 Count=0
 [Compiler]
@@ -371,7 +406,11 @@ COFFileTimeStamp=-1
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+Build=312
+=======
 Build=245
+>>>>>>> 8b03857916cdfeab734ed3ba101afc68cd2d6dde
 =======
 Build=253
 >>>>>>> ec36d4710c01f2cab1f490c19751c7bb7f91d11d
@@ -644,28 +683,28 @@ L13=Enhanced function parameters passing: Yes
 L14=Automatic register allocation: Yes
 L15=Smart register allocation: Yes
 L16=
-L17=Build: 30
-L18=18610 line(s) compiled
+L17=Build: 286
+L18=0 line(s) compiled
 L19=No errors
-L20=9 warning(s)
-L21=
-L22=Bit variables size: 0 byte(s)
-L23=
-L24=Data Stack area: 0x100 to 0x2FF
-L25=Data Stack size: 512 byte(s)
-L26=Estimated Data Stack usage: 187 byte(s)
+L20=No warnings
+L21=Data Stack area: 0x100 to 0x2FF
+L22=Data Stack size: 512 byte(s)
+L23=Estimated Data Stack usage: 252 byte(s)
+L24=
+L25=RAM Global variables area: 0x300 to 0x3C2
+L26=RAM Global variables size: 195 byte(s)
 L27=
-L28=RAM Global variables area: 0x300 to 0x372
-L29=RAM Global variables size: 115 byte(s)
+L28=Hardware Stack area: 0x3C3 to 0x6FF
+L29=Hardware Stack size: 829 byte(s)
 L30=
-L31=Hardware Stack area: 0x373 to 0x6FF
-L32=Hardware Stack size: 909 byte(s)
+L31=Heap area: 0x700 to 0x8FF
+L32=Heap size: 512 byte(s)
 L33=
-L34=Heap area: 0x700 to 0x8FF
+L34=EEPROM usage: 1024 byte(s), 100,0% of EEPROM
 L35=Heap size: 512 byte(s)
 L36=
 L37=EEPROM usage: 0 byte(s), 0,0% of EEPROM
-Lines=39
+Lines=34
 L38=Program size: 2258 words (4516 bytes), 13,8% of FLASH
 L39=519 words (1038 bytes), 18,7% reduced by Code Compression
 [BuildInfoAssembler]
@@ -681,10 +720,10 @@ L9=[.cseg] 0x000000 0x0011a4   3854    662   4516   32768  13.8%
 L10=[.dseg] 0x000100 0x000373      0    115    115    2048   5.6%
 L11=[.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 L12=
-Lines=12
+Lines=0
 [BookmarksFoldedCode]
 <<<<<<< HEAD
-Files=25
+Files=31
 =======
 Files=19
 >>>>>>> ec36d4710c01f2cab1f490c19751c7bb7f91d11d
@@ -717,6 +756,12 @@ F18=random\random.c
 F19=random\random.h
 F24=ai\ai.h
 F25=movement\stateMachine.h
+F26=dongle\dongle.c
+F27=ai\ai.c
+F28=dongle\dongle.h
+F29=locator\locator.c
+F30=locator\locator.h
+F31=C:\cvavr2\inc\math.h
 >>>>>>> ec36d4710c01f2cab1f490c19751c7bb7f91d11d
 [Bookmarks1]
 TimeStamp=982091552
@@ -743,15 +788,15 @@ ScrollPosX=0
 ScrollPosY=0
 <<<<<<< HEAD
 <<<<<<< HEAD
-TimeStamp=1147472201
+TimeStamp=1148295731
 [Bookmarks2]
-TimeStamp=1147471891
-Row=13
+TimeStamp=1148195366
+Row=201
 =======
 TimeStamp=1146725773
-Column=64
+Column=125
 ScrollPosX=0
-ScrollPosY=0
+ScrollPosY=73
 BK0=-1
 BK1=-1
 BK2=-1
@@ -805,9 +850,9 @@ BK9=-1
 [Bookmarks3]
 <<<<<<< HEAD
 <<<<<<< HEAD
-TimeStamp=1147772480
-Row=0
-Column=0
+TimeStamp=1147471353
+Row=200
+Column=46
 =======
 TimeStamp=1147440421
 Row=69
@@ -819,7 +864,7 @@ Row=13
 Column=22
 >>>>>>> 89cf83fd0472502a59e85ca142bc847d900f265c
 ScrollPosX=0
-ScrollPosY=0
+ScrollPosY=183
 BK0=-1
 BK1=-1
 BK2=-1
@@ -833,14 +878,14 @@ BK9=-1
 [Bookmarks4]
 <<<<<<< HEAD
 <<<<<<< HEAD
-TimeStamp=1147772480
+TimeStamp=1145220323
 =======
 TimeStamp=1146265147
 >>>>>>> ec36d4710c01f2cab1f490c19751c7bb7f91d11d
-Row=0
+Row=42
 Column=0
 ScrollPosX=0
-ScrollPosY=0
+ScrollPosY=22
 =======
 TimeStamp=1145150127
 Row=29
@@ -933,11 +978,11 @@ BK7=-1
 BK8=-1
 BK9=-1
 [Bookmarks8]
-TimeStamp=1146658469
-Row=15
-Column=17
+TimeStamp=1147773896
+Row=33
+Column=53
 ScrollPosX=0
-ScrollPosY=0
+ScrollPosY=15
 BK0=-1
 BK1=-1
 BK2=-1
@@ -968,11 +1013,11 @@ BK9=-1
 Blocks=0
 [Bookmarks10]
 <<<<<<< HEAD
-TimeStamp=1146271612
-Row=27
-Column=8
+TimeStamp=1147805169
+Row=42
+Column=32
 ScrollPosX=0
-ScrollPosY=21
+ScrollPosY=115
 =======
 TimeStamp=1146265147
 Row=231
@@ -993,9 +1038,9 @@ BK9=-1
 [Bookmarks11]
 <<<<<<< HEAD
 <<<<<<< HEAD
-TimeStamp=1147471949
-Row=445
-Column=59
+TimeStamp=1148194528
+Row=250
+Column=88
 =======
 TimeStamp=1146917595
 Row=31
@@ -1008,7 +1053,7 @@ Column=75
 >>>>>>> 89cf83fd0472502a59e85ca142bc847d900f265c
 ScrollPosX=0
 <<<<<<< HEAD
-ScrollPosY=434
+ScrollPosY=581
 =======
 ScrollPosY=0
 >>>>>>> ec36d4710c01f2cab1f490c19751c7bb7f91d11d
@@ -1025,9 +1070,9 @@ BK9=-1
 [Bookmarks12]
 <<<<<<< HEAD
 <<<<<<< HEAD
-TimeStamp=1147471989
-Row=44
-Column=78
+TimeStamp=1148232392
+Row=189
+Column=0
 =======
 TimeStamp=1146658357
 Row=133
@@ -1039,7 +1084,7 @@ Row=20
 Column=53
 >>>>>>> 89cf83fd0472502a59e85ca142bc847d900f265c
 ScrollPosX=0
-ScrollPosY=21
+ScrollPosY=189
 BK0=-1
 BK1=-1
 BK2=-1
@@ -1053,7 +1098,7 @@ BK9=-1
 [Bookmarks13]
 <<<<<<< HEAD
 <<<<<<< HEAD
-TimeStamp=1146402173
+TimeStamp=1147840032
 =======
 TimeStamp=1146265147
 >>>>>>> ec36d4710c01f2cab1f490c19751c7bb7f91d11d
@@ -1136,11 +1181,11 @@ Blocks=0
 Blocks=0
 [Bookmarks17]
 <<<<<<< HEAD
-TimeStamp=1147772480
-Row=69
-Column=0
+TimeStamp=1147776376
+Row=115
+Column=26
 ScrollPosX=0
-ScrollPosY=39
+ScrollPosY=92
 =======
 TimeStamp=1146618798
 Row=84
@@ -1181,16 +1226,12 @@ BK8=-1
 BK9=-1
 [FoldedCode18]
 Blocks=0
-[FoldedCode10]
-Blocks=0
-[FoldedCode13]
-Blocks=0
 [Bookmarks19]
-TimeStamp=1146919955
-Row=0
-Column=0
+TimeStamp=1148170419
+Row=164
+Column=40
 ScrollPosX=0
-ScrollPosY=0
+ScrollPosY=24
 BK0=-1
 BK1=-1
 BK2=-1
@@ -1240,31 +1281,19 @@ BK6=-1
 BK7=-1
 BK8=-1
 BK9=-1
-[FoldedCode19]
-Blocks=0
 [FoldedCode18]
 Line1=5
 Blocks=1
 [FoldedCode7]
 Blocks=0
-[FoldedCode10]
-Line1=200
-Blocks=1
 [FoldedCode6]
 Blocks=0
-[FoldedCode13]
-Blocks=0
-[FoldedCode8]
-Blocks=0
-[FoldedCode12]
-Blocks=0
-<<<<<<< HEAD
 [FoldedCode20]
 Blocks=0
 [Bookmarks21]
 TimeStamp=942822163
-Row=13
-Column=1
+Row=17
+Column=0
 ScrollPosX=0
 ScrollPosY=0
 BK0=-1
@@ -1277,14 +1306,12 @@ BK6=-1
 BK7=-1
 BK8=-1
 BK9=-1
-[FoldedCode21]
-Blocks=0
 [Bookmarks22]
-TimeStamp=1146923563
-Row=10
-Column=56
+TimeStamp=1148165353
+Row=0
+Column=0
 ScrollPosX=0
-ScrollPosY=4
+ScrollPosY=0
 BK0=-1
 BK1=-1
 BK2=-1
@@ -1296,29 +1323,7 @@ BK7=-1
 BK8=-1
 BK9=-1
 [Bookmarks23]
-TimeStamp=1146923594
-Row=3
-Column=0
-ScrollPosX=0
-ScrollPosY=0
-BK0=-1
-BK1=-1
-BK2=-1
-BK3=-1
-BK4=-1
-BK5=-1
-BK6=-1
-BK7=-1
-BK8=-1
-BK9=-1
-[FoldedCode11]
-Blocks=0
-[FoldedCode2]
-Blocks=0
-[FoldedCode23]
-Blocks=0
-[Bookmarks24]
-TimeStamp=1147471208
+TimeStamp=1148165353
 Row=0
 Column=0
 ScrollPosX=0
@@ -1333,33 +1338,187 @@ BK6=-1
 BK7=-1
 BK8=-1
 BK9=-1
+[Bookmarks24]
+TimeStamp=1148165353
+Row=0
+Column=0
+ScrollPosX=0
+ScrollPosY=0
+BK0=-1
+BK1=-1
+BK2=-1
+BK3=-1
+BK4=-1
+BK5=-1
+BK6=-1
+BK7=-1
+BK8=-1
+BK9=-1
+[Bookmarks25]
+TimeStamp=1148169929
+Row=32
+Column=28
+ScrollPosX=0
+ScrollPosY=0
+BK0=-1
+BK1=-1
+BK2=-1
+BK3=-1
+BK4=-1
+BK5=-1
+BK6=-1
+BK7=-1
+BK8=-1
+BK9=-1
+[Bookmarks26]
+TimeStamp=1148294509
+Row=58
+Column=100
+ScrollPosX=0
+ScrollPosY=39
+BK0=-1
+BK1=-1
+BK2=-1
+BK3=-1
+BK4=-1
+BK5=-1
+BK6=-1
+BK7=-1
+BK8=-1
+BK9=-1
+[Bookmarks27]
+TimeStamp=1148165353
+Row=157
+Column=26
+ScrollPosX=0
+ScrollPosY=21
+BK0=-1
+BK1=-1
+BK2=-1
+BK3=-1
+BK4=-1
+BK5=-1
+BK6=-1
+BK7=-1
+BK8=-1
+BK9=-1
+[Bookmarks28]
+TimeStamp=1147843490
+Row=7
+Column=20
+ScrollPosX=0
+ScrollPosY=0
+BK0=-1
+BK1=-1
+BK2=-1
+BK3=-1
+BK4=-1
+BK5=-1
+BK6=-1
+BK7=-1
+BK8=-1
+BK9=-1
+[Bookmarks29]
+TimeStamp=1147776525
+Row=23
+Column=14
+ScrollPosX=0
+ScrollPosY=0
+BK0=-1
+BK1=-1
+BK2=-1
+BK3=-1
+BK4=-1
+BK5=-1
+BK6=-1
+BK7=-1
+BK8=-1
+BK9=-1
+[Bookmarks30]
+TimeStamp=1148165353
+Row=21
+Column=4
+ScrollPosX=0
+ScrollPosY=0
+BK0=-1
+BK1=-1
+BK2=-1
+BK3=-1
+BK4=-1
+BK5=-1
+BK6=-1
+BK7=-1
+BK8=-1
+BK9=-1
+[FoldedCode3]
+Blocks=0
+[FoldedCode4]
+Blocks=0
+[FoldedCode10]
+Blocks=0
+[FoldedCode13]
+Blocks=0
+[FoldedCode28]
+Blocks=0
+[Bookmarks31]
+TimeStamp=977953859
+Row=14
+Column=0
+ScrollPosX=0
+ScrollPosY=0
+BK0=-1
+BK1=-1
+BK2=-1
+BK3=-1
+BK4=-1
+BK5=-1
+BK6=-1
+BK7=-1
+BK8=-1
+BK9=-1
+[FoldedCode31]
+Blocks=0
+[FoldedCode21]
+Blocks=0
+[FoldedCode2]
+Line1=57
+Blocks=1
+[FoldedCode11]
+Line1=29
+Line2=34
+Blocks=2
+[FoldedCode17]
+Blocks=0
+[FoldedCode19]
+Line1=29
+Line2=122
+Blocks=2
+[FoldedCode23]
+Blocks=0
+[FoldedCode26]
+Line1=46
+Blocks=1
+[FoldedCode27]
+Line1=20
+Line2=70
+Line3=104
+Line4=116
+Line5=135
+Line6=171
+Blocks=6
+[FoldedCode29]
+Blocks=0
+[FoldedCode8]
+Blocks=0
+[FoldedCode30]
+Blocks=0
 [FoldedCode24]
 Blocks=0
 [FoldedCode22]
 Blocks=0
-[Bookmarks25]
-TimeStamp=1147471346
-Row=0
-Column=0
-ScrollPosX=0
-ScrollPosY=0
-BK0=-1
-BK1=-1
-BK2=-1
-BK3=-1
-BK4=-1
-BK5=-1
-BK6=-1
-BK7=-1
-BK8=-1
-BK9=-1
 [FoldedCode25]
 Blocks=0
-[FoldedCode4]
-Blocks=0
-[FoldedCode3]
-Blocks=0
-[FoldedCode17]
+[FoldedCode12]
 Blocks=0
 [HeadersList]
 Files=12
@@ -1376,7 +1535,7 @@ F10=C:\Users\marc\dagas4\magicrobots\dongle\dongle.c
 F11=C:\Users\marc\dagas4\magicrobots\ai\ai.c
 F12=C:\Users\marc\dagas4\magicrobots\locator\locator.c
 [Header1]
-Files=19
+Files=21
 F1=platform.h
 F2=C:\cvavr2\inc\mega328p.h
 F3=C:\cvavr2\inc\mega328p_bits.h
@@ -1389,13 +1548,15 @@ F9=C:\cvavr2\inc\stdarg.h
 F10=spi\spi.h
 F11=nrf24l01\nrf24l01registers.h
 F12=movement\stateMachine.h
-F13=movement\movement.h
-F14=network\network.h
-F15=C:\cvavr2\inc\math.h
-F16=random\random.h
-F17=chat\chat.h
-F18=dongle\dongle.h
+F13=ai\ai.h
+F14=random\random.h
+F15=movement\pid.h
+F16=network\network.h
+F17=C:\cvavr2\inc\math.h
+F18=movement\movement.h
 F19=locator\locator.h
+F20=chat\chat.h
+F21=dongle\dongle.h
 [Header2]
 Files=11
 F1=nrf24l01\nrf24l01.h
@@ -1470,16 +1631,26 @@ F14=nrf24l01\nrf24l01registers.h
 F15=movement\movement.h
 F16=random\random.h
 [Header8]
-Files=9
+Files=19
 F1=movement\stateMachine.h
 F2=platform.h
 F3=C:\cvavr2\inc\mega328p.h
 F4=C:\cvavr2\inc\mega328p_bits.h
 F5=C:\cvavr2\inc\stdint.h
-F6=movement\movement.h
-F7=C:\cvavr2\inc\stdio.h
-F8=C:\cvavr2\inc\stdarg.h
-F9=C:\cvavr2\inc\string.h
+F6=ai\ai.h
+F7=random\random.h
+F8=movement\pid.h
+F9=network\network.h
+F10=C:\cvavr2\inc\math.h
+F11=C:\cvavr2\inc\delay.h
+F12=C:\cvavr2\inc\string.h
+F13=nrf24l01\nrf24l01.h
+F14=C:\cvavr2\inc\stdio.h
+F15=C:\cvavr2\inc\stdarg.h
+F16=spi\spi.h
+F17=nrf24l01\nrf24l01registers.h
+F18=movement\movement.h
+F19=locator\locator.h
 [Header9]
 Files=3
 F1=movement\pid.h
@@ -1511,18 +1682,18 @@ F2=platform.h
 F3=C:\cvavr2\inc\mega328p.h
 F4=C:\cvavr2\inc\mega328p_bits.h
 F5=C:\cvavr2\inc\stdint.h
-F6=movement\pid.h
-F7=network\network.h
-F8=C:\cvavr2\inc\math.h
-F9=C:\cvavr2\inc\delay.h
-F10=C:\cvavr2\inc\string.h
-F11=nrf24l01\nrf24l01.h
-F12=C:\cvavr2\inc\stdio.h
-F13=C:\cvavr2\inc\stdarg.h
-F14=spi\spi.h
-F15=nrf24l01\nrf24l01registers.h
-F16=movement\movement.h
-F17=random\random.h
+F6=random\random.h
+F7=movement\pid.h
+F8=network\network.h
+F9=C:\cvavr2\inc\math.h
+F10=C:\cvavr2\inc\delay.h
+F11=C:\cvavr2\inc\string.h
+F12=nrf24l01\nrf24l01.h
+F13=C:\cvavr2\inc\stdio.h
+F14=C:\cvavr2\inc\stdarg.h
+F15=spi\spi.h
+F16=nrf24l01\nrf24l01registers.h
+F17=movement\movement.h
 F18=locator\locator.h
 [Header12]
 Files=16

@@ -18,8 +18,8 @@ ret_t dongleInit()
   dongleDebugPrint("DEBUG=dongleInit: Serial port ready.\n");
   /* Turn ON nfr module */
   INIT_NW_STACK();    
-  gID = 240;
-  dongleDebugPrint("DEBUG=dongleInit: Ready to stablish peer to peer conections.\n");
+  gID = (uint16_t)random8();
+  dongleDebugPrint("DEBUG=dongleInit: Ready to stablish peer to peer conections. gID = %d\n",gID);
   return SUCCESS;
 }
 
@@ -32,13 +32,16 @@ ret_t dongleMainThread()
   uint8_t i;        
   uint8_t j;        
 
-  headerPack_p hdr = (headerPack_p)msgBuf;
+  discPack_p   pkt2 = (discPack_p)buffer;
   discPack_p   pkt = (discPack_p)msgBuf;
-
+  
+  i =  DATA_FROM_PC;
+  
+  memset(buffer, 0, sizeof(buffer));
   dongleDebugPrint("DEBUG=dongleMainThread: Start.\n");
   while(1)
   {
-    ret = networkManager(hdr, buffer, sizeof(buffer));
+    ret = networkManager(&(pkt2->header), pkt2->data, DATA_SIZE);
     if(ret != SUCCESS && ret != WARNING)
     {
         dongleDebugPrint("DEBUG=dongleMainThread: networkManager failed.\n");
@@ -47,20 +50,28 @@ ret_t dongleMainThread()
     {
        //networkManager read a locatioRequest_t
        dongleDebugPrint("DEBUG=dongleMainThread: Data recieved.\n");
+       //dumpPacket((discPack_p)buffer);
        for(j = 0; j < sizeof(discPack_t); j++)
         putchar(buffer[j]);
        memset(buffer, 0, sizeof(buffer));
     }
     if (isPaired && DATA_FROM_PC)
     {
-        dongleDebugPrint("DEBUG=dongleMainThread: reading RESPONSE.\n");
+        msgBuf[0] = RX_BUF;
+        dongleDebugPrint("DEBUG=dongleMainThread: reading RESPONSE.\n");         
 
-        for(i = 0; i <sizeof(discPack_t); i++)
+        for(i = 1; i <sizeof(discPack_t); i++)
+        {
+            //dongleDebugPrint("DEBUG=i=%d.\n", i);         
             msgBuf[i] = getchar();
+        }
+        //dumpPacket((discPack_p)msgBuf);
         
-        hdr->checksum = checksumCalculator(hdr, msgBuf, sizeof(discPack_t));
+        pkt->header.checksum = checksumCalculator(&(pkt->header), 
+                                   pkt->data, 
+                                   sizeof(locationRequest_t));
         dongleDebugPrint("DEBUG=dongleMainThread: calling microSendMessage.\n");
-        microSendMessage(hdr, pkt->data, sizeof(locationRequest_t));          
+        microSendMessage(&(pkt->header), pkt->data, sizeof(locationRequest_t));          
 
         // Clean buffer and index
         memset(msgBuf, 0, sizeof(msgBuf));

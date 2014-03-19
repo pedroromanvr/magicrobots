@@ -2,6 +2,9 @@
 #define __PID__
 
 #include <stdint.h>
+#define MAX_VAL_RET 2600
+#define PID_TRUE    1
+#define PID_FALSE   0
 
 typedef struct {
   uint16_t Kp;            // Proportional gain
@@ -47,6 +50,16 @@ extern void initPID(uint16_t Kp, uint16_t Ki, uint16_t Kd,
  */
 extern int16_t pid(int16_t setPoint, int16_t procVal, pidCtx_p ctx);
 
+/*  Returns the output of the controller using a discrete PID algorithm.
+ *  This function does not change the ctx's error Sum and last proc value   
+ *
+ *  @param setPoint the desired value
+ *  @param procVal  the real value got from feedback
+ *  @param ctx      context for this PID controller
+ *
+ *  @return an int16 with the PID value to apply to the system
+ */
+extern int16_t pidPeek(int16_t setPoint, int16_t procVal, pidCtx_p ctx);
 /**************************************************/
 
 #endif /* __PID__*/

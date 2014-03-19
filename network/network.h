@@ -162,6 +162,28 @@ ret_t getAddrByPipe(uint8_t pipe, char *addr);
 //            printRipEntry(&(ripTable[__i])); \
 //    }while(0)
 
+#define dumpPacket(packet) \
+    do{ \
+        discPack_p pp = packet; \
+        char *ppp = (char *)pp; \
+        char _ix; \
+        printf("DEBUG=Packet dump:\nDEBUG=[0-7]"); \
+        for(_ix = 0; _ix < 8; _ix++) \
+            printf("\t%d", ppp[_ix]); \
+        printf("\nDEBUG=[8-15]"); \
+        for(_ix = 8; _ix < 16; _ix++) \
+            printf("\t%d", ppp[_ix]); \
+        printf("\nDEBUG=[16-23]"); \
+        for(_ix = 16; _ix < 24; _ix++) \
+            printf("\t%d", ppp[_ix]); \
+        printf("\nDEBUG=[24-31]"); \
+        for(_ix = 24; _ix < 32; _ix++) \
+            printf("\t%d", ppp[_ix]); \
+        printf("\n"); \
+    }while(0)
+        
+    
+
 #define netDebugPrint printf
 
 #endif

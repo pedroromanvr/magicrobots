@@ -2,11 +2,18 @@
 
 ret_t getLocation(locationRequest_p lr)
 {
-    uint32_t i = 0;   
     ret_t ret;
     headerPack_t header;
     discPack_t packet;
-    
+
+    if(!isPaired && !isRootId(gID))
+    {
+        netDebugPrint("DEBUG=getLocation: calling joinNetworkOnTheFly for leaf\n");
+        joinNetworkOnTheFly(NULL);
+        if(!isPaired)
+            return SUCCESS;
+    }
+
     lr->type = REQUEST;
     lr->position.x = 0;
     lr->position.y = 0;
@@ -24,18 +31,14 @@ ret_t getLocation(locationRequest_p lr)
     microSendMessage(&header, (char *)lr, sizeof(locationRequest_t));
 
     locatorDebugPrint("DEBUG=getLocation: Waiting for answer...\n");
-    while(i < DEFAULT_TIMEOUT)
+
+    ret = networkManager(&header, packet.data, DATA_SIZE);
+    if(ret == WARNING && header.idSrc == LOCATION_SERVICE_GID)
     {
-        i++;
-        ret = networkManager(&header, (char *)(&packet), sizeof(discPack_t));
-        if(ret == SUCCESS)
-            continue;
-        if(ret == WARNING)
-        {
-            memcpy(lr, packet.data, sizeof(locationRequest_t));
-            return WARNING;
-        }
+        memcpy(lr, packet.data, sizeof(locationRequest_t));
+        return WARNING;
     }
+
     locatorDebugPrint("DEBUG=getLocation: Timed out\n");
     lr->type = SERVICE_UNAVAILABLE;
     lr->position.x = 0;

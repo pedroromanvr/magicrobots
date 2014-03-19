@@ -5,6 +5,7 @@
 #include "../movement/movement.h"
 #include "../locator/locator.h"
 #include "../platform.h"
+#include "../random/random.h"
 
 #include <stdint.h>
 #include <stdio.h>
